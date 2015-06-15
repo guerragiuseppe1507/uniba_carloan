@@ -45,7 +45,7 @@ public class InsertManagerController {
 	private void ManagerRegister() {
 		DAO db = new DAO();
 		db.connetti();
-		resultLabel.setText(Boolean.toString(db.manager(usernameLabel.getText(),emailLabel.getText(), passwordLabel.getText(),filialeLabel.getText(),nomeLabel.getText(),cognomeLabel.getText(),telefonoLabel.getText(),residenzaLabel.getText())));
+		resultLabel.setText(Boolean.toString(db.manager(usernameLabel.getText(),emailLabel.getText(), passwordLabel.getText(),Integer.parseInt(filialeLabel.getText()),nomeLabel.getText(),cognomeLabel.getText(),telefonoLabel.getText(),residenzaLabel.getText())));
 		db.disconnetti();
 	}
 }
