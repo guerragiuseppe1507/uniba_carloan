@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import layout.view.InsertManagerController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,7 +26,7 @@ public class MainApp extends Application {
 		
 		initRootLayout();
 		showLogin();
-		
+		showInsertManager();
 	}
 	
 	public void initRootLayout(){
@@ -51,7 +52,6 @@ public class MainApp extends Application {
 	public void showLogin(){
 		
 		try {
-		    System.out.println("1");
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("layout/view/Login.fxml"));
 			AnchorPane login = (AnchorPane) loader.load();
@@ -59,6 +59,26 @@ public class MainApp extends Application {
 			this.rootLayout.setCenter(login);
 			
 			LoginController controller = loader.getController();
+			//controller.setMainApp(this);
+			
+		} catch (IOException e){
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
+	
+	public void showInsertManager(){
+		
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("layout/view/InsertManager.fxml"));
+			AnchorPane InsertManager = (AnchorPane) loader.load();
+			
+			this.rootLayout.setCenter(InsertManager);
+			
+			InsertManagerController controller = loader.getController();
 			//controller.setMainApp(this);
 			
 		} catch (IOException e){
