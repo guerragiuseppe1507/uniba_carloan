@@ -16,7 +16,6 @@
       <TextField fx:id="usernameLabel" layoutX="429.0" layoutY="119.0" />
       <TextField fx:id="emailLabel" layoutX="429.0" layoutY="152.0" />
       <TextField fx:id="passwordLabel" layoutX="429.0" layoutY="190.0" />
-      <TextField fx:id="filialeLabel" layoutX="429.0" layoutY="234.0" />
       <TextField fx:id="nomeLabel" layoutX="429.0" layoutY="278.0" />
       <TextField fx:id="cognomeLabel" layoutX="429.0" layoutY="318.0" />
       <TextField fx:id="telefonoLabel" layoutX="429.0" layoutY="359.0" />
@@ -24,7 +23,6 @@
       <Label layoutX="74.0" layoutY="123.0" text="Username" />
       <Label layoutX="74.0" layoutY="156.0" text="email" />
       <Label layoutX="74.0" layoutY="194.0" text="Password" />
-      <Label layoutX="74.0" layoutY="238.0" text="Filiale" />
       <Label layoutX="74.0" layoutY="282.0" text="Nome" />
       <Label layoutX="74.0" layoutY="322.0" text="Cognome" />
       <Label layoutX="74.0" layoutY="363.0" text="Telefono" />

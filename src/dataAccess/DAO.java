@@ -58,19 +58,18 @@ public class DAO {
 	}
 	
 	// Registrazione Manager
-	public boolean manager(String username,String email,String password,int filiale,String nome,String cognome, String telefono,String residenza)
+	public boolean manager(String username,String email,String password,String nome,String cognome, String telefono,String residenza)
 	{
-		String query1= "INSERT INTO  `manager_di_filiale` ( `username` ,  `email` ,  `password` ,  `id_filiale` ,  `nome` ,  `cognome` ,  `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?); ";
+		String query1= "INSERT INTO  `manager_di_filiale` ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` ,  `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?); ";
 		try {
 			PreparedStatement istruzione1 = connessione.prepareStatement(query1);
 			istruzione1.setString(1, username);
 			istruzione1.setString(2, email);
 			istruzione1.setString(3, password);
-			istruzione1.setInt(4, filiale);
-			istruzione1.setString(5, nome);
-			istruzione1.setString(6, cognome);
-			istruzione1.setString(7, telefono);
-			istruzione1.setString(8, residenza);
+			istruzione1.setString(4, nome);
+			istruzione1.setString(5, cognome);
+			istruzione1.setString(6, telefono);
+			istruzione1.setString(7, residenza);
 
 			istruzione1.execute();
 			return true;	
