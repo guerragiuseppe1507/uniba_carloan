@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.jdbc.Statement;
+
 public class DAO {
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "";
@@ -39,16 +41,32 @@ public class DAO {
 	public boolean accesso(String username, String password){
 		
 		//check manager
-		String query = "SELECT * FROM dipendente_di_filiale where username = ? OR email = ? AND password = ?";
+		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" where (username = ? OR email = ?) AND password = ?";
+		String queryManagerDiSistema = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" where username = ? AND password = ?";
 		
 		try {
-			PreparedStatement istruzione = connessione.prepareStatement(query);
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
 			istruzione.setString(1, username);
 			istruzione.setString(2, username);
 			istruzione.setString(3, password);
 			ResultSet risultato = istruzione.executeQuery();
-			return risultato.first();
-
+			Boolean isUtente = risultato.first();
+			
+			if (isUtente){
+				
+				return isUtente;
+				
+			} else {
+				
+				istruzione = connessione.prepareStatement(queryManagerDiSistema);
+				istruzione.setString(1, username);
+				istruzione.setString(2, password);
+				risultato = istruzione.executeQuery();
+				Boolean isManagerDiSistema = risultato.first();
+				
+				return isManagerDiSistema;
+			
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -58,11 +76,11 @@ public class DAO {
 	}
 	
 	// Registrazione Manager
-	public boolean manager(String username,String email,String password,String nome,String cognome, String telefono,String residenza)
-	{
-		String query1= "INSERT INTO  `manager_di_filiale` ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` ,  `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?); ";
+	private int registraUtente(String username,String email,String password,String nome,String cognome, String telefono,String residenza){
+		String query1= "INSERT INTO  "+ SchemaDb.TAB_UTENTI
+				+" ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` ,  `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try {
-			PreparedStatement istruzione1 = connessione.prepareStatement(query1);
+			PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
 			istruzione1.setString(1, username);
 			istruzione1.setString(2, email);
 			istruzione1.setString(3, password);
@@ -72,15 +90,54 @@ public class DAO {
 			istruzione1.setString(7, residenza);
 
 			istruzione1.execute();
-			return true;	
+			ResultSet keys = istruzione1.getGeneratedKeys();
+			
+			int id_utente = 0;
+			
+			if(keys.next()){
+				
+				id_utente = keys.getInt(1);
+				
 			}
+			
+			return id_utente;
+		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			return 0;
 		}
 
 	//todo 
 	//Inserire qui sotto le query al db
 	
 	}
+	
+	private boolean setManagerDiFiliale(int id_utente, int id_filiale){
+		
+		String query = "INSERT INTO " + SchemaDb.TAB_MANAGER_DI_FILIALE + " (id_utente, id_filiale) VALUES (?, ?)";
+		
+		try {
+			PreparedStatement istruzione1 = connessione.prepareStatement(query);
+			istruzione1.setInt(1, id_utente);
+			istruzione1.setInt(2, id_filiale);
+
+			istruzione1.execute();
+			return true;	
+		} 	
+		catch (SQLException e) {
+				
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	public boolean registraManagerDiFiliale(String username,String email,String password,int id_filiale, String nome,String cognome, String telefono,String residenza){
+		
+		int id_utente = registraUtente(username, email, password, nome, cognome, telefono, residenza);
+		boolean isSetted = setManagerDiFiliale(id_utente, id_filiale);
+		return isSetted;
+		
+	}
+	
 }

@@ -8,27 +8,28 @@ import dataAccess.DAO;
 public class InsertManagerController {
 	
 	@FXML
-	private TextField idLabel;
+	private TextField usernameField;
 	
 	@FXML
-	private TextField usernameLabel;
+	private TextField emailField;
 	
 	@FXML
-	private TextField emailLabel;
-	@FXML
-	private TextField passwordLabel;
+	private TextField passwordField;
 	
 	@FXML
-	private TextField nomeLabel;
+	private TextField filialeField;
 	
 	@FXML
-	private TextField cognomeLabel;
+	private TextField nomeField;
 	
 	@FXML
-	private TextField telefonoLabel;
+	private TextField cognomeField;
 	
 	@FXML
-	private TextField residenzaLabel;
+	private TextField telefonoField;
+	
+	@FXML
+	private TextField residenzaField;
 	
 	@FXML
 	private Label resultLabel;
@@ -42,7 +43,7 @@ public class InsertManagerController {
 	private void ManagerRegister() {
 		DAO db = new DAO();
 		db.connetti();
-		resultLabel.setText(Boolean.toString(db.manager(usernameLabel.getText(),emailLabel.getText(), passwordLabel.getText(),nomeLabel.getText(),cognomeLabel.getText(),telefonoLabel.getText(),residenzaLabel.getText())));
+		resultLabel.setText(Boolean.toString(db.registraManagerDiFiliale(usernameField.getText(),emailField.getText(), passwordField.getText(),Integer.parseInt(filialeField.getText()),nomeField.getText(),cognomeField.getText(),telefonoField.getText(),residenzaField.getText())));
 		db.disconnetti();
 	}
 }

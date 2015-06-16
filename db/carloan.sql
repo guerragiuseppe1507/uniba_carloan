@@ -137,9 +137,9 @@ CREATE TABLE IF NOT EXISTS `contratti` (
   KEY `FK_contratti_auto` (`id_auto`),
   KEY `FK_contratti_filiali` (`filiale_di_partenza`),
   KEY `FK_contratti_filiali_2` (`filiale_di_arrivo`),
+  CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `dipendenti_di_filiale` (`id`),
   CONSTRAINT `FK_contratti_auto` FOREIGN KEY (`id_auto`) REFERENCES `auto` (`id`),
   CONSTRAINT `FK_contratti_clienti` FOREIGN KEY (`id_cliente`) REFERENCES `clienti` (`id`),
-  CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `dipendente_di_filiale` (`id`),
   CONSTRAINT `FK_contratti_filiali` FOREIGN KEY (`filiale_di_partenza`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK_contratti_filiali_2` FOREIGN KEY (`filiale_di_arrivo`) REFERENCES `filiali` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
@@ -152,48 +152,39 @@ INSERT INTO `contratti` (`id`, `tipo_km`, `tariffa`, `data_inizio`, `data_limite
 /*!40000 ALTER TABLE `contratti` ENABLE KEYS */;
 
 
--- Dump della struttura di tabella carloan.dipendente_di_filiale
-DROP TABLE IF EXISTS `dipendente_di_filiale`;
-CREATE TABLE IF NOT EXISTS `dipendente_di_filiale` (
+-- Dump della struttura di tabella carloan.dipendenti_di_filiale
+DROP TABLE IF EXISTS `dipendenti_di_filiale`;
+CREATE TABLE IF NOT EXISTS `dipendenti_di_filiale` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `id_utente` int(50) NOT NULL,
   `id_filiale` int(50) NOT NULL,
-  `nome` varchar(50) DEFAULT NULL,
-  `cognome` varchar(50) DEFAULT NULL,
-  `telefono` varchar(50) DEFAULT NULL,
-  `residenza` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`,`username`),
-  KEY `FK_dipendente_di_filiale_filiali` (`id_filiale`),
-  CONSTRAINT `FK_dipendente_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_utente` (`id_utente`),
+  KEY `id_filiale` (`id_filiale`),
+  CONSTRAINT `FK_dipendente_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
+  CONSTRAINT `FK_dipendente_di_filiale_utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
--- Dump dei dati della tabella carloan.dipendente_di_filiale: ~20 rows (circa)
-DELETE FROM `dipendente_di_filiale`;
-/*!40000 ALTER TABLE `dipendente_di_filiale` DISABLE KEYS */;
-INSERT INTO `dipendente_di_filiale` (`id`, `username`, `email`, `password`, `id_filiale`, `nome`, `cognome`, `telefono`, `residenza`) VALUES
-	(2, 'dipendente1', 'mail1', 'password', 8, NULL, NULL, NULL, NULL),
-	(3, 'dipendente2', 'mail2', 'password', 8, NULL, NULL, NULL, NULL),
-	(4, 'dipendente3', 'mail3', 'password', 8, NULL, NULL, NULL, NULL),
-	(5, 'dipendente4', 'mail4', 'password', 8, NULL, NULL, NULL, NULL),
-	(6, 'dipendente5', 'mail5', 'password', 9, NULL, NULL, NULL, NULL),
-	(7, 'dipendente6', 'mail6', 'password', 9, NULL, NULL, NULL, NULL),
-	(8, 'dipendente7', 'mail7', 'password', 9, NULL, NULL, NULL, NULL),
-	(9, 'dipendente8', 'mail8', 'password', 9, NULL, NULL, NULL, NULL),
-	(10, 'dipendente9', 'mail9', 'password', 11, NULL, NULL, NULL, NULL),
-	(11, 'dipendente10', 'mail10', 'password', 11, NULL, NULL, NULL, NULL),
-	(12, 'dipendente11', 'mail11', 'password', 11, NULL, NULL, NULL, NULL),
-	(13, 'dipendente12', 'mail12', 'password', 11, NULL, NULL, NULL, NULL),
-	(14, 'dipendente13', 'mail13', 'password', 12, NULL, NULL, NULL, NULL),
-	(15, 'dipendente14', 'mail14', 'password', 12, NULL, NULL, NULL, NULL),
-	(16, 'dipendente15', 'mail15', 'password', 12, NULL, NULL, NULL, NULL),
-	(17, 'dipendente16', 'mail16', 'password', 12, NULL, NULL, NULL, NULL),
-	(18, 'dipendente17', 'mail17', 'password', 13, NULL, NULL, NULL, NULL),
-	(19, 'dipendente18', 'mail18', 'password', 13, NULL, NULL, NULL, NULL),
-	(20, 'dipendente19', 'mail19', 'password', 13, NULL, NULL, NULL, NULL),
-	(21, 'dipendente20', 'mail20', 'password', 13, NULL, NULL, NULL, NULL);
-/*!40000 ALTER TABLE `dipendente_di_filiale` ENABLE KEYS */;
+-- Dump dei dati della tabella carloan.dipendenti_di_filiale: ~15 rows (circa)
+DELETE FROM `dipendenti_di_filiale`;
+/*!40000 ALTER TABLE `dipendenti_di_filiale` DISABLE KEYS */;
+INSERT INTO `dipendenti_di_filiale` (`id`, `id_utente`, `id_filiale`) VALUES
+	(2, 2, 9),
+	(8, 8, 9),
+	(9, 9, 9),
+	(10, 10, 11),
+	(11, 11, 11),
+	(12, 12, 11),
+	(13, 13, 12),
+	(14, 14, 12),
+	(15, 15, 12),
+	(16, 16, 13),
+	(17, 17, 13),
+	(18, 18, 13),
+	(19, 19, 8),
+	(20, 20, 8),
+	(21, 21, 8);
+/*!40000 ALTER TABLE `dipendenti_di_filiale` ENABLE KEYS */;
 
 
 -- Dump della struttura di tabella carloan.fasce
@@ -225,21 +216,19 @@ CREATE TABLE IF NOT EXISTS `filiali` (
   `nome` varchar(50) NOT NULL,
   `luogo` varchar(50) DEFAULT NULL,
   `telefono` varchar(50) DEFAULT NULL,
-  `id_manager` int(50) NOT NULL,
-  PRIMARY KEY (`id`,`nome`),
-  KEY `FK_filiali_manager_di_filiale` (`id_manager`),
-  CONSTRAINT `FK_filiali_manager_di_filiale` FOREIGN KEY (`id_manager`) REFERENCES `manager_di_filiale` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`,`nome`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
--- Dump dei dati della tabella carloan.filiali: ~5 rows (circa)
+-- Dump dei dati della tabella carloan.filiali: ~6 rows (circa)
 DELETE FROM `filiali`;
 /*!40000 ALTER TABLE `filiali` DISABLE KEYS */;
-INSERT INTO `filiali` (`id`, `nome`, `luogo`, `telefono`, `id_manager`) VALUES
-	(8, 'filiale1', NULL, NULL, 5),
-	(9, 'filiale2', NULL, NULL, 3),
-	(11, 'filiale3', NULL, NULL, 4),
-	(12, 'filiale4', NULL, NULL, 6),
-	(13, 'filiale5', NULL, NULL, 7);
+INSERT INTO `filiali` (`id`, `nome`, `luogo`, `telefono`) VALUES
+	(8, 'filiale1', NULL, NULL),
+	(9, 'filiale2', NULL, NULL),
+	(11, 'filiale3', NULL, NULL),
+	(12, 'filiale4', NULL, NULL),
+	(13, 'filiale5', NULL, NULL),
+	(17, 'filiale6', NULL, NULL);
 /*!40000 ALTER TABLE `filiali` ENABLE KEYS */;
 
 
@@ -247,25 +236,24 @@ INSERT INTO `filiali` (`id`, `nome`, `luogo`, `telefono`, `id_manager`) VALUES
 DROP TABLE IF EXISTS `manager_di_filiale`;
 CREATE TABLE IF NOT EXISTS `manager_di_filiale` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `nome` varchar(50) DEFAULT NULL,
-  `cognome` varchar(50) DEFAULT NULL,
-  `telefono` varchar(50) DEFAULT NULL,
-  `residenza` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`,`username`)
+  `id_utente` int(50) NOT NULL,
+  `id_filiale` int(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_filiare` (`id_filiale`),
+  UNIQUE KEY `id_utente` (`id_utente`),
+  CONSTRAINT `FK_manager_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
+  CONSTRAINT `FK__utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.manager_di_filiale: ~5 rows (circa)
 DELETE FROM `manager_di_filiale`;
 /*!40000 ALTER TABLE `manager_di_filiale` DISABLE KEYS */;
-INSERT INTO `manager_di_filiale` (`id`, `username`, `email`, `password`, `nome`, `cognome`, `telefono`, `residenza`) VALUES
-	(3, 'utente2', 'mail2', 'password', NULL, NULL, NULL, NULL),
-	(4, 'utente3', 'mail3', 'password', NULL, NULL, NULL, NULL),
-	(5, 'utente1', 'mail2', 'password', NULL, NULL, NULL, NULL),
-	(6, 'utente4', 'mail4', 'password', NULL, NULL, NULL, NULL),
-	(7, 'utente5', 'mail5', 'password', NULL, NULL, NULL, NULL);
+INSERT INTO `manager_di_filiale` (`id`, `id_utente`, `id_filiale`) VALUES
+	(3, 3, 9),
+	(4, 4, 11),
+	(5, 5, 8),
+	(6, 6, 12),
+	(7, 7, 13);
 /*!40000 ALTER TABLE `manager_di_filiale` ENABLE KEYS */;
 
 
@@ -342,6 +330,48 @@ INSERT INTO `prezzi` (`id`, `tariffa_base_g`, `tariffa_base_s`, `costo_chilometr
 	(3, 20.00, 55.00, 1.80, 2.00, 12.00, 30.00),
 	(4, 30.00, 65.00, 2.50, 2.50, 15.00, 36.00);
 /*!40000 ALTER TABLE `prezzi` ENABLE KEYS */;
+
+
+-- Dump della struttura di tabella carloan.utenti
+DROP TABLE IF EXISTS `utenti`;
+CREATE TABLE IF NOT EXISTS `utenti` (
+  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `nome` varchar(50) DEFAULT NULL,
+  `cognome` varchar(50) DEFAULT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `residenza` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`,`username`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+
+-- Dump dei dati della tabella carloan.utenti: ~20 rows (circa)
+DELETE FROM `utenti`;
+/*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
+INSERT INTO `utenti` (`id`, `username`, `email`, `password`, `nome`, `cognome`, `telefono`, `residenza`) VALUES
+	(2, 'utente1', 'mail1', 'password', NULL, NULL, NULL, NULL),
+	(3, 'utente2', 'mail2', 'password', NULL, NULL, NULL, NULL),
+	(4, 'utente3', 'mail3', 'password', NULL, NULL, NULL, NULL),
+	(5, 'utente4', 'mail4', 'password', NULL, NULL, NULL, NULL),
+	(6, 'utente5', 'mail5', 'password', NULL, NULL, NULL, NULL),
+	(7, 'utente6', 'mail6', 'password', NULL, NULL, NULL, NULL),
+	(8, 'utente7', 'mail7', 'password', NULL, NULL, NULL, NULL),
+	(9, 'utente8', 'mail8', 'password', NULL, NULL, NULL, NULL),
+	(10, 'utente9', 'mail9', 'password', NULL, NULL, NULL, NULL),
+	(11, 'utente10', 'mail10', 'password', NULL, NULL, NULL, NULL),
+	(12, 'utente11', 'mail11', 'password', NULL, NULL, NULL, NULL),
+	(13, 'utente12', 'mail12', 'password', NULL, NULL, NULL, NULL),
+	(14, 'utente13', 'mail13', 'password', NULL, NULL, NULL, NULL),
+	(15, 'utente14', 'mail14', 'password', NULL, NULL, NULL, NULL),
+	(16, 'utente15', 'mail15', 'password', NULL, NULL, NULL, NULL),
+	(17, 'utente16', 'mail16', 'password', NULL, NULL, NULL, NULL),
+	(18, 'utente17', 'mail17', 'password', NULL, NULL, NULL, NULL),
+	(19, 'utente18', 'mail18', 'password', NULL, NULL, NULL, NULL),
+	(20, 'utente19', 'mail19', 'password', NULL, NULL, NULL, NULL),
+	(21, 'utente20', 'mail20', 'password', NULL, NULL, NULL, NULL);
+/*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
