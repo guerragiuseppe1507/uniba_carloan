@@ -28,12 +28,12 @@ public class DAO {
 			connessione = DriverManager.getConnection(
 					"jdbc:mysql://localhost/"	
 					+ NOME_DATABASE, USERNAME, PASSWORD);	
-			risultato.put("esito", "true");
+			risultato.put(util.ResultKeys.esito, "true");
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			
-			risultato.put("esito", "false");
-			risultato.put("msgErr", "Connessione al DataBase fallita");
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Connessione al DataBase fallita");
 			
 		}
 		
@@ -44,8 +44,8 @@ public class DAO {
 	public HashMap<String, String> accesso(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
-
 		risultato = connetti();
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
 		
 		//check manager
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" where (username = ? OR email = ?) AND password = ?";
@@ -61,18 +61,18 @@ public class DAO {
 			
 			if (isUtente){
 				
-				risultato.put("esito", "true");
-				risultato.put("tipoUtente", "Loggato!!!");
+				risultato.put(util.ResultKeys.esito, "true");
+				risultato.put(util.ResultKeys.tipoUtente, "Loggato!!!");
 				
 			}else {
-				risultato.put("esito", "false");
-				risultato.put("msgErr", "Email o password errata");
+				risultato.put(util.ResultKeys.esito, "false");
+				risultato.put(util.ResultKeys.msgErr, "Email o password errata");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			risultato.put("esito", "false");
-			risultato.put("msgErr", "Errore Query");
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Errore Query");
 		}
 		
 		return risultato;

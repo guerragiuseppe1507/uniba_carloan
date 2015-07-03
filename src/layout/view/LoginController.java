@@ -35,10 +35,10 @@ public class LoginController {
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
-		if (risultato.get("esito").equalsIgnoreCase("true")){
-			resultLabel.setText(risultato.get("tipoUtente"));
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("true")){
+			resultLabel.setText(risultato.get(util.ResultKeys.tipoUtente));
 		}else{
-			resultLabel.setText(risultato.get("msgErr"));
+			resultLabel.setText(risultato.get(util.ResultKeys.msgErr));
 		}
 		
 		

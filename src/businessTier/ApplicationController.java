@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 public class ApplicationController {
 	
+	@SuppressWarnings("unchecked")
 	public HashMap<String, String> execute(String[] comando, HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<>();
@@ -29,8 +30,9 @@ public class ApplicationController {
 		}
 		catch(Exception e){
 			
-			risultato.put("esito", "false");
-			risultato.put("msgErr", e.toString());
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, e.toString());
+			
 		}
 		
 		return risultato;
