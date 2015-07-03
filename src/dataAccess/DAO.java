@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import com.mysql.jdbc.Statement;
 
@@ -15,63 +16,66 @@ public class DAO {
 	
 	//private static long dataSistema = System.currentTimeMillis();
 	//private static final int DUE_GIORNI_MILLIS = 172800000;
-	private Connection connessione;
+	private Connection connessione = null;
 	
-	public void connetti() {
+	private HashMap<String, String> connetti() {
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			
 			connessione = DriverManager.getConnection(
 					"jdbc:mysql://localhost/"	
 					+ NOME_DATABASE, USERNAME, PASSWORD);	
+			risultato.put("esito", "true");
+			
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new EccezioneConnessioneDatabase("non connesso");
+			
+			risultato.put("esito", "false");
+			risultato.put("msgErr", "Connessione al DataBase fallita");
+			
 		}
+		
+		return risultato;
 	}
+
 	
-	public boolean disconnetti(){
-		try{
-			connessione.close();
-			return true;
-		}catch(SQLException e){
-			return false;
-		}
-	}
-	
-	public boolean accesso(String username, String password){
+	public HashMap<String, String> accesso(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+
+		risultato = connetti();
 		
 		//check manager
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" where (username = ? OR email = ?) AND password = ?";
-		String queryManagerDiSistema = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" where username = ? AND password = ?";
+		//String queryManagerDiSistema = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" where username = ? AND password = ?";
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
-			istruzione.setString(1, username);
-			istruzione.setString(2, username);
-			istruzione.setString(3, password);
-			ResultSet risultato = istruzione.executeQuery();
-			Boolean isUtente = risultato.first();
+			istruzione.setString(1, inputParam.get("username"));
+			istruzione.setString(2, inputParam.get("username"));
+			istruzione.setString(3, inputParam.get("password"));
+			ResultSet res = istruzione.executeQuery();
+			Boolean isUtente = res.first();
 			
 			if (isUtente){
 				
-				return isUtente;
+				risultato.put("esito", "true");
+				risultato.put("tipoUtente", "Loggato!!!");
 				
-			} else {
-				
-				istruzione = connessione.prepareStatement(queryManagerDiSistema);
-				istruzione.setString(1, username);
-				istruzione.setString(2, password);
-				risultato = istruzione.executeQuery();
-				Boolean isManagerDiSistema = risultato.first();
-				
-				return isManagerDiSistema;
-			
+			}else {
+				risultato.put("esito", "false");
+				risultato.put("msgErr", "Email o password errata");
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			risultato.put("esito", "false");
+			risultato.put("msgErr", "Errore Query");
 		}
+		
+		return risultato;
 
 	}
 	

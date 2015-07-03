@@ -41,9 +41,9 @@ public class InsertManagerController {
 	
 	@FXML
 	private void ManagerRegister() {
-		DAO db = new DAO();
-		db.connetti();
-		resultLabel.setText(Boolean.toString(db.registraManagerDiFiliale(usernameField.getText(),emailField.getText(), passwordField.getText(),Integer.parseInt(filialeField.getText()),nomeField.getText(),cognomeField.getText(),telefonoField.getText(),residenzaField.getText())));
-		db.disconnetti();
+		//DAO db = new DAO();
+		//db.connetti();
+		//resultLabel.setText(Boolean.toString(db.registraManagerDiFiliale(usernameField.getText(),emailField.getText(), passwordField.getText(),Integer.parseInt(filialeField.getText()),nomeField.getText(),cognomeField.getText(),telefonoField.getText(),residenzaField.getText())));
+		//db.disconnetti();
 	}
 }
