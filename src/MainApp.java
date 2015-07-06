@@ -27,8 +27,8 @@ public class MainApp extends Application {
 		
 		initRootLayout();
 		//showLogin();
-		//showInsertManager();
-		showInsertDipendente();
+		showInsertManager();
+		//showInsertDipendente();
 	}
 	
 	public void initRootLayout(){
@@ -80,7 +80,7 @@ public class MainApp extends Application {
 			
 			this.rootLayout.setCenter(InsertManager);
 			
-			InsertManagerController controller = loader.getController();
+			//InsertManagerController controller = loader.getController();
 			//controller.setMainApp(this);
 			
 		} catch (IOException e){

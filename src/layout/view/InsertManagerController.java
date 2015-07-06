@@ -1,5 +1,8 @@
 package layout.view;
 
+import java.util.HashMap;
+
+import presentationTier.FrontController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -8,29 +11,14 @@ import dataAccess.DAO;
 public class InsertManagerController {
 	
 	@FXML
-	private TextField usernameField;
+	private TextField idField;
 	
 	@FXML
-	private TextField emailField;
+	private TextField id_utenteField;
 	
 	@FXML
-	private TextField passwordField;
-	
-	@FXML
-	private TextField filialeField;
-	
-	@FXML
-	private TextField nomeField;
-	
-	@FXML
-	private TextField cognomeField;
-	
-	@FXML
-	private TextField telefonoField;
-	
-	@FXML
-	private TextField residenzaField;
-	
+	private TextField id_filialeField;
+
 	@FXML
 	private Label resultLabel;
 
@@ -40,10 +28,30 @@ public class InsertManagerController {
 	}
 	
 	@FXML
-	private void ManagerRegister() {
+	private void ManagerRegisterw() {
 		DAO db = new DAO();
 		db.connetti();
-		resultLabel.setText(Boolean.toString(db.registraManagerDiFiliale(usernameField.getText(),emailField.getText(), passwordField.getText(),Integer.parseInt(filialeField.getText()),nomeField.getText(),cognomeField.getText(),telefonoField.getText(),residenzaField.getText())));
-		//db.disconnetti();
+		resultLabel.setText(Boolean.toString(db.registraManagerDiFiliale(Integer.parseInt(idField.getText()),Integer.parseInt(id_utenteField.getText()),Integer.parseInt( id_filialeField.getText()))));
+		//db.disconnetti
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

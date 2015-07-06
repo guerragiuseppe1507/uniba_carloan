@@ -81,7 +81,7 @@ public class DAO {
 	
 	// Registrazione Manager
 	private int registraManager(int id, int id_utente, int id_filiale){
-		String query1= "INSERT INTO Manager_di_filiale( `id` ,  `id_utente` ,  `id_filiale` ) VALUES (?, ?, ?)";
+		String query1= "INSERT INTO manager_di_filiale( `id` ,  `id_utente` ,  `id_filiale` ) VALUES (?, ?, ?)";
 		
 		try {
 			PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
@@ -142,7 +142,7 @@ public class DAO {
 	
 	private boolean setManagerDiFiliale(int id_utente, int id_filiale){
 		
-		String query = "INSERT INTO " + SchemaDb.TAB_MANAGER_DI_FILIALE + " (id_utente, id_filiale) VALUES (?, ?)";
+		String query = "INSERT INTO manager_di_filiale(id_utente, id_filiale) VALUES (?, ?)";
 		
 		try {
 			PreparedStatement istruzione1 = connessione.prepareStatement(query);
@@ -180,9 +180,9 @@ public class DAO {
 	}
 
 
-	public boolean registraManagerDiFiliale(String username,String email,String password,int id_filiale, String nome,String cognome, String telefono,String residenza){
+	public boolean registraManagerDiFiliale(int id, int id_utente, int id_filiale){
 		
-		int id_utente = registraManager(id, id_utente, id_filiale);
+		int utente = registraManager(id, id_utente, id_filiale);
 		boolean isSetted = setManagerDiFiliale(id_utente, id_filiale);
 		return isSetted;
 		
