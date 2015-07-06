@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import layout.view.InsertDipendenteController;
 import layout.view.InsertManagerController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,8 +26,9 @@ public class MainApp extends Application {
 		this.primaryStage.setTitle("AddressApp");
 		
 		initRootLayout();
-		showLogin();
+		//showLogin();
 		//showInsertManager();
+		showInsertDipendente();
 	}
 	
 	public void initRootLayout(){
@@ -89,6 +91,25 @@ public class MainApp extends Application {
 		
 	}
 	
+	public void showInsertDipendente(){
+		
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("layout/view/InsertDipendentediFiliale.fxml"));
+			AnchorPane InsertDipendente = (AnchorPane) loader.load();
+			
+			this.rootLayout.setCenter(InsertDipendente);
+			
+			//InsertDipendenteController controller = loader.getController();
+			//controller.setMainApp(this);
+			
+		} catch (IOException e){
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
 	
 	public Stage getPrimaryStage() {
 		

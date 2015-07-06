@@ -18,7 +18,7 @@ public class DAO {
 	//private static final int DUE_GIORNI_MILLIS = 172800000;
 	private Connection connessione = null;
 	
-	private HashMap<String, String> connetti() {
+	public HashMap<String, String> connetti() {
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		
@@ -80,36 +80,60 @@ public class DAO {
 	}
 	
 	// Registrazione Manager
-	private int registraUtente(String username,String email,String password,String nome,String cognome, String telefono,String residenza){
-		String query1= "INSERT INTO  "+ SchemaDb.TAB_UTENTI
-				+" ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` ,  `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	private int registraManager(int id, int id_utente, int id_filiale){
+		String query1= "INSERT INTO Manager_di_filiale( `id` ,  `id_utente` ,  `id_filiale` ) VALUES (?, ?, ?)";
+		
 		try {
 			PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
-			istruzione1.setString(1, username);
-			istruzione1.setString(2, email);
-			istruzione1.setString(3, password);
-			istruzione1.setString(4, nome);
-			istruzione1.setString(5, cognome);
-			istruzione1.setString(6, telefono);
-			istruzione1.setString(7, residenza);
+			istruzione1.setInt(1, id);
+			istruzione1.setInt(2, id_utente);
+			istruzione1.setInt(3, id_filiale);
 
 			istruzione1.execute();
 			ResultSet keys = istruzione1.getGeneratedKeys();
 			
-			int id_utente = 0;
-			
-			if(keys.next()){
-				
-				id_utente = keys.getInt(1);
-				
-			}
-			
-			return id_utente;
+			return 1;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
 		}
+		
+		
+	}
+		// Registrazione Dipendente
+		private int registraDipendente(String username,String email,String password,String nome,String cognome,int filiale, String telefono,String residenza){
+			String query1= "INSERT INTO  "+ SchemaDb.TAB_UTENTI
+					+" ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` , 'filiale, `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			try {
+				PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
+				istruzione1.setString(1, username);
+				istruzione1.setString(2, email);
+				istruzione1.setString(3, password);
+				istruzione1.setString(4, nome);
+				istruzione1.setString(5, cognome);
+				istruzione1.setInt(6, filiale);
+				istruzione1.setString(7, telefono);
+				istruzione1.setString(8, residenza);
+
+				istruzione1.execute();
+				ResultSet keys = istruzione1.getGeneratedKeys();
+				
+				int id_utente = 0;
+				
+				if(keys.next()){
+					
+					id_utente = keys.getInt(1);
+					
+				}
+				
+				return id_utente;
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				return 0;
+			}
 
 	//todo 
 	//Inserire qui sotto le query al db
@@ -136,12 +160,41 @@ public class DAO {
 		
 	}
 	
+    private boolean setDipendente(int id_utente){
+		
+		String query = "INSERT INTO " + SchemaDb.TAB_MANAGER_DI_FILIALE + " (id_utente, id_filiale) VALUES (?, ?)";
+		
+		try {
+			PreparedStatement istruzione1 = connessione.prepareStatement(query);
+			istruzione1.setInt(1, id_utente);
+
+			istruzione1.execute();
+			return true;	
+		} 	
+		catch (SQLException e) {
+				
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+
 	public boolean registraManagerDiFiliale(String username,String email,String password,int id_filiale, String nome,String cognome, String telefono,String residenza){
 		
-		int id_utente = registraUtente(username, email, password, nome, cognome, telefono, residenza);
+		int id_utente = registraManager(id, id_utente, id_filiale);
 		boolean isSetted = setManagerDiFiliale(id_utente, id_filiale);
 		return isSetted;
 		
+	}
+
+
+	public boolean dipendent(String username, String email, String password,String nome, String cognome, int filiale, String telefono, String residenza) {
+		// TODO Auto-generated method stub
+		int id_utente = registraDipendente(username, email, password, nome, cognome, filiale, telefono, residenza);	                               
+		boolean isSetted = setDipendente(id_utente);
+		return isSetted;
+
 	}
 	
 }
