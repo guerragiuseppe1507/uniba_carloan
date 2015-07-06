@@ -41,15 +41,19 @@ public class DAO {
 	}
 
 	
-	public HashMap<String, String> accesso(HashMap<String,String> inputParam){
+public HashMap<String, String> accesso(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
 		
 		//check manager
-		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" where (username = ? OR email = ?) AND password = ?";
+		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" WHERE (username = ? OR email = ?) AND password = ?";
+		String queryManagerSis = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" WHERE username = ? AND password = ?";
+		
 		//String queryManagerDiSistema = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" where username = ? AND password = ?";
+		
+		int id ;
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
@@ -62,11 +66,30 @@ public class DAO {
 			if (isUtente){
 				
 				risultato.put(util.ResultKeys.esito, "true");
-				risultato.put(util.ResultKeys.tipoUtente, "Loggato!!!");
 				
-			}else {
-				risultato.put(util.ResultKeys.esito, "false");
-				risultato.put(util.ResultKeys.msgErr, "Email o password errata");
+				id = res.getInt("id");
+				
+				if(checkUserType(id,"managerdifiliale")){					
+					risultato.put(util.ResultKeys.tipoUtente, "managerFiliale");					
+				} else if (checkUserType(id,"dipendentedifiliale")){					
+					risultato.put(util.ResultKeys.tipoUtente, "dipendenteFiliale");					
+				}
+				
+			} else {
+				
+				istruzione = connessione.prepareStatement(queryManagerSis);
+				istruzione.setString(1, inputParam.get("username"));
+				istruzione.setString(2, inputParam.get("password"));
+				res = istruzione.executeQuery();
+				isUtente = res.first();
+				
+				if(isUtente){
+					risultato.put(util.ResultKeys.tipoUtente, "managerSistema");
+				} else {
+					risultato.put(util.ResultKeys.esito, "false");
+					risultato.put(util.ResultKeys.msgErr, "Email o password errata");
+				}
+				
 			}
 
 		} catch (SQLException e) {
@@ -77,6 +100,23 @@ public class DAO {
 		
 		return risultato;
 
+	}
+	
+	private boolean checkUserType(int id, String type) throws SQLException{
+		
+		String query;
+		if(type.equalsIgnoreCase("managerdifiliale")){
+			query = "SELECT * FROM " + SchemaDb.TAB_MANAGER_DI_FILIALE + " WHERE id = ?";
+		} else if(type.equalsIgnoreCase("dipendentedifiliale")) {
+			query = "SELECT * FROM " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE + " WHERE id = ?";
+		} else {
+			return false;
+		}
+		
+		PreparedStatement istruzione = connessione.prepareStatement(query);
+		istruzione.setInt(1, id);
+		ResultSet res = istruzione.executeQuery();
+		return res.first();
 	}
 	
 	// Registrazione Manager

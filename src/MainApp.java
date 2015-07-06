@@ -26,8 +26,8 @@ public class MainApp extends Application {
 		this.primaryStage.setTitle("AddressApp");
 		
 		initRootLayout();
-		//showLogin();
-		showInsertManager();
+		showLogin();
+		//showInsertManager();
 		//showInsertDipendente();
 	}
 	
