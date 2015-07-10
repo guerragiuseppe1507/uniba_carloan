@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import javafx.beans.property.StringProperty;
+
 import com.mysql.jdbc.Statement;
 
 public class DAO {
@@ -41,7 +43,7 @@ public class DAO {
 	}
 
 	
-public HashMap<String, String> accesso(HashMap<String,String> inputParam){
+    public HashMap<String, String> accesso(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
@@ -119,6 +121,193 @@ public HashMap<String, String> accesso(HashMap<String,String> inputParam){
 		return res.first();
 	}
 	
+	public HashMap<String, String> getUtenti(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
+				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
+				" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
+		
+		String id;
+		String username;
+		String email;
+		String nome;
+		String cognome;
+		String telefono;
+		String residenza;
+		
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("idFiliale"));
+			ResultSet res = istruzione.executeQuery();
+			Boolean isUtente = res.first();
+			
+			if (isUtente){
+				
+				risultato.put(util.ResultKeys.esito, "true");
+
+				int pos = 0;
+				do{
+					
+					id = Integer.toString(res.getInt("id_utente"));
+					username = res.getString("username");
+					email = res.getString("email");
+					nome = res.getString("nome");
+					cognome = res.getString("cognome");
+					telefono = res.getString("telefono");
+					residenza = res.getString("residenza");
+					
+					risultato.put("id" + Integer.toString(pos), id);
+					risultato.put("username" + Integer.toString(pos), username);
+					risultato.put("email" + Integer.toString(pos), email);
+					risultato.put("nome" + Integer.toString(pos), nome);
+					risultato.put("cognome" + Integer.toString(pos), cognome);
+					risultato.put("telefono" + Integer.toString(pos), telefono);
+					risultato.put("residenza" + Integer.toString(pos), residenza);
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.esito, "false");
+				risultato.put(util.ResultKeys.resLength, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
+	
+	public HashMap<String, String> getFiliali(){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		
+		String queryFiliale = "SELECT * FROM "+ SchemaDb.TAB_FILIALI;
+		
+		String id;
+		String nome;
+		String luogo;
+		String telefono;
+		
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryFiliale);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isUtente = res.first();
+			
+			if (isUtente){
+				
+				risultato.put(util.ResultKeys.esito, "true");
+
+				int pos = 0;
+				do{
+					
+					id = Integer.toString(res.getInt("id"));
+					nome = res.getString("nome");
+					luogo = res.getString("luogo");
+					telefono = res.getString("telefono");
+					
+					risultato.put("id" + Integer.toString(pos), id);
+					risultato.put("nome" + Integer.toString(pos), nome);
+					risultato.put("luogo" + Integer.toString(pos), luogo);
+					risultato.put("telefono" + Integer.toString(pos), telefono);
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.esito, "false");
+				risultato.put(util.ResultKeys.resLength, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
+	
+	public HashMap<String, String> getManagers(){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		
+		String queryManagerDiFiliale = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +
+				" INNER JOIN "+ SchemaDb.TAB_MANAGER_DI_FILIALE +
+				" ON " +SchemaDb.TAB_UTENTI+".id = " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_utente"+
+				" INNER JOIN "+ SchemaDb.TAB_FILIALI+
+				" ON " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale = "+SchemaDb.TAB_FILIALI+".id";
+		
+		String id_utente;
+		String id_filiale;
+		String nome_filiale;
+		String username_manager;
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryManagerDiFiliale);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isUtente = res.first();
+			
+			if (isUtente){
+				
+				risultato.put(util.ResultKeys.esito, "true");
+
+				int pos = 0;
+				do{
+					
+					id_utente = Integer.toString(res.getInt(SchemaDb.TAB_MANAGER_DI_FILIALE+".id_utente"));
+					id_filiale = Integer.toString(res.getInt(SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale"));
+					nome_filiale = res.getString(SchemaDb.TAB_FILIALI+".nome");
+					username_manager = res.getString(SchemaDb.TAB_UTENTI+".username");		
+					
+					risultato.put("id_utente" + Integer.toString(pos), id_utente);
+					risultato.put("id_filiale" + Integer.toString(pos), id_filiale);
+					risultato.put("nome" + Integer.toString(pos), nome_filiale);
+					risultato.put("username" + Integer.toString(pos), username_manager);
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.esito, "false");
+				risultato.put(util.ResultKeys.resLength, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
+	
 	// Registrazione Manager
 	private int registraManager(int id, int id_utente, int id_filiale){
 		String query1= "INSERT INTO manager_di_filiale( `id` ,  `id_utente` ,  `id_filiale` ) VALUES (?, ?, ?)";
@@ -141,39 +330,39 @@ public HashMap<String, String> accesso(HashMap<String,String> inputParam){
 		
 		
 	}
-		// Registrazione Dipendente
-		private int registraDipendente(String username,String email,String password,String nome,String cognome,int filiale, String telefono,String residenza){
-			String query1= "INSERT INTO  "+ SchemaDb.TAB_UTENTI
-					+" ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` , 'filiale, `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-			
-			try {
-				PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
-				istruzione1.setString(1, username);
-				istruzione1.setString(2, email);
-				istruzione1.setString(3, password);
-				istruzione1.setString(4, nome);
-				istruzione1.setString(5, cognome);
-				istruzione1.setInt(6, filiale);
-				istruzione1.setString(7, telefono);
-				istruzione1.setString(8, residenza);
+// Registrazione Dipendente
+private int registraDipendente(String username,String email,String password,String nome,String cognome,int filiale, String telefono,String residenza){
+	String query1= "INSERT INTO  "+ SchemaDb.TAB_UTENTI
+			+" ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` , 'filiale, `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	
+	try {
+		PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
+		istruzione1.setString(1, username);
+		istruzione1.setString(2, email);
+		istruzione1.setString(3, password);
+		istruzione1.setString(4, nome);
+		istruzione1.setString(5, cognome);
+		istruzione1.setInt(6, filiale);
+		istruzione1.setString(7, telefono);
+		istruzione1.setString(8, residenza);
 
-				istruzione1.execute();
-				ResultSet keys = istruzione1.getGeneratedKeys();
-				
-				int id_utente = 0;
-				
-				if(keys.next()){
-					
-					id_utente = keys.getInt(1);
-					
-				}
-				
-				return id_utente;
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-				return 0;
-			}
+		istruzione1.execute();
+		ResultSet keys = istruzione1.getGeneratedKeys();
+		
+		int id_utente = 0;
+		
+		if(keys.next()){
+			
+			id_utente = keys.getInt(1);
+			
+		}
+		
+		return id_utente;
+	}
+	catch (SQLException e) {
+		e.printStackTrace();
+		return 0;
+	}
 
 	//todo 
 	//Inserire qui sotto le query al db
