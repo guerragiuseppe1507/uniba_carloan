@@ -12,8 +12,8 @@ public class ManagerDiFiliale {
 	
 	public ManagerDiFiliale(int id_manager, int id_filiale, String usernameManager, String nomeFiliale){
 		
-		this.idManager = idManager;
-		this.idFiliale = idFiliale;
+		this.idManager = id_manager;
+		this.idFiliale = id_filiale;
 		this.usernameManager = new SimpleStringProperty(usernameManager);
 		this.nomeFiliale = new SimpleStringProperty(nomeFiliale);
 		

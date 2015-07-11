@@ -256,7 +256,7 @@ public class DAO {
 		String queryManagerDiFiliale = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +
 				" INNER JOIN "+ SchemaDb.TAB_MANAGER_DI_FILIALE +
 				" ON " +SchemaDb.TAB_UTENTI+".id = " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_utente"+
-				" INNER JOIN "+ SchemaDb.TAB_FILIALI+
+				" RIGHT JOIN "+ SchemaDb.TAB_FILIALI+
 				" ON " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale = "+SchemaDb.TAB_FILIALI+".id";
 		
 		String id_utente;
@@ -277,14 +277,14 @@ public class DAO {
 				do{
 					
 					id_utente = Integer.toString(res.getInt(SchemaDb.TAB_MANAGER_DI_FILIALE+".id_utente"));
-					id_filiale = Integer.toString(res.getInt(SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale"));
+					id_filiale = Integer.toString(res.getInt(SchemaDb.TAB_FILIALI+".id"));
 					nome_filiale = res.getString(SchemaDb.TAB_FILIALI+".nome");
 					username_manager = res.getString(SchemaDb.TAB_UTENTI+".username");		
 					
-					risultato.put("id_utente" + Integer.toString(pos), id_utente);
+					risultato.put("id_utente" + Integer.toString(pos), id_utente==null?"0":id_utente);
 					risultato.put("id_filiale" + Integer.toString(pos), id_filiale);
 					risultato.put("nome" + Integer.toString(pos), nome_filiale);
-					risultato.put("username" + Integer.toString(pos), username_manager);
+					risultato.put("username" + Integer.toString(pos), username_manager==null?"Non Impostato":username_manager);
 					pos++;
 					
 				}while(res.next());
@@ -295,6 +295,39 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.esito, "false");
 				risultato.put(util.ResultKeys.resLength, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
+	
+    public HashMap<String, String> setManager(HashMap<String, String> inputParam){
+		
+    	HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		
+		String queryGetManager =  "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_FILIALE +
+				" INNER JOIN "+ SchemaDb.TAB_FILIALI +
+				" ON " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale = "+SchemaDb.TAB_FILIALI+".id"+
+				" WHERE " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale = ?";
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryGetManager);
+			ResultSet res = istruzione.executeQuery();
+			Boolean hasManager = res.first();
+			
+			if (hasManager){
+				
+				
+			}else{
+				
 				
 			}
 			
@@ -409,13 +442,7 @@ private int registraDipendente(String username,String email,String password,Stri
 	}
 
 
-	public boolean registraManagerDiFiliale(int id, int id_utente, int id_filiale){
-		
-		int utente = registraManager(id, id_utente, id_filiale);
-		boolean isSetted = setManagerDiFiliale(id_utente, id_filiale);
-		return isSetted;
-		
-	}
+
 
 
 	public boolean dipendent(String username, String email, String password,String nome, String cognome, int filiale, String telefono, String residenza) {

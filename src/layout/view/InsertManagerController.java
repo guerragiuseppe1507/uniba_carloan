@@ -1,11 +1,20 @@
 package layout.view;
 
+import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import presentationTier.FrontController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -48,15 +57,21 @@ public class InsertManagerController {
     @FXML
     private TableColumn<ManagerDiFiliale, String> managerDiFilialeNomeFColumn;
 	
-    private ObservableList<ManagerDiFiliale> managerDiFilialeData = FXCollections.observableArrayList();
-	private ObservableList<Utente> usersData = FXCollections.observableArrayList();
-	private ObservableList<Filiale> filialiData = FXCollections.observableArrayList();
+    private ArrayList<ManagerDiFiliale> managersDiFiliale;
+    private ObservableList<ManagerDiFiliale> managerDiFilialeData;
+	private ObservableList<Utente> usersData;
+	private ObservableList<Filiale> filialiData;
 	
 	private Filiale selectedFiliale;
 	private Utente selectedUtente;
 
 	@FXML
 	private void initialize(){
+		
+		managersDiFiliale = new ArrayList<ManagerDiFiliale>();
+		managerDiFilialeData = FXCollections.observableArrayList();
+		usersData = FXCollections.observableArrayList();
+		filialiData = FXCollections.observableArrayList();
 		
 		riempiTabellaManager();
 		
@@ -72,13 +87,54 @@ public class InsertManagerController {
 	
 	@FXML
 	private void setManager() {
-		int id_utente = selectedUtente.getId();
-		int id_filiale = selectedUtente.getId();
+		int id_utente;
+		int id_filiale;
+		Boolean b = false;
+		ManagerDiFiliale altroManager = null;
 		
-		//TODO 
-		//1 controllare se la filiale scelta ha un manager
-		//se si bisogna chiedere se licenziare il manager vecchio o settarlo come dipendente della filiale
+		try{
+			id_filiale = selectedFiliale.getId();
+			id_utente = selectedUtente.getId();
+			for(int i = 0 ; i < managersDiFiliale.size(); i++){
+				if(managersDiFiliale.get(i).getIdFiliale() == id_filiale &&
+						managersDiFiliale.get(i).getIdManagr() != 0){
+						b = true;
+						altroManager = managersDiFiliale.get(i);
+				}
+			}
+			
+			if(b==true){
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Conferma");
+				alert.setHeaderText("Esiste gia il manager '"+altroManager.getUsernameManager()+"' per la filiale selezionata");
+				alert.setContentText("Continuare ugualmente?\nNB: il manager precedente verrà impostato come dipendente della sua filiale.");
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+				    setTheNewManager(id_utente);
+				}
+				
+			}else{
+				setTheNewManager(id_utente);
+			}
+			
+		}catch(NullPointerException e){
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Attenzione!");
+			alert.setHeaderText("Dipendente non selezionato");
+			alert.setContentText("Assicurati di scegliere una filiale e successivamente un dipendente prima di continuare");
+
+			alert.showAndWait();
+		}
 		
+	}
+	
+	private void setTheNewManager(int id){
+		String[] comando = new String[]{"businessTier.GestioneUtenti", "setManagerDiFiliale"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("idFiliale", Integer.toString(id));
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
 	}
 	
 	private void getUser(Utente u){
@@ -96,12 +152,12 @@ public class InsertManagerController {
 			
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
 				
-				managerDiFilialeData.add(new ManagerDiFiliale(Integer.parseInt(risultato.get("id_utente" + Integer.toString(i))),
+				ManagerDiFiliale tmp = new ManagerDiFiliale(Integer.parseInt(risultato.get("id_utente" + Integer.toString(i))),
 						Integer.parseInt(risultato.get("id_filiale" + Integer.toString(i))),
 						risultato.get("username" + Integer.toString(i)), 
-						risultato.get("nome" + Integer.toString(i)))
-				); 
-				
+						risultato.get("nome" + Integer.toString(i)));
+				managerDiFilialeData.add(tmp); 
+				managersDiFiliale.add(tmp);				
 			}
 			
 			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().usernameManagerProperty());
@@ -193,7 +249,6 @@ public class InsertManagerController {
 		} else {
 			usersTable.getItems().clear();
 			usersTable.setPlaceholder(new Label("No Users Found"));
-			
 		}
 		
 	}
