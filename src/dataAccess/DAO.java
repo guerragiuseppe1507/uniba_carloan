@@ -247,6 +247,7 @@ public class DAO {
 		
 	}
 	
+	
 	public HashMap<String, String> getManagers(){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
@@ -285,6 +286,80 @@ public class DAO {
 					risultato.put("id_filiale" + Integer.toString(pos), id_filiale);
 					risultato.put("nome" + Integer.toString(pos), nome_filiale);
 					risultato.put("username" + Integer.toString(pos), username_manager);
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.esito, "false");
+				risultato.put(util.ResultKeys.resLength, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.esito, "false");
+			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
+	
+	
+	
+	
+	public HashMap<String, String> getAuto(){
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		
+		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_AUTO +
+				" INNER JOIN "+ SchemaDb.TAB_FILIALI +
+				" ON " +SchemaDb.TAB_AUTO+".id_filiale = " + SchemaDb.TAB_FILIALI+".id"+
+				" INNER JOIN "+ SchemaDb.TAB_MODELLI+
+				" ON " + SchemaDb.TAB_AUTO+".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
+				" INNER JOIN "+ SchemaDb.TAB_FASCE+
+				" ON " + SchemaDb.TAB_MODELLI+".id_fascia = "+SchemaDb.TAB_FASCE+".id";
+		String id_Auto;
+		String nome_filiale;
+		String id_Modello;
+		String Targa;
+		String Status;
+		String chilometraggio;
+		String Fasce;
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isAuto = res.first();
+			
+			if (isAuto){
+				
+				risultato.put(util.ResultKeys.esito, "true");
+
+				int pos = 0;
+				do{
+					
+					id_Auto = Integer.toString(res.getInt(SchemaDb.TAB_AUTO+".id"));
+					nome_filiale = Integer.toString(res.getInt(SchemaDb.TAB_AUTO+".id_filiale"));
+					id_Modello = res.getString(SchemaDb.TAB_AUTO+".id_modello");
+					Targa = res.getString(SchemaDb.TAB_AUTO+".targa");
+					Status=res.getString(SchemaDb.TAB_AUTO+".status");
+					chilometraggio=res.getString(SchemaDb.TAB_AUTO+".chilometraggio");
+					Fasce=res.getString(SchemaDb.TAB_FILIALI+".nome");
+					
+					risultato.put("id_auto" + Integer.toString(pos), id_Auto);
+					risultato.put("nome_filiale" + Integer.toString(pos), nome_filiale);
+					risultato.put("id_modello" + Integer.toString(pos), id_Modello);
+					risultato.put("targa" + Integer.toString(pos), Targa);
+					risultato.put("status" + Integer.toString(pos),Status);
+					risultato.put("chilometraggio" + Integer.toString(pos),chilometraggio);
+					risultato.put("fasce" + Integer.toString(pos),Fasce);
+					
 					pos++;
 					
 				}while(res.next());

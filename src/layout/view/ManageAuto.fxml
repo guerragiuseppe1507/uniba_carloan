@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.ManageAutoController">
+   <children>
+      <TableView fx:id="autoTable" layoutX="23.0" layoutY="33.0" prefHeight="200.0" prefWidth="729.0">
+        <columns>
+      <!--    <TableColumn fx:id="id_Auto" prefWidth="110.0" text="Id Auto" />
+          <TableColumn fx:id="id_Modello" prefWidth="131.0" text="Id Modello" />-->
+          <TableColumn fx:id="targa" prefWidth="82.0" text="Targa" />
+            <TableColumn fx:id="nomeFiliale" prefWidth="100.0" text="Nome filiale" />
+            <TableColumn fx:id="status" prefWidth="103.0" text="Status" />
+            <TableColumn fx:id="chilometraggio" prefWidth="139.0" text="Chilometraggio" />
+            <TableColumn fx:id="fasce" prefWidth="63.0" text="Fasce" />
+        </columns>
+      </TableView>
+      <Button layoutX="131.0" layoutY="410.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="135.0" text="Inserisci Auto" />
+      <Button layoutX="323.0" layoutY="410.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Cancella Auto" />
+      <Button layoutX="507.0" layoutY="410.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Modifica Dati Auto" />
+   </children>
+</AnchorPane>
