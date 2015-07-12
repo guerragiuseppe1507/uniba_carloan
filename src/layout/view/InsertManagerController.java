@@ -111,11 +111,11 @@ public class InsertManagerController {
 
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK){
-				    setTheNewManager(id_utente);
+				    setTheNewManager(id_utente, id_filiale);
 				}
 				
 			}else{
-				setTheNewManager(id_utente);
+				setTheNewManager(id_utente, id_filiale);
 			}
 			
 		}catch(NullPointerException e){
@@ -129,12 +129,19 @@ public class InsertManagerController {
 		
 	}
 	
-	private void setTheNewManager(int id){
+	private void setTheNewManager(int idUtente, int idFiliale){
 		String[] comando = new String[]{"businessTier.GestioneUtenti", "setManagerDiFiliale"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("idFiliale", Integer.toString(id));
+		inputParam.put("idUtente", Integer.toString(idUtente));
+		inputParam.put("idFiliale", Integer.toString(idFiliale));
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
+		
+		if(risultato.get(util.ResultKeys.esito).equals("true")){
+			riempiTabellaManager();
+			riempiTabellaUtenti(selectedFiliale);
+		}
+		
 	}
 	
 	private void getUser(Utente u){
@@ -147,6 +154,8 @@ public class InsertManagerController {
 		HashMap<String, String> inputParam = new HashMap<>();
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
+		
+		managerDiFilialeData = FXCollections.observableArrayList();
 		
 		if(risultato.get(util.ResultKeys.esito).equals("true")){
 			

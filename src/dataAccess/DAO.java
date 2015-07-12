@@ -41,6 +41,42 @@ public class DAO {
 		
 		return risultato;
 	}
+	
+	private void startConnectionTransaction(){
+		
+		try {
+			connessione.commit();
+			connessione.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+    private void endConnectionTransaction(){
+    	
+    	try {
+			connessione.commit();
+			connessione.setAutoCommit(true);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+	}
+    
+    private void connectionRollBack(){
+    	
+    	try {
+			connessione.rollback();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
 
 	
     public HashMap<String, String> accesso(HashMap<String,String> inputParam){
@@ -389,25 +425,63 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
 		
+		int newManager = Integer.parseInt(inputParam.get("idUtente"));
+		int idFiliale = Integer.parseInt(inputParam.get("idFiliale"));
+		
 		String queryGetManager =  "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_FILIALE +
 				" INNER JOIN "+ SchemaDb.TAB_FILIALI +
 				" ON " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale = "+SchemaDb.TAB_FILIALI+".id"+
 				" WHERE " + SchemaDb.TAB_MANAGER_DI_FILIALE+".id_filiale = ?";
+		
+		String setDipendente = "INSERT INTO "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +" (id_utente, id_filiale) VALUES (?, ?)";
+		
+		String deleteDipendente = "DELETE FROM "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +" WHERE id_utente = ?";
+		
+		String updateManager = "UPDATE "+ SchemaDb.TAB_MANAGER_DI_FILIALE 
+				+" SET id_utente = ? WHERE id_utente = ?";
+		
+		String setManager = "INSERT INTO "+ SchemaDb.TAB_MANAGER_DI_FILIALE +" (id_utente, id_filiale) VALUES (?, ?)";
+			
+		//startConnectionTransaction();
+
 		try {
+			
 			PreparedStatement istruzione = connessione.prepareStatement(queryGetManager);
+			istruzione.setInt(1, idFiliale);
 			ResultSet res = istruzione.executeQuery();
 			Boolean hasManager = res.first();
 			
 			if (hasManager){
+				int oldManager = res.getInt(SchemaDb.TAB_MANAGER_DI_FILIALE+".id_utente");
 				
+				istruzione = connessione.prepareStatement(updateManager);
+				istruzione.setInt(1, newManager);
+				istruzione.setInt(2, oldManager);
+				istruzione.execute();
+				
+				istruzione = connessione.prepareStatement(setDipendente);
+				istruzione.setInt(1, oldManager);
+				istruzione.setInt(2, idFiliale);
+				istruzione.execute();
 				
 			}else{
 				
-				
+				PreparedStatement istruzione1 = connessione.prepareStatement(setManager);
+				istruzione1.setInt(1, newManager);
+				istruzione1.setInt(2, idFiliale);
+				istruzione1.execute();
 			}
+			
+			istruzione = connessione.prepareStatement(deleteDipendente);
+			istruzione.setInt(1, newManager);
+			istruzione.execute();
+			
+			//endConnectionTransaction();
+			risultato.put(util.ResultKeys.esito, "true");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			//connectionRollBack();
 			risultato.put(util.ResultKeys.esito, "false");
 			risultato.put(util.ResultKeys.msgErr, "Errore Query");
 		}
