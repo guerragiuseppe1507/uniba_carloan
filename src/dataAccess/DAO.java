@@ -45,7 +45,6 @@ public class DAO {
 	private void startConnectionTransaction(){
 		
 		try {
-			connessione.commit();
 			connessione.setAutoCommit(false);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -60,6 +59,7 @@ public class DAO {
     	try {
 			connessione.commit();
 			connessione.setAutoCommit(true);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -442,7 +442,7 @@ public class DAO {
 		
 		String setManager = "INSERT INTO "+ SchemaDb.TAB_MANAGER_DI_FILIALE +" (id_utente, id_filiale) VALUES (?, ?)";
 			
-		//startConnectionTransaction();
+		startConnectionTransaction();
 
 		try {
 			
@@ -476,12 +476,12 @@ public class DAO {
 			istruzione.setInt(1, newManager);
 			istruzione.execute();
 			
-			//endConnectionTransaction();
+			endConnectionTransaction();
 			risultato.put(util.ResultKeys.esito, "true");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//connectionRollBack();
+			connectionRollBack();
 			risultato.put(util.ResultKeys.esito, "false");
 			risultato.put(util.ResultKeys.msgErr, "Errore Query");
 		}

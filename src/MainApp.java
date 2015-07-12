@@ -27,9 +27,9 @@ public class MainApp extends Application {
 		
 		initRootLayout();
 		//showLogin();
-		//showInsertManager();
+		showInsertManager();
 		//showInsertDipendente();
-		showManageAuto();
+		//showManageAuto();
 	}
 	
 	public void initRootLayout(){
@@ -132,8 +132,6 @@ public void showManageAuto(){
 		}
 		
 	}
-	
-	
 	
 	
 	public Stage getPrimaryStage() {
