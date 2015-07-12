@@ -1,30 +1,38 @@
 package layout.view;
 
-import java.awt.Component;
+
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
+import java.util.ResourceBundle;
 import presentationTier.FrontController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import layout.model.ContextMenu;
 import layout.model.Filiale;
 import layout.model.ManagerDiFiliale;
 import layout.model.Utente;
-import dataAccess.DAO;
 
-public class InsertManagerController {
+public class InsertManagerController implements Initializable, ControlledScreen{
+	
+	ScreensController myController;
+	
+	@FXML
+	StackPane container;
+	
+	@FXML
+	AnchorPane menu;
 	
 	@FXML
     private TableView<Utente> usersTable;
@@ -65,8 +73,13 @@ public class InsertManagerController {
 	private Filiale selectedFiliale;
 	private Utente selectedUtente;
 
-	@FXML
-	private void initialize(){
+	@Override
+	public void initialize(URL url, ResourceBundle rb){
+		
+		container.setPrefHeight(ScreensFramework.DEFAULT_HEIGHT);
+		container.setPrefWidth(ScreensFramework.DEFAULT_WIDTH);
+		menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
+		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
 		managersDiFiliale = new ArrayList<ManagerDiFiliale>();
 		managerDiFilialeData = FXCollections.observableArrayList();
@@ -83,6 +96,11 @@ public class InsertManagerController {
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
 
+	}
+	
+	public void setScreenParent(ScreensController screenParent){
+		myController = screenParent;
+		ContextMenu.showContextMenu(menu,myController);
 	}
 	
 	@FXML

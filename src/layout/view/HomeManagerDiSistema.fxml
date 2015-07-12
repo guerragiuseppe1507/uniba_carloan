@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.HomeManagerDiSistemaController">
+   <children>
+      <AnchorPane prefHeight="200.0">
+         <children>
+            <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

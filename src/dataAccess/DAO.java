@@ -6,9 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-
-import javafx.beans.property.StringProperty;
-
 import com.mysql.jdbc.Statement;
 
 public class DAO {
@@ -111,6 +108,8 @@ public class DAO {
 					risultato.put(util.ResultKeys.tipoUtente, "managerFiliale");					
 				} else if (checkUserType(id,"dipendentedifiliale")){					
 					risultato.put(util.ResultKeys.tipoUtente, "dipendenteFiliale");					
+				} else {
+					risultato.put(util.ResultKeys.tipoUtente, "utenteNonAssegnato");
 				}
 				
 			} else {
@@ -501,7 +500,7 @@ public class DAO {
 			istruzione1.setInt(3, id_filiale);
 
 			istruzione1.execute();
-			ResultSet keys = istruzione1.getGeneratedKeys();
+			istruzione1.getGeneratedKeys();
 			
 			return 1;
 		}
@@ -594,7 +593,7 @@ private int registraDipendente(String username,String email,String password,Stri
 
 	public boolean registraManagerDiFiliale(int id, int id_utente, int id_filiale){
 		
-		int utente = registraManager(id, id_utente, id_filiale);
+		registraManager(id, id_utente, id_filiale);
 		boolean isSetted = setManagerDiFiliale(id_utente, id_filiale);
 		return isSetted;
 		

@@ -1,22 +1,33 @@
 package layout.view;
 
+import java.net.URL;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import layout.model.Filiale;
-import layout.model.ManagerDiFiliale;
-import layout.model.Utente;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import layout.model.ContextMenu;
 import layout.model.Auto;
-import dataAccess.DAO;
 
-public class ManageAutoController {
+
+public class ManageAutoController implements Initializable, ControlledScreen{
+	
+	ScreensController myController;
+	
+	@FXML
+	StackPane container;
+	
+	@FXML
+	AnchorPane menu;
+	
 	@FXML
 	 private TableView<Auto> autoTable;
 	@FXML
@@ -36,8 +47,13 @@ public class ManageAutoController {
 	
 	private ObservableList<Auto> AutoData = FXCollections.observableArrayList();
 	
-	@FXML
-	private void initialize(){
+	@Override
+	public void initialize(URL url, ResourceBundle rb){
+		
+		container.setPrefHeight(ScreensFramework.DEFAULT_HEIGHT);
+		container.setPrefWidth(ScreensFramework.DEFAULT_WIDTH);
+		menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
+		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
 		riempiTabellaAuto();
 		
@@ -48,7 +64,12 @@ public class ManageAutoController {
 	
 	}
 	
-private void riempiTabellaAuto(){
+	public void setScreenParent(ScreensController screenParent){
+		myController = screenParent;
+		ContextMenu.showContextMenu(menu,myController);
+	}
+	
+	private void riempiTabellaAuto(){
 		
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();
