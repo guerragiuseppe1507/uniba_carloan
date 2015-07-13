@@ -11,13 +11,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Dump della struttura del database carloan
-DROP DATABASE IF EXISTS `carloan`;
 CREATE DATABASE IF NOT EXISTS `carloan` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `carloan`;
 
 
 -- Dump della struttura di tabella carloan.auto
-DROP TABLE IF EXISTS `auto`;
 CREATE TABLE IF NOT EXISTS `auto` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `id_modello` int(50) NOT NULL,
@@ -86,7 +84,6 @@ INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilom
 
 
 -- Dump della struttura di tabella carloan.clienti
-DROP TABLE IF EXISTS `clienti`;
 CREATE TABLE IF NOT EXISTS `clienti` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
@@ -115,7 +112,6 @@ INSERT INTO `clienti` (`id`, `nome`, `cognome`, `mail`, `residenza`, `data_di_na
 
 
 -- Dump della struttura di tabella carloan.contratti
-DROP TABLE IF EXISTS `contratti`;
 CREATE TABLE IF NOT EXISTS `contratti` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tipo_km` varchar(50) NOT NULL,
@@ -137,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `contratti` (
   KEY `FK_contratti_auto` (`id_auto`),
   KEY `FK_contratti_filiali` (`filiale_di_partenza`),
   KEY `FK_contratti_filiali_2` (`filiale_di_arrivo`),
-  CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `dipendenti_di_filiale` (`id`),
+  CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `utenti` (`id`),
   CONSTRAINT `FK_contratti_auto` FOREIGN KEY (`id_auto`) REFERENCES `auto` (`id`),
   CONSTRAINT `FK_contratti_clienti` FOREIGN KEY (`id_cliente`) REFERENCES `clienti` (`id`),
   CONSTRAINT `FK_contratti_filiali` FOREIGN KEY (`filiale_di_partenza`) REFERENCES `filiali` (`id`),
@@ -153,7 +149,6 @@ INSERT INTO `contratti` (`id`, `tipo_km`, `tariffa`, `data_inizio`, `data_limite
 
 
 -- Dump della struttura di tabella carloan.dipendenti_di_filiale
-DROP TABLE IF EXISTS `dipendenti_di_filiale`;
 CREATE TABLE IF NOT EXISTS `dipendenti_di_filiale` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `id_utente` int(50) NOT NULL,
@@ -163,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `dipendenti_di_filiale` (
   KEY `id_filiale` (`id_filiale`),
   CONSTRAINT `FK_dipendente_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK_dipendente_di_filiale_utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.dipendenti_di_filiale: ~15 rows (circa)
 DELETE FROM `dipendenti_di_filiale`;
@@ -173,22 +168,21 @@ INSERT INTO `dipendenti_di_filiale` (`id`, `id_utente`, `id_filiale`) VALUES
 	(8, 8, 9),
 	(9, 9, 9),
 	(10, 10, 11),
-	(11, 11, 11),
 	(12, 12, 11),
 	(13, 13, 12),
-	(14, 14, 12),
 	(15, 15, 12),
 	(16, 16, 13),
-	(17, 17, 13),
 	(18, 18, 13),
 	(19, 19, 8),
 	(20, 20, 8),
-	(21, 21, 8);
+	(21, 21, 8),
+	(31, 11, 11),
+	(35, 17, 13),
+	(38, 14, 12);
 /*!40000 ALTER TABLE `dipendenti_di_filiale` ENABLE KEYS */;
 
 
 -- Dump della struttura di tabella carloan.fasce
-DROP TABLE IF EXISTS `fasce`;
 CREATE TABLE IF NOT EXISTS `fasce` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
@@ -210,7 +204,6 @@ INSERT INTO `fasce` (`id`, `nome`, `id_prezzi`) VALUES
 
 
 -- Dump della struttura di tabella carloan.filiali
-DROP TABLE IF EXISTS `filiali`;
 CREATE TABLE IF NOT EXISTS `filiali` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
@@ -233,7 +226,6 @@ INSERT INTO `filiali` (`id`, `nome`, `luogo`, `telefono`) VALUES
 
 
 -- Dump della struttura di tabella carloan.manager_di_filiale
-DROP TABLE IF EXISTS `manager_di_filiale`;
 CREATE TABLE IF NOT EXISTS `manager_di_filiale` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `id_utente` int(50) NOT NULL,
@@ -243,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `manager_di_filiale` (
   UNIQUE KEY `id_utente` (`id_utente`),
   CONSTRAINT `FK_manager_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK__utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.manager_di_filiale: ~5 rows (circa)
 DELETE FROM `manager_di_filiale`;
@@ -258,7 +250,6 @@ INSERT INTO `manager_di_filiale` (`id`, `id_utente`, `id_filiale`) VALUES
 
 
 -- Dump della struttura di tabella carloan.manager_di_sistema
-DROP TABLE IF EXISTS `manager_di_sistema`;
 CREATE TABLE IF NOT EXISTS `manager_di_sistema` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
@@ -275,7 +266,6 @@ INSERT INTO `manager_di_sistema` (`id`, `username`, `password`) VALUES
 
 
 -- Dump della struttura di tabella carloan.modelli
-DROP TABLE IF EXISTS `modelli`;
 CREATE TABLE IF NOT EXISTS `modelli` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
@@ -309,7 +299,6 @@ INSERT INTO `modelli` (`id`, `nome`, `id_fascia`) VALUES
 
 
 -- Dump della struttura di tabella carloan.prezzi
-DROP TABLE IF EXISTS `prezzi`;
 CREATE TABLE IF NOT EXISTS `prezzi` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `tariffa_base_g` double(5,2) NOT NULL,
@@ -333,7 +322,6 @@ INSERT INTO `prezzi` (`id`, `tariffa_base_g`, `tariffa_base_s`, `costo_chilometr
 
 
 -- Dump della struttura di tabella carloan.utenti
-DROP TABLE IF EXISTS `utenti`;
 CREATE TABLE IF NOT EXISTS `utenti` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
@@ -345,9 +333,9 @@ CREATE TABLE IF NOT EXISTS `utenti` (
   `residenza` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`,`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
--- Dump dei dati della tabella carloan.utenti: ~20 rows (circa)
+-- Dump dei dati della tabella carloan.utenti: ~21 rows (circa)
 DELETE FROM `utenti`;
 /*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
 INSERT INTO `utenti` (`id`, `username`, `email`, `password`, `nome`, `cognome`, `telefono`, `residenza`) VALUES
@@ -370,7 +358,8 @@ INSERT INTO `utenti` (`id`, `username`, `email`, `password`, `nome`, `cognome`, 
 	(18, 'utente17', 'mail17', 'password', NULL, NULL, NULL, NULL),
 	(19, 'utente18', 'mail18', 'password', NULL, NULL, NULL, NULL),
 	(20, 'utente19', 'mail19', 'password', NULL, NULL, NULL, NULL),
-	(21, 'utente20', 'mail20', 'password', NULL, NULL, NULL, NULL);
+	(21, 'utente20', 'mail20', 'password', NULL, NULL, NULL, NULL),
+	(22, 'utente 21', 'mail21', 'password', NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
