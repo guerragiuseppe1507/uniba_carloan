@@ -36,6 +36,9 @@ public class ScreensFramework extends Application {
 	public static String insertDipendenteDiFilialeFile = "InsertDipendenteDiFiliale.fxml";
 	public static String manageAutoID = "ManageAuto";
 	public static String manageAutoFile = "ManageAuto.fxml";
+	public static String gestioneDipendentiID = "GestioneDipendenti";
+	public static String gestioneDipendenti = "GestioneDipendenti.fxml";
+	
 	
 	//Variabile globale che memorizza la sessione dell' utente tramite la mail.
 	public static String userId;

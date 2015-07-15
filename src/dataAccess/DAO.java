@@ -161,10 +161,12 @@ public class DAO {
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
-		
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
-				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
-				" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
+				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente";;
+		
+		if (inputParam.get("restrict").equals("filiale")){
+			queryUtente +=" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
+		}
 		
 		String id;
 		String username;
@@ -176,7 +178,9 @@ public class DAO {
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
-			istruzione.setString(1, inputParam.get("idFiliale"));
+			if (inputParam.get("restrict").equals("filiale")){
+				istruzione.setString(1, inputParam.get("idFiliale"));
+			}
 			ResultSet res = istruzione.executeQuery();
 			Boolean isUtente = res.first();
 			

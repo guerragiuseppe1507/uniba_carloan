@@ -49,8 +49,8 @@ public class ContextMenu {
     		//TODO voci del menu
     		MenuItem assumiDipendente = new MenuItem("Gestisci Dipendenti");
     		MenuItem gestisciAuto = new MenuItem("Gestisci Auto");
-    		
-    		gestisci.getItems().addAll(assumiDipendente, gestisciAuto);
+    		MenuItem gestisciDipendente = new MenuItem("Gestisci Dipendenti");
+    		gestisci.getItems().addAll(assumiDipendente, gestisciAuto, gestisciDipendente);
     		
     		assumiDipendente.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
@@ -65,6 +65,15 @@ public class ContextMenu {
 	            	ctrl.setScreen(ScreensFramework.manageAutoID);
 	            }
 	        });
+    		
+    		
+    		gestisciDipendente.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.setScreen(ScreensFramework.gestioneDipendentiID);
+	            }
+	        });
+    		
     		
     	}else if(Context.getInstance().getUserType().equals(Context.dipendenteFiliale)){
     		

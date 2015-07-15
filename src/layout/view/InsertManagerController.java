@@ -243,6 +243,8 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
 		HashMap<String, String> inputParam = new HashMap<>();
 		inputParam.put("idFiliale", idFiliale);
+		inputParam.put("restrict", "filiale");
+		
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		

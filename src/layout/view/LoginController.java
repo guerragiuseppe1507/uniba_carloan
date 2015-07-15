@@ -107,6 +107,7 @@ public class LoginController implements Initializable, ControlledScreen{
 		myController.loadScreen(ScreensFramework.homeManagerDiFilialeID,ScreensFramework.homeManagerDiFilialeFile);
 		myController.loadScreen(ScreensFramework.insertDipendenteDiFilialeID,ScreensFramework.insertDipendenteDiFilialeFile);
 		myController.loadScreen(ScreensFramework.manageAutoID,ScreensFramework.manageAutoFile);
+		myController.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendenti);
 	}
 	private void loadDipendenteFilialeScreens(){
 		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
