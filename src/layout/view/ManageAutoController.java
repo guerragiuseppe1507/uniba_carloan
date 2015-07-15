@@ -31,9 +31,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	 private TableView<Auto> autoTable;
 	@FXML
-	private TableColumn<Auto, String> id_Auto;
-	@FXML
-	private TableColumn<Auto, String> id_Modello;
+	private TableColumn<Auto, String> modello;
 	@FXML
 	private TableColumn<Auto, String> targa;
 	@FXML
@@ -80,9 +78,8 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
 				
-				AutoData.add(new Auto(Integer.parseInt(risultato.get("id_auto" + Integer.toString(i))),
-						Integer.parseInt(risultato.get("id_modello" + Integer.toString(i))),
-						
+				AutoData.add(new Auto(
+						risultato.get("modello" + Integer.toString(i)),
 						risultato.get("nome_filiale" + Integer.toString(i)), 
 						risultato.get("status" + Integer.toString(i)),
 						risultato.get("targa"+Integer.toString(i)),
@@ -92,7 +89,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 				
 			}
 			
-				
+			modello.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
 			nomeFiliale.setCellValueFactory(cellData->cellData.getValue().nomeFilialeProperty());
 			status.setCellValueFactory(cellData->cellData.getValue().statusProperty());
 			chilometraggio.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());

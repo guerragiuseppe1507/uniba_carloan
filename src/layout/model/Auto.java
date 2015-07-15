@@ -4,40 +4,38 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Auto {
-		private int idAuto;
-		private int idModello;
+		private StringProperty modello;
 		private StringProperty nomeFiliale;
-		private StringProperty Status;
-		private StringProperty Chilometraggio;
-		private StringProperty Fasce;
-		private StringProperty Targa;
+		private StringProperty status;
+		private StringProperty chilometraggio;
+		private StringProperty fasce;
+		private StringProperty targa;
 		
-		public Auto(int idAuto, int idModello, String nomeFiliale, String Status,String Targa, String Chilometraggio, String Fasce){
+		public Auto(String Modello, String NomeFiliale, String Status,String Targa, String Chilometraggio, String Fasce){
 			
-			this.idAuto=idAuto;
-			this.idModello = idModello;
-			this.Status=new SimpleStringProperty(Status);
-			this.Targa= new SimpleStringProperty(Targa);
-			this.nomeFiliale = new SimpleStringProperty(nomeFiliale);
-			this.Chilometraggio = new SimpleStringProperty(Chilometraggio);
-			this.Fasce=new SimpleStringProperty(Fasce);
+			this.modello=new SimpleStringProperty(Modello);
+			this.status=new SimpleStringProperty(Status);
+			this.targa= new SimpleStringProperty(Targa);
+			this.nomeFiliale = new SimpleStringProperty(NomeFiliale);
+			this.chilometraggio = new SimpleStringProperty(Chilometraggio);
+			this.fasce=new SimpleStringProperty(Fasce);
 			
 		}
 
-		public int getIdAuto(){return idAuto;}
-		public int getidModello(){return idModello;}
 		
+		public String modello(){return modello.get();}
 		public String getnomeFiliale(){return nomeFiliale.get();}
-		public String getChilometraggio(){return Chilometraggio.get();}
-		public String getStatus(){return Status.get();}
-		public String getFasce(){return Fasce.get();}
-		public String getTarga(){return Targa.get();}
+		public String getChilometraggio(){return chilometraggio.get();}
+		public String getStatus(){return status.get();}
+		public String getFasce(){return fasce.get();}
+		public String getTarga(){return targa.get();}
 		
+		public StringProperty modelloProperty(){return modello;}
 		public StringProperty nomeFilialeProperty(){return nomeFiliale;}
-		public StringProperty chilometraggioProperty(){return Chilometraggio;}
-		public StringProperty statusProperty(){return Status;}
-		public StringProperty fasceProperty(){return Fasce;}
-		public StringProperty targaProperty(){return Targa;}
+		public StringProperty chilometraggioProperty(){return chilometraggio;}
+		public StringProperty statusProperty(){return status;}
+		public StringProperty fasceProperty(){return fasce;}
+		public StringProperty targaProperty(){return targa;}
 
 	}
 

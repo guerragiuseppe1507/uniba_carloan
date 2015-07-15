@@ -359,13 +359,13 @@ public class DAO {
 				" ON " + SchemaDb.TAB_AUTO+".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
 				" INNER JOIN "+ SchemaDb.TAB_FASCE+
 				" ON " + SchemaDb.TAB_MODELLI+".id_fascia = "+SchemaDb.TAB_FASCE+".id";
-		String id_Auto;
+	
 		String nome_filiale;
-		String id_Modello;
-		String Targa;
-		String Status;
+		String modello;
+		String targa;
+		String status;
 		String chilometraggio;
-		String Fasce;
+		String fasce;
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
@@ -379,21 +379,20 @@ public class DAO {
 				int pos = 0;
 				do{
 					
-					id_Auto = Integer.toString(res.getInt(SchemaDb.TAB_AUTO+".id"));
-					nome_filiale = Integer.toString(res.getInt(SchemaDb.TAB_AUTO+".id_filiale"));
-					id_Modello = res.getString(SchemaDb.TAB_AUTO+".id_modello");
-					Targa = res.getString(SchemaDb.TAB_AUTO+".targa");
-					Status=res.getString(SchemaDb.TAB_AUTO+".status");
+					nome_filiale = res.getString(SchemaDb.TAB_FILIALI+".nome");
+					modello = res.getString(SchemaDb.TAB_MODELLI+".nome");
+					targa = res.getString(SchemaDb.TAB_AUTO+".targa");
+					status=res.getString(SchemaDb.TAB_AUTO+".status");
 					chilometraggio=res.getString(SchemaDb.TAB_AUTO+".chilometraggio");
-					Fasce=res.getString(SchemaDb.TAB_FILIALI+".nome");
+					fasce=res.getString(SchemaDb.TAB_FASCE+".nome");
+
 					
-					risultato.put("id_auto" + Integer.toString(pos), id_Auto);
 					risultato.put("nome_filiale" + Integer.toString(pos), nome_filiale);
-					risultato.put("id_modello" + Integer.toString(pos), id_Modello);
-					risultato.put("targa" + Integer.toString(pos), Targa);
-					risultato.put("status" + Integer.toString(pos),Status);
+					risultato.put("modello" + Integer.toString(pos), modello);
+					risultato.put("targa" + Integer.toString(pos), targa);
+					risultato.put("status" + Integer.toString(pos),status);
 					risultato.put("chilometraggio" + Integer.toString(pos),chilometraggio);
-					risultato.put("fasce" + Integer.toString(pos),Fasce);
+					risultato.put("fasce" + Integer.toString(pos),fasce);
 					
 					pos++;
 					
