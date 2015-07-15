@@ -31,7 +31,6 @@ public class ContextMenu {
 			
 			//TODO voci del menu
 			MenuItem gestisciManager = new MenuItem("Gestisci Manager");
-			
 			gestisci.getItems().addAll(gestisciManager);
 			
 			gestisciManager.setOnAction(new EventHandler<ActionEvent>() {
