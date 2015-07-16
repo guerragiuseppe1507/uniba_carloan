@@ -162,8 +162,14 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
-				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente";;
+				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente";
 		
+				
+				//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
+				//and id NOT IN ( select id_utente from dipendenti_di_filiale)
+				
+							
+				
 		if (inputParam.get("restrict").equals("filiale")){
 			queryUtente +=" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
 		}
@@ -1387,13 +1393,73 @@ private int registraDipendente(String username,String email,String password,Stri
 	
 	// METODI DANIELE
 	
-	
-	
-	
-	
-	
-	
-	
+ public HashMap<String, String> getFreeUsers(){
+			
+			HashMap<String, String> risultato = new HashMap<String, String>();
+			risultato = connetti();
+			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+			String queryUtente = "SELECT * FROM"+SchemaDb.TAB_UTENTI+"WHERE id NOT IN(SELECT * FROM"+SchemaDb.TAB_MANAGER_DI_FILIALE+") AND id NOT IN(SELECT * FROM"+SchemaDb.TAB_DIPENDENTI_DI_FILIALE+")";
+			
+					
+					//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
+					//and id NOT IN ( select id_utente from dipendenti_di_filiale)
+			
+			String username;
+			String email;
+			String nome;
+			String cognome;
+			String telefono;
+			String residenza;
+			
+			try {
+				PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+				ResultSet res = istruzione.executeQuery();
+				Boolean isUtente = res.first();
+				
+				if (isUtente){
+					
+					risultato.put(util.ResultKeys.ESITO, "true");
+
+					int pos = 0;
+					do{
+						
+						username = res.getString("username");
+						email = res.getString("email");
+						nome = res.getString("nome");
+						cognome = res.getString("cognome");
+						telefono = res.getString("telefono");
+						residenza = res.getString("residenza");
+						
+						risultato.put("username" + Integer.toString(pos), username);
+						risultato.put("email" + Integer.toString(pos), email);
+						risultato.put("nome" + Integer.toString(pos), nome);
+						risultato.put("cognome" + Integer.toString(pos), cognome);
+						risultato.put("telefono" + Integer.toString(pos), telefono);
+						risultato.put("residenza" + Integer.toString(pos), residenza);
+						pos++;
+						
+					}while(res.next());
+					
+					risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+					
+				}else{
+					
+					risultato.put(util.ResultKeys.ESITO, "false");
+					risultato.put(util.ResultKeys.RES_LENGTH, "0");
+					
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+			}
+			
+			return risultato;
+			
+		}
+		
+		
 	
 	
 	

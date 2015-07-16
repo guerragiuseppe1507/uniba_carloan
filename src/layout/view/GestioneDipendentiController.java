@@ -91,9 +91,9 @@ private void riempiTabellaUtenti(){
 		
 		
 		
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
+		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtentiLiberi"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put(ResultKeys.RESTRICT, "tutti");
+		inputParam.put(ResultKeys.RESTRICT, "liberi");
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
