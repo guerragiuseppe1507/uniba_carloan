@@ -124,8 +124,8 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			
 			if(b==true){
 				
-				Optional<ButtonType> result = NotificationManager.setConfirm("Esiste gia il manager '"+altroManager.getUsername()+"' per la filiale selezionata\n"+
-						"Continuare ugualmente?\nNB: il manager precedente verrà impostato come dipendente della sua filiale.");
+				Optional<ButtonType> result = NotificationManager.setConfirm("Esiste gia il manager '"+altroManager.getUsername()+"' per la filiale selezionata; "+
+						"Continuare ugualmente?\n\nNB: il manager precedente verrà impostato come dipendente della sua filiale.");
 				
 				if (result.get() == ButtonType.OK){
 				    setTheNewManager(id_utente, id_filiale);
@@ -273,6 +273,44 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			usersTable.setPlaceholder(new Label("No Users Found"));
 		}
 		
+	}
+	
+	@FXML
+	public void caricaUtentiLiberiHandler(){
+		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtentiLiberi"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		usersData = FXCollections.observableArrayList();
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+			
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+					
+				usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+						risultato.get("username" + Integer.toString(i)), 
+						risultato.get("email" + Integer.toString(i)), 
+						risultato.get("nome" + Integer.toString(i)), 
+						risultato.get("cognome" + Integer.toString(i)), 
+						risultato.get("telefono" + Integer.toString(i)), 
+						risultato.get("residenza" + Integer.toString(i))));		
+			}
+			
+			usersUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
+			usersEmailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+			usersNomeColumn.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
+			usersCognomeColumn.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
+			usersTelefonoColumn.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
+			usersResidenzaColumn.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
+			
+			usersTable.setItems(usersData);
+			
+		} else {
+			usersTable.getItems().clear();
+			usersTable.setPlaceholder(new Label("No Users Found"));
+		
+		}
 	}
 
 }

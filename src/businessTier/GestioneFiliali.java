@@ -12,13 +12,30 @@ public GestioneFiliali(){}
 		
 		HashMap<String, String> risultato = new HashMap<>();
 		
-		/* Accede al database per controllare che l'utente sia presente nel sistema
-		 * e che le credenziali di accesso al sistema siano corrette.
-		 */
 		DAO dao = new DAO();
 		risultato = dao.getFiliali();	
 		return risultato;
 		
 	}
+	
+	public HashMap<String, String> assumi(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+
+		DAO dao = new DAO();
+		risultato = dao.assumiDipendente(inputParam);	
+		return risultato;
+		
+	}
+
+	public HashMap<String, String> licenzia(HashMap<String, String> inputParam){
+	
+	HashMap<String, String> risultato = new HashMap<>();
+
+	DAO dao = new DAO();
+	risultato = dao.licenziaDipendente(inputParam);	
+	return risultato;
+	
+}
 
 }

@@ -217,11 +217,7 @@ public class DAO {
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
 				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
 				" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
-				
-				//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
-				//and id NOT IN ( select id_utente from dipendenti_di_filiale)
-				
-							
+								
 		String id;
 		String username;
 		String email;
@@ -600,6 +596,57 @@ public class DAO {
 		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Username o Email già utilizzati");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+
+	}
+    
+    public HashMap<String, String> assumiDipendente(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +" (id_utente, id_filiale) VALUES (?, ?)";
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("id_utente"));
+			istruzione.setString(2, inputParam.get("id_filiale"));
+			istruzione.execute();
+			
+			risultato.put(util.ResultKeys.ESITO, "true");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+
+	}
+    
+    public HashMap<String, String> licenziaDipendente(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "DELETE FROM "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +" WHERE id_utente = ?";
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("id_utente"));
+			istruzione.execute();
+			
+			risultato.put(util.ResultKeys.ESITO, "true");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			risultato.put(util.ResultKeys.ESITO, "false");
@@ -1393,71 +1440,72 @@ public class DAO {
 	
 	// METODI DANIELE
 	
- public HashMap<String, String> getFreeUsers(){
+    public HashMap<String, String> getFreeUsers(){
 			
-			HashMap<String, String> risultato = new HashMap<String, String>();
-			risultato = connetti();
-			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
-			String queryUtente = "SELECT * FROM"+SchemaDb.TAB_UTENTI+"WHERE id NOT IN(SELECT * FROM"+SchemaDb.TAB_MANAGER_DI_FILIALE+") AND id NOT IN(SELECT * FROM"+SchemaDb.TAB_DIPENDENTI_DI_FILIALE+")";
-			
-					
-					//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
-					//and id NOT IN ( select id_utente from dipendenti_di_filiale)
-			
-			String username;
-			String email;
-			String nome;
-			String cognome;
-			String telefono;
-			String residenza;
-			
-			try {
-				PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
-				ResultSet res = istruzione.executeQuery();
-				Boolean isUtente = res.first();
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		String queryUtente = "SELECT * FROM "+SchemaDb.TAB_UTENTI+" WHERE id NOT IN(SELECT id_utente FROM "+SchemaDb.TAB_MANAGER_DI_FILIALE+") AND id NOT IN(SELECT id_utente FROM "+SchemaDb.TAB_DIPENDENTI_DI_FILIALE+")";
+		
 				
-				if (isUtente){
-					
-					risultato.put(util.ResultKeys.ESITO, "true");
+				//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
+				//and id NOT IN ( select id_utente from dipendenti_di_filiale)
+		String id;
+		String username;
+		String email;
+		String nome;
+		String cognome;
+		String telefono;
+		String residenza;
+		
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isUtente = res.first();
+			
+			if (isUtente){
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
 
-					int pos = 0;
-					do{
-						
-						username = res.getString("username");
-						email = res.getString("email");
-						nome = res.getString("nome");
-						cognome = res.getString("cognome");
-						telefono = res.getString("telefono");
-						residenza = res.getString("residenza");
-						
-						risultato.put("username" + Integer.toString(pos), username);
-						risultato.put("email" + Integer.toString(pos), email);
-						risultato.put("nome" + Integer.toString(pos), nome);
-						risultato.put("cognome" + Integer.toString(pos), cognome);
-						risultato.put("telefono" + Integer.toString(pos), telefono);
-						risultato.put("residenza" + Integer.toString(pos), residenza);
-						pos++;
-						
-					}while(res.next());
+				int pos = 0;
+				do{
+					id = res.getString("id");
+					username = res.getString("username");
+					email = res.getString("email");
+					nome = res.getString("nome");
+					cognome = res.getString("cognome");
+					telefono = res.getString("telefono");
+					residenza = res.getString("residenza");
 					
-					risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+					risultato.put("id" + Integer.toString(pos), id);
+					risultato.put("username" + Integer.toString(pos), username);
+					risultato.put("email" + Integer.toString(pos), email);
+					risultato.put("nome" + Integer.toString(pos), nome);
+					risultato.put("cognome" + Integer.toString(pos), cognome);
+					risultato.put("telefono" + Integer.toString(pos), telefono);
+					risultato.put("residenza" + Integer.toString(pos), residenza);
+					pos++;
 					
-				}else{
-					
-					risultato.put(util.ResultKeys.ESITO, "false");
-					risultato.put(util.ResultKeys.RES_LENGTH, "0");
-					
-				}
+				}while(res.next());
 				
-			} catch (SQLException e) {
-				e.printStackTrace();
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+				
+			}else{
+				
 				risultato.put(util.ResultKeys.ESITO, "false");
-				risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				
 			}
 			
-			return risultato;
-			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
+		
+		return risultato;
+			
+	}
 		
 		
 	

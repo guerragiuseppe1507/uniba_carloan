@@ -27,6 +27,8 @@ public class NotificationManager {
 	
 	public static Optional<ButtonType> setConfirm(String c){
 		notifica = new Alert(AlertType.CONFIRMATION);
+		notifica.setTitle("");	
+		notifica.setContentText(c);
 		Optional<ButtonType> result = notifica.showAndWait();
 		return result;
 	}

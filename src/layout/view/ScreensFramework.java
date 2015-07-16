@@ -32,8 +32,6 @@ public class ScreensFramework extends Application {
 	public static String homeDipendenteDiFilialeFile = "HomeDipendenteDiFiliale.fxml";
 	public static String insertManagerID = "InsertManager";
 	public static String insertManagerFile = "InsertManager.fxml";
-	public static String insertDipendenteDiFilialeID = "InsertDipendenteDiFiliale";
-	public static String insertDipendenteDiFilialeFile = "InsertDipendenteDiFiliale.fxml";
 	public static String manageAutoID = "ManageAuto";
 	public static String manageAutoFile = "ManageAuto.fxml";
 	public static String gestioneDipendentiID = "GestioneDipendenti";
@@ -92,7 +90,6 @@ public class ScreensFramework extends Application {
 	public static void loadManagerFilialeScreens(ScreensController c){
 		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
 		c.loadScreen(ScreensFramework.homeManagerDiFilialeID,ScreensFramework.homeManagerDiFilialeFile);
-		c.loadScreen(ScreensFramework.insertDipendenteDiFilialeID,ScreensFramework.insertDipendenteDiFilialeFile);
 		c.loadScreen(ScreensFramework.manageAutoID,ScreensFramework.manageAutoFile);
 		c.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendentiFile);
 		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);

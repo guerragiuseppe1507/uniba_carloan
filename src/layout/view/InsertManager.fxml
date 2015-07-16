@@ -9,7 +9,7 @@
 <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.InsertManagerController">
 	<AnchorPane>
 	   <children>
-	      <TableView fx:id="managerDiFilialeTable" focusTraversable="false" layoutX="835.0" layoutY="96.0" prefHeight="486.0" prefWidth="391.0">
+	      <TableView fx:id="managerDiFilialeTable" focusTraversable="false" layoutX="835.0" layoutY="111.0" prefHeight="486.0" prefWidth="391.0">
 	        <columns>
 	          <TableColumn fx:id="managerDiFilialeNomeMColumn" editable="false" prefWidth="75.0" sortable="false" text="Manager" />
 	          <TableColumn fx:id="managerDiFilialeNomeFColumn" editable="false" prefWidth="75.0" sortable="false" text="Filiale" />
@@ -18,7 +18,7 @@
 	            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 	         </columnResizePolicy>
 	      </TableView>
-	      <TableView fx:id="usersTable" layoutX="54.0" layoutY="404.0" prefHeight="258.0" prefWidth="766.0">
+	      <TableView fx:id="usersTable" layoutX="54.0" layoutY="430.0" prefHeight="258.0" prefWidth="766.0">
 	        <columns>
 	          <TableColumn fx:id="usersUsernameColumn" prefWidth="75.0" text="Username" />
 	          <TableColumn fx:id="usersEmailColumn" prefWidth="75.0" text="E-mail" />
@@ -31,7 +31,7 @@
 	            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 	         </columnResizePolicy>
 	      </TableView>
-	      <TableView fx:id="filialiTable" layoutX="54.0" layoutY="96.0" prefHeight="269.0" prefWidth="766.0">
+	      <TableView fx:id="filialiTable" layoutX="54.0" layoutY="111.0" prefHeight="269.0" prefWidth="766.0">
 	        <columns>
 	          <TableColumn fx:id="filialiNomeColumn" prefWidth="75.0" text="Nome" />
 	          <TableColumn fx:id="filialiLuogoColumn" prefWidth="75.0" text="Luogo" />
@@ -41,11 +41,13 @@
 	            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 	         </columnResizePolicy>
 	      </TableView>
-	      <Text layoutX="54.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleziona Una Filiale :" />
-	      <Text layoutX="54.0" layoutY="399.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleziona un dipendente della filiale scelta :" />
-	      <Text layoutX="835.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Riepilogo Manager Di Filiale :" />
-	      <Button layoutX="835.0" layoutY="597.0" mnemonicParsing="false" onAction="#setManager" prefHeight="65.0" prefWidth="391.0" text="Promuovi Dipendente" />
+	      <Text layoutX="54.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleziona Una Filiale :" />
+	      <Text layoutX="54.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleziona un dipendente della filiale scelta :" />
+	      <Text layoutX="835.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Riepilogo Manager Di Filiale :" />
+	      <Button layoutX="835.0" layoutY="610.0" mnemonicParsing="false" onAction="#setManager" prefHeight="78.0" prefWidth="391.0" text="Promuovi Dipendente" />
          <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
+         <Button layoutX="575.0" layoutY="395.0" mnemonicParsing="false" onAction="#caricaUtentiLiberiHandler" prefHeight="21.0" prefWidth="245.0" text="Carica Utenti Liberi" />
+         <Label layoutX="516.0" layoutY="400.0" text="oppure" />
 	   </children>
 	</AnchorPane>
 </StackPane>
