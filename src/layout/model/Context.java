@@ -12,16 +12,27 @@ public class Context {
 
 	//Dichiarazione e instanziazione di un oggetto della classe Context
 	private final static Context instance = new Context();
-	public static final String dipendenteFiliale = "dipendenteFiliale";
-	public static final String managerFiliale = "managerFiliale";
-	public static final String managerSistema = "managerSistema";
+	public static final String dipendenteFiliale = "Dipendente Di Filiale";
+	public static final String managerFiliale = "Manager Di Filiale";
+	public static final String managerSistema = "Manager Di Sistema";
 
+	private String userType;
+	private Utente utente;
+	
+	private String password;
+	
 	//Metodo che restituisce l'oggetto statico instance di tipo Context
     public static Context getInstance() {
         return instance;
     }
     
-    private String userType;
+    public Utente getUtente(){
+    	return utente;
+    }
+    
+    public void setUtente(Utente u){
+    	utente = u;
+    }
     
     public void setUserType(String t){
     	this.userType = t;	
@@ -31,6 +42,14 @@ public class Context {
     	return userType;
     	
     }
+    
+    public void setPassword(String p){
+    	this.password = p;
+    }
+    
+    public String getPassword(){
+    	return this.password;
+	}
 
 }
 

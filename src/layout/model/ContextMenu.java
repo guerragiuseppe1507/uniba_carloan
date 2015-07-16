@@ -21,11 +21,11 @@ public class ContextMenu {
     	c.getChildren().add(mainMenu);
     	mainMenu.prefWidthProperty().bind(c.widthProperty());
 		mainMenu.prefHeightProperty().bind(c.heightProperty());
-		
+		Boolean notManager = true;
 		
     	
     	if(Context.getInstance().getUserType().equals(Context.managerSistema)){
-	    	
+    		notManager = false;
 			Menu gestisci = new Menu("Gestisci Filiali");
 			mainMenu.getMenus().addAll(gestisci);
 			
@@ -86,7 +86,7 @@ public class ContextMenu {
 		mainMenu.getMenus().addAll(account);
 		MenuItem disconnetti = new MenuItem("Disconnetti");
 		
-		account.getItems().addAll(disconnetti);
+		
 		
 		
 		disconnetti.setOnAction(new EventHandler<ActionEvent>() {
@@ -96,6 +96,20 @@ public class ContextMenu {
             	ctrl.resetScreens();
             }
         });
+		
+		if (notManager){
+			MenuItem editProfile = new MenuItem("Dati Personali");
+			account.getItems().addAll(editProfile,disconnetti);
+			editProfile.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.setScreen(ScreensFramework.gestioneProfiloID);
+	            	ctrl.resetScreens();
+	            }
+			 });
+		}else{
+			account.getItems().addAll(disconnetti);
+		};
     	
     }
 }

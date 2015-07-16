@@ -82,13 +82,23 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
+		int id ;
+		String username;
+		String email;
+		String nome;
+		String cognome;
+		String telefono;
+		String residenza;
+		String password;
+		
+		
 		//check manager
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" WHERE (username = ? OR email = ?) AND password = ?";
 		String queryManagerSis = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" WHERE username = ? AND password = ?";
 		
 		//String queryManagerDiSistema = "SELECT * FROM "+ SchemaDb.TAB_MANAGER_DI_SISTEMA +" where username = ? AND password = ?";
 		
-		int id ;
+		
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
@@ -101,15 +111,58 @@ public class DAO {
 			if (isUtente){
 				
 				risultato.put(util.ResultKeys.ESITO, "true");
-				
 				id = res.getInt("id");
 				
+				ResultSet resFiliale = null;
+				
 				if(checkUserType(id,"managerdifiliale")){					
-					risultato.put(util.ResultKeys.TIPO_UTENTE, "managerFiliale");					
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "Manager Di Filiale");
+					
+					String query = "SELECT * FROM "+SchemaDb.TAB_MANAGER_DI_FILIALE+" INNER JOIN "+SchemaDb.TAB_FILIALI+
+							" ON id_filiale = "+SchemaDb.TAB_FILIALI+
+							".id WHERE id_utente = ?";
+					PreparedStatement istruzioneFiliale = connessione.prepareStatement(query);
+					istruzioneFiliale.setInt(1, id);
+					resFiliale = istruzioneFiliale.executeQuery();
 				} else if (checkUserType(id,"dipendentedifiliale")){					
-					risultato.put(util.ResultKeys.TIPO_UTENTE, "dipendenteFiliale");					
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "Dipendente Di Filiale");	
+					String query = "SELECT * FROM "+SchemaDb.TAB_DIPENDENTI_DI_FILIALE+" INNER JOIN "+SchemaDb.TAB_FILIALI+
+							" ON id_filiale = "+SchemaDb.TAB_FILIALI+
+							".id WHERE id_utente = ?";
+					PreparedStatement istruzioneFiliale = connessione.prepareStatement(query);
+					istruzioneFiliale.setInt(1, id);
+					resFiliale = istruzioneFiliale.executeQuery();
 				} else {
 					risultato.put(util.ResultKeys.TIPO_UTENTE, "utenteNonAssegnato");
+				}
+				
+				if(resFiliale != null){
+					id = res.getInt("id");
+					username = res.getString("username");
+					email = res.getString("email");
+					nome = res.getString("nome");
+					cognome = res.getString("cognome");
+					telefono = res.getString("telefono");
+					residenza = res.getString("residenza");
+					password = res.getString("password");
+					resFiliale.first();
+					String id_filiale = resFiliale.getString("id_filiale");
+					String nome_filiale = resFiliale.getString("nome");
+					String telefono_filiale = resFiliale.getString("luogo");
+					String luogo_filiale = resFiliale.getString("telefono");
+					
+					risultato.put("id", Integer.toString(id));
+					risultato.put("username", username);
+					risultato.put("email", email);
+					risultato.put("nome", nome);
+					risultato.put("cognome", cognome);
+					risultato.put("telefono", telefono);
+					risultato.put("residenza", residenza);
+					risultato.put("password", password);
+					risultato.put("id_filiale", id_filiale);
+					risultato.put("nome_filiale", nome_filiale);
+					risultato.put("luogo_filiale", luogo_filiale);
+					risultato.put("telefono_filiale", telefono_filiale);
 				}
 				
 			} else {
@@ -121,7 +174,7 @@ public class DAO {
 				isUtente = res.first();
 				
 				if(isUtente){
-					risultato.put(util.ResultKeys.TIPO_UTENTE, "managerSistema");
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "Manager Di Sistema");
 				} else {
 					risultato.put(util.ResultKeys.ESITO, "false");
 					risultato.put(util.ResultKeys.MSG_ERR, "Email o password errata");
@@ -162,12 +215,8 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
-				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente";;
-		
-		if (inputParam.get("restrict").equals("filiale")){
-			queryUtente +=" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
-		}
-		
+				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
+				" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
 		String id;
 		String username;
 		String email;
@@ -178,9 +227,7 @@ public class DAO {
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
-			if (inputParam.get("restrict").equals("filiale")){
-				istruzione.setString(1, inputParam.get("idFiliale"));
-			}
+			istruzione.setString(1, inputParam.get("idFiliale"));
 			ResultSet res = istruzione.executeQuery();
 			Boolean isUtente = res.first();
 			
@@ -492,124 +539,78 @@ public class DAO {
 		
 	}
 	
-	// Registrazione Manager
-	private int registraManager(int id, int id_utente, int id_filiale){
-		String query1= "INSERT INTO manager_di_filiale( `id` ,  `id_utente` ,  `id_filiale` ) VALUES (?, ?, ?)";
+    public HashMap<String, String> updateProfile(HashMap<String,String> inputParam){
 		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "UPDATE "+ SchemaDb.TAB_UTENTI +" SET username=?,email=?,password=?,nome=?,cognome=?,telefono=?,residenza=? "+
+							"WHERE id = ?";
+
 		try {
-			PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
-			istruzione1.setInt(1, id);
-			istruzione1.setInt(2, id_utente);
-			istruzione1.setInt(3, id_filiale);
-
-			istruzione1.execute();
-			istruzione1.getGeneratedKeys();
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("username"));
+			istruzione.setString(2, inputParam.get("email"));
+			istruzione.setString(3, inputParam.get("password"));
+			istruzione.setString(4, inputParam.get("nome"));
+			istruzione.setString(5, inputParam.get("cognome"));
+			istruzione.setString(6, inputParam.get("telefono"));
+			istruzione.setString(7, inputParam.get("residenza"));
+			istruzione.setString(8, inputParam.get("id"));
+			istruzione.execute();
 			
-			return 1;
-		}
-		catch (SQLException e) {
+			risultato.put(util.ResultKeys.ESITO, "true");
+
+		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Username o Email già utilizzati");
+		} catch (SQLException e) {
 			e.printStackTrace();
-			return 0;
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
-		
-	}
-// Registrazione Dipendente
-private int registraDipendente(String username,String email,String password,String nome,String cognome,int filiale, String telefono,String residenza){
-	String query1= "INSERT INTO  "+ SchemaDb.TAB_UTENTI
-			+" ( `username` ,  `email` ,  `password` ,  `nome` ,  `cognome` , 'filiale, `telefono` ,  `residenza` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-	
-	try {
-		PreparedStatement istruzione1 = connessione.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS);
-		istruzione1.setString(1, username);
-		istruzione1.setString(2, email);
-		istruzione1.setString(3, password);
-		istruzione1.setString(4, nome);
-		istruzione1.setString(5, cognome);
-		istruzione1.setInt(6, filiale);
-		istruzione1.setString(7, telefono);
-		istruzione1.setString(8, residenza);
+		return risultato;
 
-		istruzione1.execute();
-		ResultSet keys = istruzione1.getGeneratedKeys();
-		
-		int id_utente = 0;
-		
-		if(keys.next()){
-			
-			id_utente = keys.getInt(1);
-			
-		}
-		
-		return id_utente;
 	}
-	catch (SQLException e) {
-		e.printStackTrace();
-		return 0;
-	}
+    
+    public HashMap<String, String> registrazione(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_UTENTI +" (username, email, password) VALUES (?, ?, ?)";
 
-	//todo 
-	//Inserire qui sotto le query al db
-	
-	}
-	
-	private boolean setManagerDiFiliale(int id_utente, int id_filiale){
-		
-		String query = "INSERT INTO manager_di_filiale(id_utente, id_filiale) VALUES (?, ?)";
-		
 		try {
-			PreparedStatement istruzione1 = connessione.prepareStatement(query);
-			istruzione1.setInt(1, id_utente);
-			istruzione1.setInt(2, id_filiale);
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("username"));
+			istruzione.setString(2, inputParam.get("email"));
+			istruzione.setString(3, inputParam.get("password"));
+			istruzione.execute();
+			
+			risultato.put(util.ResultKeys.ESITO, "true");
 
-			istruzione1.execute();
-			return true;	
-		} 	
-		catch (SQLException e) {
-				
+		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Username o Email già utilizzati");
+		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
+		return risultato;
+
 	}
+
+
 	
-    private boolean setDipendente(int id_utente){
-		
-		String query = "INSERT INTO " + SchemaDb.TAB_MANAGER_DI_FILIALE + " (id_utente, id_filiale) VALUES (?, ?)";
-		
-		try {
-			PreparedStatement istruzione1 = connessione.prepareStatement(query);
-			istruzione1.setInt(1, id_utente);
-
-			istruzione1.execute();
-			return true;	
-		} 	
-		catch (SQLException e) {
-				
-			e.printStackTrace();
-			return false;
-		}
-		
-	}
 
 
 
-	public boolean registraManagerDiFiliale(int id, int id_utente, int id_filiale){
-		
-		registraManager(id, id_utente, id_filiale);
-		boolean isSetted = setManagerDiFiliale(id_utente, id_filiale);
-		return isSetted;
-		
-	}
 
-
-	public boolean dipendent(String username, String email, String password,String nome, String cognome, int filiale, String telefono, String residenza) {
-		// TODO Auto-generated method stub
-		int id_utente = registraDipendente(username, email, password, nome, cognome, filiale, telefono, residenza);	                               
-		boolean isSetted = setDipendente(id_utente);
-		return isSetted;
-
-	}
 	
 	
 	

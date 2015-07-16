@@ -86,48 +86,47 @@ ScreensController myController;
 	
 	
 	
-private void riempiTabellaUtenti(){
-		
-		
-		
-		
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put(ResultKeys.RESTRICT, "tutti");
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		usersData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+	private void riempiTabellaUtenti(){
 			
 			
-		
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+			
+			
+			String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
+			HashMap<String, String> inputParam = new HashMap<>();
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			
+			usersData = FXCollections.observableArrayList();
+			
+			if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 				
-				usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)), 
-						risultato.get("email" + Integer.toString(i)), 
-						risultato.get("nome" + Integer.toString(i)), 
-						risultato.get("cognome" + Integer.toString(i)), 
-						risultato.get("telefono" + Integer.toString(i)), 
-						risultato.get("residenza" + Integer.toString(i))));
 				
+			
+				for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+					
+					usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+							risultato.get("username" + Integer.toString(i)), 
+							risultato.get("email" + Integer.toString(i)), 
+							risultato.get("nome" + Integer.toString(i)), 
+							risultato.get("cognome" + Integer.toString(i)), 
+							risultato.get("telefono" + Integer.toString(i)), 
+							risultato.get("residenza" + Integer.toString(i))));
+					
+				}
+				
+				username.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
+				email.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+				nome.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
+				cognome.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
+				telefono.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
+				residenza.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
+				
+				usersTable.setItems(usersData);
+				
+			} else {
+				usersTable.getItems().clear();
+				usersTable.setPlaceholder(new Label("No Users Found"));
 			}
-			
-			username.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			email.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-			nome.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
-			cognome.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
-			telefono.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
-			residenza.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
-			
-			usersTable.setItems(usersData);
-			
-		} else {
-			usersTable.getItems().clear();
-			usersTable.setPlaceholder(new Label("No Users Found"));
-		}
-    
-}
+	    
+	}
 }

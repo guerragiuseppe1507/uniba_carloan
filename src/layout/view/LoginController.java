@@ -5,13 +5,17 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
+import util.EmailValidator;
 import util.NotificationManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import layout.model.Context;
+import layout.model.Filiale;
+import layout.model.Utente;
 
 public class LoginController implements Initializable, ControlledScreen{
 	
@@ -22,10 +26,19 @@ public class LoginController implements Initializable, ControlledScreen{
 	StackPane container;
 	
 	@FXML
+	private TextField regUsername;
+	
+	@FXML
+	private TextField regEmail;
+	
+	@FXML
+	private TextField regPassword;
+	
+	@FXML
 	private TextField usernameLabel;
 	
 	@FXML
-	private TextField passwordLabel;
+	private PasswordField passwordLabel;
 	
 	@FXML
 	private Label resultLabel;
@@ -53,21 +66,24 @@ public class LoginController implements Initializable, ControlledScreen{
 		risultato =	FrontController.request(comando, inputParam);
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			
 			if (risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerSistema)){
 				c.setUserType(Context.managerSistema);
-				loadManagerSistemaScreens();		
+				ScreensFramework.loadManagerSistemaScreens(myController);		
 				myController.setScreen(ScreensFramework.homeManagerDiSistemaID);
 			}
 			
 			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerFiliale)){
 				c.setUserType(Context.managerFiliale);
-				loadManagerFilialeScreens();
+				istanziaUtente(risultato);
+				ScreensFramework.loadManagerFilialeScreens(myController);
 				myController.setScreen(ScreensFramework.homeManagerDiFilialeID);
 			}
 			
 			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.dipendenteFiliale)){
 				c.setUserType(Context.dipendenteFiliale);
-				loadDipendenteFilialeScreens();
+				istanziaUtente(risultato);
+				ScreensFramework.loadDipendenteFilialeScreens(myController);
 				myController.setScreen(ScreensFramework.homeDipendenteDiFilialeID);
 			}
 			
@@ -76,7 +92,6 @@ public class LoginController implements Initializable, ControlledScreen{
 				NotificationManager.setInfo("Utente non ancora associato ad alcuna filiale\n"+
 											"Contatta il manager della tua filiale di riferimento");
 			}
-			
 			
 
 		}else if(risultato.get(util.ResultKeys.MSG_ERR).equalsIgnoreCase("Connessione al DataBase fallita")){
@@ -92,22 +107,56 @@ public class LoginController implements Initializable, ControlledScreen{
 		
 	}
 	
-	private void loadManagerSistemaScreens(){
-		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
-		myController.loadScreen(ScreensFramework.homeManagerDiSistemaID,ScreensFramework.homeManagerDiSistemaFile);
-		myController.loadScreen(ScreensFramework.insertManagerID,ScreensFramework.insertManagerFile);
-
+	private void istanziaUtente(HashMap<String, String> risultato){
+		Context.getInstance().setUtente(new Utente(
+				Integer.parseInt(risultato.get("id")),
+				risultato.get("username"),
+				risultato.get("email"),
+				risultato.get("nome"),
+				risultato.get("cognome"),
+				risultato.get("telefono"),
+				risultato.get("residenza")));
+		Context.getInstance().getUtente().setFiliale(new Filiale(
+				Integer.parseInt(risultato.get("id_filiale")),
+				risultato.get("nome_filiale"),
+				risultato.get("luogo_filiale"),
+				risultato.get("telefono_filiale")));
+		Context.getInstance().setPassword(risultato.get("password"));
 	}
-	private void loadManagerFilialeScreens(){
-		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
-		myController.loadScreen(ScreensFramework.homeManagerDiFilialeID,ScreensFramework.homeManagerDiFilialeFile);
-		myController.loadScreen(ScreensFramework.insertDipendenteDiFilialeID,ScreensFramework.insertDipendenteDiFilialeFile);
-		myController.loadScreen(ScreensFramework.manageAutoID,ScreensFramework.manageAutoFile);
-		myController.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendenti);
+	
+	@FXML
+	private void handleRegister() {
+		
+		Boolean registrable = true;
+		
+		if (regUsername.getText().equals("") ||
+				regEmail.getText().equals("") ||
+				regPassword.getText().equals("")){
+			NotificationManager.setWarning("Tutti i campi sono obbligatori");
+			registrable = false;
+		}else if(!EmailValidator.isValidEmailAddress(regEmail.getText())){
+			NotificationManager.setWarning("Formato E-mail non valido");
+			registrable = false;
+		}
+		
+		if(registrable == true){
+			String[] comando = new String[]{"businessTier.Autenticazione", "register"};
+			
+			HashMap<String, String> inputParam = new HashMap<>();
+			inputParam.put("username", regUsername.getText());
+			inputParam.put("email", regEmail.getText());
+			inputParam.put("password", regPassword.getText());
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			
+			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+				NotificationManager.setInfo("Registrazione Effettuata\nContatta un Manager Di Filiale per farti assegnare ad una filiale");
+			} else {
+				NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+			}
+		}
+		
 	}
-	private void loadDipendenteFilialeScreens(){
-		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
-		myController.loadScreen(ScreensFramework.homeDipendenteDiFilialeID,ScreensFramework.homeDipendenteDiFilialeFile);
-	}
-
+	
 }

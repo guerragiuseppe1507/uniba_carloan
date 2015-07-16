@@ -37,7 +37,9 @@ public class ScreensFramework extends Application {
 	public static String manageAutoID = "ManageAuto";
 	public static String manageAutoFile = "ManageAuto.fxml";
 	public static String gestioneDipendentiID = "GestioneDipendenti";
-	public static String gestioneDipendenti = "GestioneDipendenti.fxml";
+	public static String gestioneDipendentiFile = "GestioneDipendenti.fxml";
+	public static String gestioneProfiloID = "InfoProfilo";
+	public static String gestioneProfiloFile = "InfoProfilo.fxml";
 	
 	
 	//Variabile globale che memorizza la sessione dell' utente tramite la mail.
@@ -70,11 +72,36 @@ public class ScreensFramework extends Application {
 		//La schermata non è personalizzabile nelle dimensioni(per una maggiore affidabilità a differenti risoluzioni)
 		primaryStage.setResizable(false);
 		
+		
+		primaryStage.setTitle("CARLOAN");
+		
 		//Impostazione della scena iniziale e visualizzazione della stessa
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 		
+	}
+	
+	public static void loadManagerSistemaScreens(ScreensController c){
+		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
+		c.loadScreen(ScreensFramework.homeManagerDiSistemaID,ScreensFramework.homeManagerDiSistemaFile);
+		c.loadScreen(ScreensFramework.insertManagerID,ScreensFramework.insertManagerFile);
+
+	}
+	
+	public static void loadManagerFilialeScreens(ScreensController c){
+		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
+		c.loadScreen(ScreensFramework.homeManagerDiFilialeID,ScreensFramework.homeManagerDiFilialeFile);
+		c.loadScreen(ScreensFramework.insertDipendenteDiFilialeID,ScreensFramework.insertDipendenteDiFilialeFile);
+		c.loadScreen(ScreensFramework.manageAutoID,ScreensFramework.manageAutoFile);
+		c.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendentiFile);
+		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
+	}
+	
+	public static void loadDipendenteFilialeScreens(ScreensController c){
+		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
+		c.loadScreen(ScreensFramework.homeDipendenteDiFilialeID,ScreensFramework.homeDipendenteDiFilialeFile);
+		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
 	}
 	
 	

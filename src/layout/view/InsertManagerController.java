@@ -8,12 +8,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
+import util.NotificationManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -116,7 +115,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			id_filiale = selectedFiliale.getId();
 			id_utente = selectedUtente.getId();
 			for(int i = 0 ; i < managersDiFiliale.size(); i++){
-				if(managersDiFiliale.get(i).getIdFiliale() == id_filiale &&
+				if(managersDiFiliale.get(i).getFiliale().getId() == id_filiale &&
 						managersDiFiliale.get(i).getId() != 0){
 						b = true;
 						altroManager = managersDiFiliale.get(i);
@@ -124,12 +123,10 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			}
 			
 			if(b==true){
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Conferma");
-				alert.setHeaderText("Esiste gia il manager '"+altroManager.getUsername()+"' per la filiale selezionata");
-				alert.setContentText("Continuare ugualmente?\nNB: il manager precedente verrà impostato come dipendente della sua filiale.");
-
-				Optional<ButtonType> result = alert.showAndWait();
+				
+				Optional<ButtonType> result = NotificationManager.setConfirm("Esiste gia il manager '"+altroManager.getUsername()+"' per la filiale selezionata\n"+
+						"Continuare ugualmente?\nNB: il manager precedente verrà impostato come dipendente della sua filiale.");
+				
 				if (result.get() == ButtonType.OK){
 				    setTheNewManager(id_utente, id_filiale);
 				}
@@ -139,12 +136,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			}
 			
 		}catch(NullPointerException e){
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Attenzione!");
-			alert.setHeaderText("Dipendente non selezionato");
-			alert.setContentText("Assicurati di scegliere una filiale e successivamente un dipendente prima di continuare");
-
-			alert.showAndWait();
+			NotificationManager.setWarning("Utente non selezionato");
 		}
 		
 	}
@@ -183,14 +175,14 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 				
 				ManagerDiFiliale tmp = new ManagerDiFiliale(Integer.parseInt(risultato.get("id_utente" + Integer.toString(i))),
 						risultato.get("username" + Integer.toString(i)));
-				tmp.setFiliale(Integer.parseInt(risultato.get("id_filiale" + Integer.toString(i))),
-						risultato.get("nome" + Integer.toString(i)));
+				tmp.setFiliale(new Filiale(Integer.parseInt(risultato.get("id_filiale" + Integer.toString(i))),
+						risultato.get("nome" + Integer.toString(i))));
 				managerDiFilialeData.add(tmp); 
 				managersDiFiliale.add(tmp);				
 			}
 			
 			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			managerDiFilialeNomeFColumn.setCellValueFactory(cellData -> cellData.getValue().nomeFilialeProperty());
+			managerDiFilialeNomeFColumn.setCellValueFactory(cellData -> cellData.getValue().getFiliale().nomeProperty());
 			
 			managerDiFilialeTable.setItems(managerDiFilialeData);
 			managerDiFilialeTable.setSelectionModel(null);
@@ -245,7 +237,6 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
 		HashMap<String, String> inputParam = new HashMap<>();
 		inputParam.put("idFiliale", idFiliale);
-		inputParam.put("restrict", "filiale");
 		
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
@@ -283,24 +274,5 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		}
 		
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

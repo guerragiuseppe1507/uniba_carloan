@@ -32,9 +32,10 @@ public class Utente {
 		this.username = new SimpleStringProperty(usernameManager);
 	}
 	
-	public void setFiliale(int id_filiale, String nome_filiale){
-		this.filiale = new Filiale(id_filiale,nome_filiale);
+	public void setFiliale(Filiale filiale){
+		this.filiale = filiale;
 	}
+	
 	
 	public int getId(){return id;}
 	
@@ -52,7 +53,5 @@ public class Utente {
 	public StringProperty telefonoProperty()throws NullPointerException{return telefono;}
 	public StringProperty residenzaProperty()throws NullPointerException{return residenza;}
 	
-	public int getIdFiliale()throws NullPointerException{return filiale.getId();}
-	public String getNomeFiliale()throws NullPointerException{return filiale.getNome();}
-	public StringProperty nomeFilialeProperty()throws NullPointerException{return filiale.nomeProperty();}
+	public Filiale getFiliale()throws NullPointerException{return filiale;}
 }

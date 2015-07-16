@@ -37,4 +37,14 @@ public class GestioneUtenti {
 		return risultato;
 		
 	}
+	
+	public HashMap<String, String> updateProfile(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+
+		DAO dao = new DAO();
+		risultato = dao.updateProfile(inputParam);	
+		return risultato;
+		
+	}
 }

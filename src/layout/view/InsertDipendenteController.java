@@ -65,7 +65,7 @@ public class InsertDipendenteController implements Initializable, ControlledScre
 	private void DipendentRegister() {
 		DAO db = new DAO();
 		db.connetti();
-		resultLabel.setText(Boolean.toString(db.dipendent(usernameField.getText(),emailField.getText(), passwordField.getText(),nomeField.getText(),cognomeField.getText(),Integer.parseInt(filialeField.getText()),telefonoField.getText(),residenzaField.getText())));
+		//resultLabel.setText(Boolean.toString(db.dipendent(usernameField.getText(),emailField.getText(), passwordField.getText(),nomeField.getText(),cognomeField.getText(),Integer.parseInt(filialeField.getText()),telefonoField.getText(),residenzaField.getText())));
 		//db.disconnetti();
 	}
 }

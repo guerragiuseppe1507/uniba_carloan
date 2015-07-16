@@ -1,4 +1,5 @@
 package layout.view;
+
 import java.util.HashMap;
 
 import javafx.animation.KeyFrame;
@@ -46,7 +47,7 @@ public class ScreensController extends StackPane {
 			return true;
 		}
 		catch (Exception e){
-			
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return false;
 		}
@@ -63,29 +64,14 @@ public class ScreensController extends StackPane {
 			final DoubleProperty opacity = opacityProperty();
 			
 			if (!getChildren().isEmpty()){                     		//Se c'è più di una schermata.
-				Timeline fade = new Timeline(
-						new KeyFrame(Duration.ZERO, new KeyValue (opacity, 1.0)),
-						new KeyFrame(new Duration(50), new EventHandler<ActionEvent>(){  //Duration = durata dissolvenza tra switch schermate
-					@Override
-					public void handle(ActionEvent t){
-						getChildren().remove(0);              		//Rimuove la schermata visualizzata
-						getChildren().add(0, screens.get(name));	//Aggiunge la nuova schermata
-						Timeline fadeIn = new Timeline(
-								new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-								new KeyFrame(new Duration(50), new KeyValue(opacity, 1.0)));
-						fadeIn.play();
-						
-					}
-				}, new KeyValue(opacity, 0.0)));
-				fade.play();
+				
+				getChildren().remove(0);              		//Rimuove la schermata visualizzata
+				getChildren().add(0, screens.get(name));
 			
 			} else {
-				setOpacity(0.0);
+				
 				getChildren().add(screens.get(name));				//Non c'è nient'altro visualizzato, mostra direttamente
-				Timeline fadeIn = new Timeline(
-						new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
-						new KeyFrame(new Duration(100), new KeyValue(opacity, 1.0)));  //Durata dissolvenza apertura schermata principale
-				fadeIn.play();
+				
 			}
 			return true;
 		} else {

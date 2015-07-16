@@ -1,22 +1,39 @@
 package util;
 
+import java.util.Optional;
+
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 
 public class NotificationManager {
 	
+	private static Alert notifica;
+	
 	public static void setError(String e){
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("");
-		alert.setContentText(e);
-		alert.showAndWait();
+		notifica = new Alert(AlertType.ERROR);
+		showNotification(e);
 	};
 	
 	public static void setInfo(String i){
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("");
-		alert.setContentText(i);
-		alert.showAndWait();
+		notifica = new Alert(AlertType.INFORMATION);
+		showNotification(i);
 	}
 
+	public static void setWarning(String w){
+		notifica = new Alert(AlertType.WARNING);
+		showNotification(w);
+	}
+	
+	public static Optional<ButtonType> setConfirm(String c){
+		notifica = new Alert(AlertType.CONFIRMATION);
+		Optional<ButtonType> result = notifica.showAndWait();
+		return result;
+	}
+	
+	private static void showNotification(String n){
+		notifica.setTitle("");	
+		notifica.setContentText(n);
+		notifica.showAndWait();
+	}
 }
