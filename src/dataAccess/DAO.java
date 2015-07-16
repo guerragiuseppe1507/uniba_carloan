@@ -27,12 +27,12 @@ public class DAO {
 			connessione = DriverManager.getConnection(
 					"jdbc:mysql://localhost/"	
 					+ NOME_DATABASE, USERNAME, PASSWORD);	
-			risultato.put(util.ResultKeys.esito, "true");
+			risultato.put(util.ResultKeys.ESITO, "true");
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Connessione al DataBase fallita");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Connessione al DataBase fallita");
 			
 		}
 		
@@ -80,7 +80,7 @@ public class DAO {
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
 		//check manager
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +" WHERE (username = ? OR email = ?) AND password = ?";
@@ -100,16 +100,16 @@ public class DAO {
 			
 			if (isUtente){
 				
-				risultato.put(util.ResultKeys.esito, "true");
+				risultato.put(util.ResultKeys.ESITO, "true");
 				
 				id = res.getInt("id");
 				
 				if(checkUserType(id,"managerdifiliale")){					
-					risultato.put(util.ResultKeys.tipoUtente, "managerFiliale");					
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "managerFiliale");					
 				} else if (checkUserType(id,"dipendentedifiliale")){					
-					risultato.put(util.ResultKeys.tipoUtente, "dipendenteFiliale");					
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "dipendenteFiliale");					
 				} else {
-					risultato.put(util.ResultKeys.tipoUtente, "utenteNonAssegnato");
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "utenteNonAssegnato");
 				}
 				
 			} else {
@@ -121,18 +121,18 @@ public class DAO {
 				isUtente = res.first();
 				
 				if(isUtente){
-					risultato.put(util.ResultKeys.tipoUtente, "managerSistema");
+					risultato.put(util.ResultKeys.TIPO_UTENTE, "managerSistema");
 				} else {
-					risultato.put(util.ResultKeys.esito, "false");
-					risultato.put(util.ResultKeys.msgErr, "Email o password errata");
+					risultato.put(util.ResultKeys.ESITO, "false");
+					risultato.put(util.ResultKeys.MSG_ERR, "Email o password errata");
 				}
 				
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
 		return risultato;
@@ -160,7 +160,7 @@ public class DAO {
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
 				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente";;
 		
@@ -186,7 +186,7 @@ public class DAO {
 			
 			if (isUtente){
 				
-				risultato.put(util.ResultKeys.esito, "true");
+				risultato.put(util.ResultKeys.ESITO, "true");
 
 				int pos = 0;
 				do{
@@ -210,19 +210,19 @@ public class DAO {
 					
 				}while(res.next());
 				
-				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
 				
 			}else{
 				
-				risultato.put(util.ResultKeys.esito, "false");
-				risultato.put(util.ResultKeys.resLength, "0");
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
 				
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
 		return risultato;
@@ -233,7 +233,7 @@ public class DAO {
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
 		String queryFiliale = "SELECT * FROM "+ SchemaDb.TAB_FILIALI;
 		
@@ -249,7 +249,7 @@ public class DAO {
 			
 			if (isUtente){
 				
-				risultato.put(util.ResultKeys.esito, "true");
+				risultato.put(util.ResultKeys.ESITO, "true");
 
 				int pos = 0;
 				do{
@@ -267,19 +267,19 @@ public class DAO {
 					
 				}while(res.next());
 				
-				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
 				
 			}else{
 				
-				risultato.put(util.ResultKeys.esito, "false");
-				risultato.put(util.ResultKeys.resLength, "0");
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
 				
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
 		return risultato;
@@ -291,7 +291,7 @@ public class DAO {
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
 		String queryManagerDiFiliale = "SELECT * FROM "+ SchemaDb.TAB_UTENTI +
 				" INNER JOIN "+ SchemaDb.TAB_MANAGER_DI_FILIALE +
@@ -311,7 +311,7 @@ public class DAO {
 			
 			if (isUtente){
 				
-				risultato.put(util.ResultKeys.esito, "true");
+				risultato.put(util.ResultKeys.ESITO, "true");
 
 				int pos = 0;
 				do{
@@ -329,19 +329,19 @@ public class DAO {
 					
 				}while(res.next());
 				
-				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
 				
 			}else{
 				
-				risultato.put(util.ResultKeys.esito, "false");
-				risultato.put(util.ResultKeys.resLength, "0");
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
 				
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
 		return risultato;
@@ -354,7 +354,7 @@ public class DAO {
 	public HashMap<String, String> getAuto(){
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
 		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_AUTO +
 				" INNER JOIN "+ SchemaDb.TAB_FILIALI +
@@ -378,7 +378,7 @@ public class DAO {
 			
 			if (isAuto){
 				
-				risultato.put(util.ResultKeys.esito, "true");
+				risultato.put(util.ResultKeys.ESITO, "true");
 
 				int pos = 0;
 				do{
@@ -402,19 +402,19 @@ public class DAO {
 					
 				}while(res.next());
 				
-				risultato.put(util.ResultKeys.resLength, Integer.toString(pos));
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
 				
 			}else{
 				
-				risultato.put(util.ResultKeys.esito, "false");
-				risultato.put(util.ResultKeys.resLength, "0");
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
 				
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
 		return risultato;
@@ -425,7 +425,7 @@ public class DAO {
 		
     	HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("false")) return risultato;
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
 		int newManager = Integer.parseInt(inputParam.get("idUtente"));
 		int idFiliale = Integer.parseInt(inputParam.get("idFiliale"));
@@ -479,13 +479,13 @@ public class DAO {
 			istruzione.execute();
 			
 			endConnectionTransaction();
-			risultato.put(util.ResultKeys.esito, "true");
+			risultato.put(util.ResultKeys.ESITO, "true");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			connectionRollBack();
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, "Errore Query");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
 		
 		return risultato;

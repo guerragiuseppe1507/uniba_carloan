@@ -52,10 +52,7 @@ public class ScreensController extends StackPane {
 		}
 	}
 	
-	public boolean resetScreens(){
-		screens = new HashMap<>();
-		return loadScreen(ScreensFramework.loginID,ScreensFramework.loginFile);
-	}
+
 	
 	//Questo metodo prova a visualizzare la schermata col nome dato.
 	//Prima di tutto controlla se la schermata è stata caricata. Poi, se c'è più di una schermata,
@@ -105,6 +102,11 @@ public class ScreensController extends StackPane {
 		} else {
 			return true;
 		}
+	}
+	
+	public boolean resetScreens(){
+		screens = new HashMap<>();
+		return loadScreen(ScreensFramework.loginID,ScreensFramework.loginFile);
 	}
 
 }

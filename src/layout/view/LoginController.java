@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
+import util.NotificationManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -53,44 +52,41 @@ public class LoginController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
-		if (risultato.get(util.ResultKeys.esito).equalsIgnoreCase("true")){
-			if (risultato.get(util.ResultKeys.tipoUtente).equals(Context.managerSistema)){
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			if (risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerSistema)){
 				c.setUserType(Context.managerSistema);
 				loadManagerSistemaScreens();		
 				myController.setScreen(ScreensFramework.homeManagerDiSistemaID);
 			}
 			
-			if(risultato.get(util.ResultKeys.tipoUtente).equals(Context.managerFiliale)){
+			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerFiliale)){
 				c.setUserType(Context.managerFiliale);
 				loadManagerFilialeScreens();
 				myController.setScreen(ScreensFramework.homeManagerDiFilialeID);
 			}
 			
-			if(risultato.get(util.ResultKeys.tipoUtente).equals(Context.dipendenteFiliale)){
+			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.dipendenteFiliale)){
 				c.setUserType(Context.dipendenteFiliale);
 				loadDipendenteFilialeScreens();
 				myController.setScreen(ScreensFramework.homeDipendenteDiFilialeID);
 			}
 			
-			if(risultato.get(util.ResultKeys.tipoUtente).equals("utenteNonAssegnato")){
+			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals("utenteNonAssegnato")){
 				
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Accesso Rifiutato");
-				alert.setHeaderText("Utente non ancora associato ad alcuna filiale");
-				alert.setContentText("Contatta il manager della tua filiale di riferimento");
-
-				alert.showAndWait();
+				NotificationManager.setInfo("Utente non ancora associato ad alcuna filiale\n"+
+											"Contatta il manager della tua filiale di riferimento");
 			}
 			
 			
 
+		}else if(risultato.get(util.ResultKeys.MSG_ERR).equalsIgnoreCase("Connessione al DataBase fallita")){
+						
+			NotificationManager.setError("Connessione al server fallita");
+			
 		}else{
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Accesso Rifiutato");
-			alert.setHeaderText("Utente non trovato");
-			alert.setContentText("Ricontrolla i dati inseriti o contatta un manager della tua filiale di riferimento");
 
-			alert.showAndWait();
+			NotificationManager.setError("Ricontrolla i dati inseriti o contatta un manager della tua filiale di riferimento");
+
 		}
 		
 		

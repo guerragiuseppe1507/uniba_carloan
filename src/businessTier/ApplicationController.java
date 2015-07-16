@@ -30,8 +30,8 @@ public class ApplicationController {
 		}
 		catch(Exception e){
 			
-			risultato.put(util.ResultKeys.esito, "false");
-			risultato.put(util.ResultKeys.msgErr, e.toString());
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, e.toString());
 			
 		}
 		

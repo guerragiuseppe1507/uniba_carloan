@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import presentationTier.FrontController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import layout.model.ContextMenu;
+import layout.model.DipendenteDiFiliale;
 import layout.model.Filiale;
 import layout.model.ManagerDiFiliale;
 import layout.model.Utente;
@@ -91,7 +93,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		riempiTabellaFiliali();
 		
 		filialiTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> riempiTabellaUtenti(newValue));
+	            (observable, oldValue, newValue) -> riempiTabellaDipendenti(newValue));
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
@@ -115,7 +117,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			id_utente = selectedUtente.getId();
 			for(int i = 0 ; i < managersDiFiliale.size(); i++){
 				if(managersDiFiliale.get(i).getIdFiliale() == id_filiale &&
-						managersDiFiliale.get(i).getIdManagr() != 0){
+						managersDiFiliale.get(i).getId() != 0){
 						b = true;
 						altroManager = managersDiFiliale.get(i);
 				}
@@ -124,7 +126,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			if(b==true){
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Conferma");
-				alert.setHeaderText("Esiste gia il manager '"+altroManager.getUsernameManager()+"' per la filiale selezionata");
+				alert.setHeaderText("Esiste gia il manager '"+altroManager.getUsername()+"' per la filiale selezionata");
 				alert.setContentText("Continuare ugualmente?\nNB: il manager precedente verrà impostato come dipendente della sua filiale.");
 
 				Optional<ButtonType> result = alert.showAndWait();
@@ -155,9 +157,9 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
-		if(risultato.get(util.ResultKeys.esito).equals("true")){
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			riempiTabellaManager();
-			riempiTabellaUtenti(selectedFiliale);
+			riempiTabellaDipendenti(selectedFiliale);
 		}
 		
 	}
@@ -175,19 +177,19 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 		managerDiFilialeData = FXCollections.observableArrayList();
 		
-		if(risultato.get(util.ResultKeys.esito).equals("true")){
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				ManagerDiFiliale tmp = new ManagerDiFiliale(Integer.parseInt(risultato.get("id_utente" + Integer.toString(i))),
-						Integer.parseInt(risultato.get("id_filiale" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)), 
+						risultato.get("username" + Integer.toString(i)));
+				tmp.setFiliale(Integer.parseInt(risultato.get("id_filiale" + Integer.toString(i))),
 						risultato.get("nome" + Integer.toString(i)));
 				managerDiFilialeData.add(tmp); 
 				managersDiFiliale.add(tmp);				
 			}
 			
-			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().usernameManagerProperty());
+			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
 			managerDiFilialeNomeFColumn.setCellValueFactory(cellData -> cellData.getValue().nomeFilialeProperty());
 			
 			managerDiFilialeTable.setItems(managerDiFilialeData);
@@ -208,9 +210,9 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
-		if(risultato.get(util.ResultKeys.esito).equals("true")){
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				filialiData.add(new Filiale(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
 						risultato.get("nome" + Integer.toString(i)), 
@@ -220,9 +222,9 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 				
 			}
 			
-			filialiNomeColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			filialiLuogoColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-			filialiTelefonoColumn.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
+			filialiNomeColumn.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
+			filialiLuogoColumn.setCellValueFactory(cellData -> cellData.getValue().luogoProperty());
+			filialiTelefonoColumn.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
 			
 			filialiTable.setItems(filialiData);
 			
@@ -234,7 +236,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 	}
 	
-	private void riempiTabellaUtenti(Filiale filiale){
+	private void riempiTabellaDipendenti(Filiale filiale){
 		
 		selectedFiliale = filiale;
 		
@@ -250,13 +252,13 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 		usersData = FXCollections.observableArrayList();
 		
-		if(risultato.get(util.ResultKeys.esito).equals("true")){
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
 			
 		
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
-				usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+				usersData.add(new DipendenteDiFiliale(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
 						risultato.get("username" + Integer.toString(i)), 
 						risultato.get("email" + Integer.toString(i)), 
 						risultato.get("nome" + Integer.toString(i)), 

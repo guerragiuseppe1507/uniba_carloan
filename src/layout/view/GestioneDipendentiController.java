@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
+import util.ResultKeys;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -92,17 +93,17 @@ private void riempiTabellaUtenti(){
 		
 		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("restrict", "tutti");
+		inputParam.put(ResultKeys.RESTRICT, "tutti");
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
 		usersData = FXCollections.observableArrayList();
 		
-		if(risultato.get(util.ResultKeys.esito).equals("true")){
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
 			
 		
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
 						risultato.get("username" + Integer.toString(i)), 

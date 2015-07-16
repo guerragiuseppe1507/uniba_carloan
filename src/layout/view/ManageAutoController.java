@@ -74,9 +74,9 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
-		if(risultato.get(util.ResultKeys.esito).equals("true")){
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.resLength)) ; i++){
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				AutoData.add(new Auto(
 						risultato.get("modello" + Integer.toString(i)),
