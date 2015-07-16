@@ -86,14 +86,30 @@ ScreensController myController;
 	
 	
 	
+<<<<<<< HEAD
 	private void riempiTabellaUtenti(){
-			
-			
-			
-			
+=======
+private void riempiTabellaUtenti(){
+		
+		
+		
+		
 		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtentiLiberi"};
-			HashMap<String, String> inputParam = new HashMap<>();
+		HashMap<String, String> inputParam = new HashMap<>();
 		inputParam.put(ResultKeys.RESTRICT, "liberi");
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		usersData = FXCollections.observableArrayList();
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+>>>>>>> 0e7a96d5e1e2e2ed32b3425f846c3a81f94f8cc6
+			
+			
+			
+			
+			String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
+			HashMap<String, String> inputParam = new HashMap<>();
 			HashMap<String, String> risultato = new HashMap<>();
 			risultato =	FrontController.request(comando, inputParam);
 			

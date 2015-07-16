@@ -215,13 +215,23 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
+<<<<<<< HEAD
 				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
 				" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
+=======
+				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente";
+		
 				
 				//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
 				//and id NOT IN ( select id_utente from dipendenti_di_filiale)
 				
 							
+				
+		if (inputParam.get("restrict").equals("filiale")){
+			queryUtente +=" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
+		}
+		
+>>>>>>> 0e7a96d5e1e2e2ed32b3425f846c3a81f94f8cc6
 		String id;
 		String username;
 		String email;
