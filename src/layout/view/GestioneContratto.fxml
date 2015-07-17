@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.GestioneContrattiController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane fx:id="menu" prefHeight="200.0" prefWidth="200.0">
          <children>
+            <AnchorPane prefHeight="30.0" prefWidth="1280.0" />
             <TableView fx:id="tableContratto" layoutX="79.0" layoutY="218.0" prefHeight="280.0" prefWidth="1190.0">
                <columns>
                   <TableColumn fx:id="id" prefWidth="75.0" text="id" />

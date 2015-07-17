@@ -1642,8 +1642,8 @@ public class DAO {
 		
 		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_CONTRATTI +
 				" INNER JOIN "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
-				" ON " +SchemaDb.TAB_CONTRATTI+".id_filiale = " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id"+
-				" INNER JOIN "+ SchemaDb.TAB_CONTRATTI+
+				" ON " +SchemaDb.TAB_CONTRATTI+".id_dipendente = " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id"+
+				" INNER JOIN "+ SchemaDb.TAB_MODELLI+
 				" ON " + SchemaDb.TAB_CONTRATTI+".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
 				" INNER JOIN "+ SchemaDb.TAB_CLIENTI+
 				" ON " + SchemaDb.TAB_CONTRATTI+".id_cliente = "+SchemaDb.TAB_CLIENTI+".id";
