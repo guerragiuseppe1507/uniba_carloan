@@ -9,7 +9,7 @@
 <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.ManageAutoController">
 	<AnchorPane>
 	   <children>
-	      <TableView fx:id="autoTable" layoutX="318.0" layoutY="175.0" prefHeight="200.0" prefWidth="658.0">
+	      <TableView fx:id="autoTable" layoutX="576.0" layoutY="119.0" prefHeight="267.0" prefWidth="582.0">
 	        <columns>
 	          <TableColumn fx:id="modello" prefWidth="131.0" text="Modello" />
 	          <TableColumn fx:id="targa" prefWidth="82.0" text="Targa" />
@@ -26,6 +26,7 @@
 	      <Button layoutX="576.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Cancella Auto" />
 	      <Button layoutX="760.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Modifica Dati Auto" />
          <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
+         <ChoiceBox fx:id="scegliFascia" layoutX="171.0" layoutY="222.0" prefWidth="150.0" />
 	   </children>
 	</AnchorPane>
 </StackPane>

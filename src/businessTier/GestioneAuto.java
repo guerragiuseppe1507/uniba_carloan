@@ -9,7 +9,19 @@ public class GestioneAuto {
 	public GestioneAuto(){};
 	
 	
-public HashMap<String, String> recuperoDatiAuto(HashMap<String, String> inputParam){
+	public HashMap<String, String> recuperoDatiAuto(HashMap<String, String> inputParam){
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			
+			/* Accede al database per controllare che l'auto sia presente nel sistema
+			 * e che le credenziali di accesso al sistema siano corrette.
+			 */
+			DAO dao = new DAO();
+			risultato = dao.getAuto();	
+			return risultato;
+	}
+	
+	public HashMap<String, String> recuperoDatiFasce(HashMap<String, String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<>();
 		
@@ -17,10 +29,10 @@ public HashMap<String, String> recuperoDatiAuto(HashMap<String, String> inputPar
 		 * e che le credenziali di accesso al sistema siano corrette.
 		 */
 		DAO dao = new DAO();
-		risultato = dao.getAuto();	
+		risultato = dao.getFasce();	
 		return risultato;
 }
-	
+		
 	
 	
 	

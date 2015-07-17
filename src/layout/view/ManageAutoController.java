@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,7 +44,11 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	private TableColumn<Auto, String> fasce;
 	
-	private ObservableList<Auto> AutoData = FXCollections.observableArrayList();
+	@FXML
+	private ChoiceBox<String> scegliFascia;
+	
+	private ObservableList<Auto> autoData = FXCollections.observableArrayList();
+	private ObservableList<String> fasceData = FXCollections.observableArrayList();
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
@@ -54,6 +59,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
 		riempiTabellaAuto();
+		popolaSpinnerFasce();
 		
 		
 		autoTable.getSelectionModel().selectedItemProperty().addListener(
@@ -78,7 +84,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
-				AutoData.add(new Auto(
+				autoData.add(new Auto(
 						risultato.get("modello" + Integer.toString(i)),
 						risultato.get("nome_filiale" + Integer.toString(i)), 
 						risultato.get("status" + Integer.toString(i)),
@@ -95,7 +101,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			chilometraggio.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
 			targa.setCellValueFactory(cellData->cellData.getValue().targaProperty());
 			fasce.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
-			autoTable.setItems(AutoData);
+			autoTable.setItems(autoData);
 			
 		} else {
 			
@@ -103,6 +109,26 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			
 		}
 		
+	}
+	
+	private void popolaSpinnerFasce(){
+		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiFasce"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+			
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+				
+				fasceData.add(
+						risultato.get("nome_fascia" + Integer.toString(i))
+				); 
+				
+			}
+		}
+		
+		scegliFascia.setItems(fasceData);
 	}
 	
 	

@@ -657,6 +657,75 @@ public class DAO {
 
 	}
 
+    public HashMap<String, String> getFasce(){
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_FASCE + " INNER JOIN "+SchemaDb.TAB_PREZZI+" ON id_prezzi = "+
+				SchemaDb.TAB_PREZZI+".id";
+	
+		String nome_fascia;
+		String id_prezzi;
+		String tariffa_base_g;
+		String tariffa_base_s;
+		String costo_chilometrico;
+		String penale_chilometri;
+		String tariffa_illim_g;
+		String tariffa_illim_s;
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isFascia = res.first();
+			
+			if (isFascia){
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+
+				int pos = 0;
+				do{
+					
+					nome_fascia = res.getString("nome");
+					id_prezzi= res.getString("nome");
+					tariffa_base_g= res.getString("nome");
+					tariffa_base_s= res.getString("nome");
+					costo_chilometrico= res.getString("nome");
+					penale_chilometri= res.getString("nome");
+					tariffa_illim_g= res.getString("nome");
+					tariffa_illim_s= res.getString("nome");
+					
+					risultato.put("nome_fascia" + Integer.toString(pos), nome_fascia);
+					risultato.put("id_prezzi" + Integer.toString(pos), id_prezzi);
+					risultato.put("tariffa_base_g" + Integer.toString(pos), tariffa_base_g);
+					risultato.put("tariffa_base_s" + Integer.toString(pos),tariffa_base_s);
+					risultato.put("costo_chilometrico" + Integer.toString(pos),costo_chilometrico);
+					risultato.put("penale_chilometri" + Integer.toString(pos),penale_chilometri);
+					risultato.put("tariffa_illim_g" + Integer.toString(pos),tariffa_illim_g);
+					risultato.put("tariffa_illim_s" + Integer.toString(pos),tariffa_illim_s);
+					
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
 
 	
 
