@@ -1,21 +1,21 @@
 package util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class CountryManager {
 	
-	public static ArrayList<String> getCountryNames(){
-		 ArrayList<String> countries = new ArrayList<String>();
+	private static final String[] countrySupported = {"Italia"};
+	
+	public static ObservableList<String> getCountryNames(){
+		ObservableList<String> countries = FXCollections.observableArrayList();
 
-	    Locale[] locales = Locale.getAvailableLocales();
-	    for (Locale locale : locales) {
-	      String name = locale.getDisplayCountry();
-
-	      if (!"".equals(name)) {
-	        countries.add(name);
-	      }
+	    for (String country : countrySupported) {
+	      String name = country;
+	      countries.add(name);   
 	    }
 	    
 	    Collections.sort(countries);

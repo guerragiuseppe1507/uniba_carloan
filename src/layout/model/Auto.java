@@ -4,39 +4,47 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Auto {
-		private StringProperty modello;
-		private StringProperty nomeFiliale;
-		private StringProperty status;
-		private StringProperty chilometraggio;
-		private StringProperty fasce;
-		private StringProperty targa;
+	
+	private int id;
+	private StringProperty modello;
+	private StringProperty nomeFiliale;
+	private StringProperty status;
+	private StringProperty chilometraggio;
+	private StringProperty fasce;
+	private StringProperty targa;
+	private StringProperty provenienza;
+	
+	public Auto(int id, String modello, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
 		
-		public Auto(String Modello, String NomeFiliale, String Status,String Targa, String Chilometraggio, String Fasce){
-			
-			this.modello=new SimpleStringProperty(Modello);
-			this.status=new SimpleStringProperty(Status);
-			this.targa= new SimpleStringProperty(Targa);
-			this.nomeFiliale = new SimpleStringProperty(NomeFiliale);
-			this.chilometraggio = new SimpleStringProperty(Chilometraggio);
-			this.fasce=new SimpleStringProperty(Fasce);
-			
-		}
-
+		this.id = id;
+		this.modello=new SimpleStringProperty(modello);
+		this.status=new SimpleStringProperty(status);
+		this.targa= new SimpleStringProperty(targa);
+		this.nomeFiliale = new SimpleStringProperty(nomeFiliale);
+		this.chilometraggio = new SimpleStringProperty(chilometraggio);
+		this.fasce=new SimpleStringProperty(fasce);
+		this.provenienza=new SimpleStringProperty(provenienza);
 		
-		public String modello(){return modello.get();}
-		public String getnomeFiliale(){return nomeFiliale.get();}
-		public String getChilometraggio(){return chilometraggio.get();}
-		public String getStatus(){return status.get();}
-		public String getFasce(){return fasce.get();}
-		public String getTarga(){return targa.get();}
-		
-		public StringProperty modelloProperty(){return modello;}
-		public StringProperty nomeFilialeProperty(){return nomeFiliale;}
-		public StringProperty chilometraggioProperty(){return chilometraggio;}
-		public StringProperty statusProperty(){return status;}
-		public StringProperty fasceProperty(){return fasce;}
-		public StringProperty targaProperty(){return targa;}
-
 	}
+	
+	public int getId(){return id;}
+	
+	public String modello(){return modello.get();}
+	public String getnomeFiliale(){return nomeFiliale.get();}
+	public String getChilometraggio(){return chilometraggio.get();}
+	public String getStatus(){return status.get();}
+	public String getFasce(){return fasce.get();}
+	public String getTarga(){return targa.get();}
+	public String getProvenienza(){return provenienza.get();}
+	
+	public StringProperty modelloProperty(){return modello;}
+	public StringProperty nomeFilialeProperty(){return nomeFiliale;}
+	public StringProperty chilometraggioProperty(){return chilometraggio;}
+	public StringProperty statusProperty(){return status;}
+	public StringProperty fasceProperty(){return fasce;}
+	public StringProperty targaProperty(){return targa;}
+	public StringProperty provenienzaProperty(){return provenienza;}
+
+}
 
 

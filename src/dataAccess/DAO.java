@@ -399,7 +399,7 @@ public class DAO {
 	
 	
 	
-	public HashMap<String, String> getAuto(){
+	public HashMap<String, String> getAuto(HashMap<String, String> inputParam){
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
@@ -412,12 +412,14 @@ public class DAO {
 				" INNER JOIN "+ SchemaDb.TAB_FASCE+
 				" ON " + SchemaDb.TAB_MODELLI+".id_fascia = "+SchemaDb.TAB_FASCE+".id";
 	
+		String id;
 		String nome_filiale;
 		String modello;
 		String targa;
 		String status;
 		String chilometraggio;
 		String fasce;
+		String provenienza;
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
@@ -430,19 +432,21 @@ public class DAO {
 
 				int pos = 0;
 				do{
-					
+					id=res.getString(SchemaDb.TAB_AUTO+".id");
 					nome_filiale = res.getString(SchemaDb.TAB_FILIALI+".nome");
 					modello = res.getString(SchemaDb.TAB_MODELLI+".nome");
 					targa = res.getString(SchemaDb.TAB_AUTO+".targa");
 					status=res.getString(SchemaDb.TAB_AUTO+".status");
+					provenienza=res.getString(SchemaDb.TAB_AUTO+".provenienza");
 					chilometraggio=res.getString(SchemaDb.TAB_AUTO+".chilometraggio");
 					fasce=res.getString(SchemaDb.TAB_FASCE+".nome");
 
-					
+					risultato.put("id" + Integer.toString(pos), id);
 					risultato.put("nome_filiale" + Integer.toString(pos), nome_filiale);
 					risultato.put("modello" + Integer.toString(pos), modello);
 					risultato.put("targa" + Integer.toString(pos), targa);
 					risultato.put("status" + Integer.toString(pos),status);
+					risultato.put("provenienza" + Integer.toString(pos),provenienza);
 					risultato.put("chilometraggio" + Integer.toString(pos),chilometraggio);
 					risultato.put("fasce" + Integer.toString(pos),fasce);
 					

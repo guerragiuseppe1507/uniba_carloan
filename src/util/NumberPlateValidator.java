@@ -14,10 +14,17 @@ public class NumberPlateValidator {
 		}
 	}
 	
+	public static String getPlateExample(String region){
+		String example;
+		if(region.equals("Italia")){example = "AAA-BB-1111";}
+		else{example = "";}//TODO
+		return example;
+	}
+	
 	private static String loadMatcher(String region){
 		String regex;
 		
-		if(region.equals("IT")){regex = "^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$";}
+		if(region.equals("Italia")){regex = "^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$";}
 		else{regex = "";}//TODO
 		
 		return regex;

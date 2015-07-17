@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
+import util.CountryManager;
+import util.NotificationManager;
+import util.NumberPlateValidator;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,6 +41,9 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	Label filiale;
 	@FXML
 	Label filialeNonDisp;
+	@FXML
+	Label examplePlate;
+	
 	
 	//Sezione inserimento auto
 	@FXML
@@ -47,7 +53,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	private ComboBox<String> scegliModello;
 	@FXML
-	private TextField nuovTarga;
+	private TextField nuovaTarga;
 	
 	
 	//Sezione auto non disponibili
@@ -64,7 +70,13 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	private TableColumn<Auto, String> fasceNonDisp;	
 	@FXML
+	private TableColumn<Auto, String> provenienzaNonDisp;
+	@FXML
 	private ComboBox<String> scegliStatusDaNonDispon;
+	@FXML
+	private TextField nuovaTargaAutoNonDisp;
+	@FXML
+	Label examplePlateAutoNonDisp;
 	
 	//Sezione auto disponibili
 	@FXML
@@ -80,13 +92,22 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	private TableColumn<Auto, String> fasce;	
 	@FXML
+	private TableColumn<Auto, String> provenienza;
+	@FXML
 	private ComboBox<String> scegliStatusDaDispon;
+	@FXML
+	private TextField nuovaTargaAutoDisp;
+	@FXML
+	Label examplePlateAutoDisp;
 	
 	
 	
 	private ObservableList<Auto> autoData = FXCollections.observableArrayList();
 	private ObservableList<String> fasceData = FXCollections.observableArrayList();
 	private ObservableList<String> modelliData = FXCollections.observableArrayList();
+	
+	private String modelloScelto;
+	private String nazioneScelta;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
@@ -106,7 +127,10 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		
 		//Popolamento Spinner
 		popolaSpinnerFasce();
+		scegliProvenienza.setItems(CountryManager.getCountryNames());
 		
+		scegliProvenienza.getSelectionModel().selectedIndexProperty().addListener(
+				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliProvenienza(new_value));
 		scegliFascia.getSelectionModel().selectedIndexProperty().addListener(
 				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliFascia(new_value));
 		
@@ -118,16 +142,23 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		ContextMenu.showContextMenu(menu,myController);
 	}
 	
+	private void handleScegliProvenienza(Number value){
+		nazioneScelta = scegliProvenienza.getItems().get(value.intValue());
+		examplePlate.setText(NumberPlateValidator.getPlateExample(nazioneScelta));
+		
+	}
+	
 	private void handleScegliFascia(Number value){
 		String selectedFascia = scegliFascia.getItems().get(value.intValue());
 		
 		popolaSpinnerModelli(selectedFascia);
-		
+		scegliModello.getSelectionModel().selectedIndexProperty().addListener(
+				(ChangeListener<Number>) (ovModello, valueModello, new_valueModello) -> handleScegliModello(new_valueModello));
 		
 	}
 	
 	private void handleScegliModello(Number value){
-		String selectedModello = scegliFascia.getItems().get(value.intValue());
+		modelloScelto = scegliModello.getItems().get(value.intValue());
 	}
 	
 	private void popolaSpinnerModelli(String fascia){
@@ -166,12 +197,14 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				autoData.add(new Auto(
+						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
 						risultato.get("modello" + Integer.toString(i)),
 						risultato.get("nome_filiale" + Integer.toString(i)), 
 						risultato.get("status" + Integer.toString(i)),
 						risultato.get("targa"+Integer.toString(i)),
 						risultato.get("chilometraggio" + Integer.toString(i)),
-						risultato.get("fasce" + Integer.toString(i)))
+						risultato.get("fasce" + Integer.toString(i)),
+						risultato.get("provenienza" + Integer.toString(i)))
 				); 
 				
 			}
@@ -181,10 +214,9 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			chilometraggio.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
 			targa.setCellValueFactory(cellData->cellData.getValue().targaProperty());
 			fasce.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
-			autoTable.setItems(autoData);
+			provenienza.setCellValueFactory(cellData->cellData.getValue().provenienzaProperty());
 			
-			scegliFascia.getSelectionModel().selectedIndexProperty().addListener(
-					(ChangeListener<Number>) (ov, value, new_value) -> handleScegliModello(new_value));
+			autoTable.setItems(autoData);
 			
 		} else {
 			
@@ -232,6 +264,25 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	}
 	@FXML
 	private void handleInserisciAuto() {
+		
+		if (nuovaTarga.getText().equals("") 
+				|| nazioneScelta == null
+				|| modelloScelto == null){
+			NotificationManager.setError("Tutti i campi sono obbligatori");
+		} else if (!NumberPlateValidator.validate(nuovaTarga.getText(), nazioneScelta)){
+			NotificationManager.setError("Targa non conforme agli standard della nazione scelta.\n"+
+										"Nazione Scelta : "+nazioneScelta);
+		} else {
+			System.out.println("si puo fare");
+		}
+
+	}
+	@FXML
+	private void handleCanbiaTargaAutoNonDisp() {
+		
+	}
+	@FXML
+	private void handleCanbiaTargaAutoDisp() {
 		
 	}
 	
