@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -9,24 +11,75 @@
 <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.ManageAutoController">
 	<AnchorPane>
 	   <children>
-	      <TableView fx:id="autoTable" layoutX="576.0" layoutY="119.0" prefHeight="267.0" prefWidth="582.0">
+	      <TableView fx:id="autoTable" layoutX="59.0" layoutY="287.0" prefHeight="231.0" prefWidth="544.0">
 	        <columns>
 	          <TableColumn fx:id="modello" prefWidth="131.0" text="Modello" />
 	          <TableColumn fx:id="targa" prefWidth="82.0" text="Targa" />
-	            <TableColumn fx:id="nomeFiliale" prefWidth="100.0" text="Nome filiale" />
 	            <TableColumn fx:id="status" prefWidth="103.0" text="Status" />
-	            <TableColumn fx:id="chilometraggio" prefWidth="139.0" text="Chilometraggio" />
-	            <TableColumn fx:id="fasce" prefWidth="102.0" text="Fasce" />
+	            <TableColumn fx:id="chilometraggio" prefWidth="139.0" text="Km" />
+	            <TableColumn fx:id="fasce" prefWidth="102.0" text="Fascia" />
 	        </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
 	      </TableView>
-	      <Button layoutX="384.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="135.0" text="Inserisci Auto" />
-	      <Button layoutX="576.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Cancella Auto" />
-	      <Button layoutX="760.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Modifica Dati Auto" />
+	      <TableView fx:id="autoTableNonDisp" layoutX="677.0" layoutY="287.0" prefHeight="231.0" prefWidth="544.0">
+	        <columns>
+	          <TableColumn fx:id="modelloNonDisp" prefWidth="131.0" text="Modello" />
+	          <TableColumn fx:id="targaNonDisp" prefWidth="82.0" text="Targa" />
+	            <TableColumn fx:id="statusNonDisp" prefWidth="103.0" text="Status" />
+	            <TableColumn fx:id="chilometraggioNonDisp" prefWidth="139.0" text="Km" />
+	            <TableColumn fx:id="fasceNonDisp" prefWidth="102.0" text="Fascia" />
+	        </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+	      </TableView>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="119.0" layoutX="136.0" layoutY="108.0" stroke="BLACK" strokeType="INSIDE" width="1009.0" />
+	      <Button layoutX="331.0" layoutY="533.0" mnemonicParsing="false" onAction="#handleCancellaAutoDisp" prefHeight="121.0" prefWidth="271.0" text="Cancella Auto" />
+	      <Button layoutX="59.0" layoutY="615.0" mnemonicParsing="false" onAction="#handleCanbiaStatusAutoDisp" prefHeight="39.0" prefWidth="253.0" text="Cambia status" />
          <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
-         <ChoiceBox fx:id="scegliFascia" layoutX="171.0" layoutY="222.0" prefWidth="150.0" />
+         <GridPane layoutX="167.0" layoutY="121.0" prefHeight="92.0" prefWidth="625.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="121.0" />
+             <ColumnConstraints hgrow="SOMETIMES" maxWidth="238.0" minWidth="10.0" prefWidth="191.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="214.0" minWidth="10.0" prefWidth="118.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="327.0" minWidth="10.0" prefWidth="209.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+            <children>
+               <TextField fx:id="nuovTarga" GridPane.columnIndex="1" />
+               <Label text="Targa :" />
+               <Label text="Fascia : " GridPane.columnIndex="2">
+                  <GridPane.margin>
+                     <Insets left="20.0" />
+                  </GridPane.margin></Label>
+               <Label text="Modello :" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <GridPane.margin>
+                     <Insets left="20.0" />
+                  </GridPane.margin></Label>
+               <Label text="Provenienza :" GridPane.rowIndex="1" />
+               <ComboBox fx:id="scegliProvenienza" prefHeight="31.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               <ComboBox fx:id="scegliFascia" prefHeight="31.0" prefWidth="231.0" GridPane.columnIndex="3" />
+               <ComboBox fx:id="scegliModello" prefHeight="31.0" prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            </children>
+         </GridPane>
+         <Button layoutX="839.0" layoutY="129.0" mnemonicParsing="false" onAction="#handleInserisciAuto" prefHeight="77.0" prefWidth="278.0" text="Inserisci Auto" />
+         <Label layoutX="136.0" layoutY="87.0" text="Inserisci nuova auto :" />
+         <Line endY="400.0" layoutX="642.0" layoutY="262.0" />
+         <Label layoutX="59.0" layoutY="261.0" text="Auto disponibili per il noleggio :" />
+         <Label layoutX="677.0" layoutY="261.0" text="Auto non disponibili :" />
+         <Label layoutX="59.0" layoutY="533.0" text="Seleziona status dell' auto :" />
+         <Button layoutX="950.0" layoutY="533.0" mnemonicParsing="false" onAction="#handleCancellaAutoNonDisp" prefHeight="121.0" prefWidth="271.0" text="Cancella Auto" />
+         <Button layoutX="678.0" layoutY="615.0" mnemonicParsing="false" onAction="#handleCanbiaStatusAutoNonDisp" prefHeight="39.0" prefWidth="253.0" text="Cambia status" />
+         <Label layoutX="678.0" layoutY="533.0" text="Seleziona status dell' auto :" />
+         <Label fx:id="filiale" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="59.0" layoutY="240.0" text="Filiale" textAlignment="RIGHT" textFill="#00000080" />
+         <Label fx:id="filialeNonDisp" layoutX="678.0" layoutY="240.0" text="Filiale" textFill="#00000080" />
+         <ComboBox fx:id="scegliStatusDaDispon" layoutX="59.0" layoutY="562.0" prefHeight="39.0" prefWidth="253.0" />
+         <ComboBox fx:id="scegliStatusDaNonDispon" layoutX="678.0" layoutY="562.0" prefHeight="39.0" prefWidth="253.0" />
 	   </children>
 	</AnchorPane>
 </StackPane>

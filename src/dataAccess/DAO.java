@@ -726,6 +726,56 @@ public class DAO {
 		return risultato;
 		
 	}
+    
+    public HashMap<String, String> getModelli(HashMap<String, String> inputParam){
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_MODELLI +" INNER JOIN "+SchemaDb.TAB_FASCE+" ON id_fascia = "+
+				SchemaDb.TAB_FASCE+".id WHERE "+SchemaDb.TAB_FASCE+".nome = ?";
+	
+		String nome_modello;
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			istruzione.setString(1, inputParam.get("nome_fascia"));
+			ResultSet res = istruzione.executeQuery();
+			Boolean isModello = res.first();
+			
+			if (isModello){
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+
+				int pos = 0;
+				do{
+					
+					nome_modello = res.getString("nome");
+					
+					risultato.put("nome_modello" + Integer.toString(pos), nome_modello);
+					
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
 
 	
 
