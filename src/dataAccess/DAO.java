@@ -1650,13 +1650,15 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
-		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_CONTRATTI +
-				" INNER JOIN "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
-				" ON " +SchemaDb.TAB_CONTRATTI+".id_dipendente = " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id"+
-				" INNER JOIN "+ SchemaDb.TAB_MODELLI+
-				" ON " + SchemaDb.TAB_CONTRATTI+".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
+		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_CONTRATTI +			
+				" INNER JOIN "+ SchemaDb.TAB_AUTO+
+				" ON " + SchemaDb.TAB_CONTRATTI+".id_auto = "+SchemaDb.TAB_AUTO+".id"+
+				" INNER JOIN "+SchemaDb.TAB_MODELLI+
+				" ON " + SchemaDb.TAB_AUTO +".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
 				" INNER JOIN "+ SchemaDb.TAB_CLIENTI+
-				" ON " + SchemaDb.TAB_CONTRATTI+".id_cliente = "+SchemaDb.TAB_CLIENTI+".id";
+				" ON " + SchemaDb.TAB_CONTRATTI+".id_cliente = "+SchemaDb.TAB_CLIENTI+".id"+
+				" INNER JOIN "+SchemaDb.TAB_UTENTI+
+				" ON " + SchemaDb.TAB_CONTRATTI+".id_dipendente = "+SchemaDb.TAB_UTENTI+".id";
 	
 		 String id;
 		 String tipoKm;
@@ -1685,19 +1687,19 @@ public class DAO {
 				int pos = 0;
 				do{
 					
-					tipoKm = res.getString(SchemaDb.TAB_CONTRATTI+".nome");
-					idAuto = res.getString(SchemaDb.TAB_MODELLI+".nome");
+					tipoKm = res.getString(SchemaDb.TAB_CONTRATTI+".tipo_km");
 					tariffa = res.getString(SchemaDb.TAB_CONTRATTI+".tariffa");
-					dataInizio=res.getString(SchemaDb.TAB_CONTRATTI+".dataInizio");
-					dataLimite=res.getString(SchemaDb.TAB_CONTRATTI+".dataLimite");
-					dataRientro=res.getString(SchemaDb.TAB_CONTRATTI+".dataRientro");
+					dataInizio=res.getString(SchemaDb.TAB_CONTRATTI+".data_inizio");
+					dataLimite=res.getString(SchemaDb.TAB_CONTRATTI+".data_limite");
+					dataRientro=res.getString(SchemaDb.TAB_CONTRATTI+".data_rientro");
 					acconto=res.getString(SchemaDb.TAB_CONTRATTI+".acconto");
 					stato=res.getString(SchemaDb.TAB_CONTRATTI+".stato");
 					idCliente=res.getString(SchemaDb.TAB_CLIENTI+".nome");
-					idDipendente=res.getString(SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".nome");
-					totPrezzo=res.getString(SchemaDb.TAB_CONTRATTI+".totPrezzo");
-					filialeDiPartenza=res.getString(SchemaDb.TAB_CONTRATTI+".filialeDiPartenza");
-					filialeDiArrivo=res.getString(SchemaDb.TAB_CONTRATTI+".filialeDiArrivo");
+					idDipendente=res.getString(SchemaDb.TAB_UTENTI+".nome");
+					idAuto = res.getString(SchemaDb.TAB_MODELLI+".nome");
+					totPrezzo=res.getString(SchemaDb.TAB_CONTRATTI+".tot_prezzo");
+					filialeDiPartenza=res.getString(SchemaDb.TAB_CONTRATTI+".filiale_di_partenza");
+					filialeDiArrivo=res.getString(SchemaDb.TAB_CONTRATTI+".filiale_di_arrivo");
 					
 					risultato.put("tipoKm" + Integer.toString(pos), tipoKm);
 					risultato.put("idAuto" + Integer.toString(pos), idAuto);
