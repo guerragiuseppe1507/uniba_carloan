@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
 import util.EmailValidator;
+import util.Md5Encrypter;
 import util.NotificationManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ public class LoginController implements Initializable, ControlledScreen{
 	
 	ScreensController myController;
 	Context c = Context.getInstance();
+	final String APP_NAME = ScreensFramework.APP_NAME;
 	
 	@FXML
 	StackPane container;
@@ -60,7 +62,7 @@ public class LoginController implements Initializable, ControlledScreen{
 		
 		HashMap<String, String> inputParam = new HashMap<>();
 		inputParam.put("username", usernameLabel.getText());
-		inputParam.put("password", passwordLabel.getText());
+		inputParam.put("password", Md5Encrypter.encrypt(passwordLabel.getText()));
 		
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
@@ -71,6 +73,7 @@ public class LoginController implements Initializable, ControlledScreen{
 				c.setUserType(Context.managerSistema);
 				ScreensFramework.loadManagerSistemaScreens(myController);		
 				myController.setScreen(ScreensFramework.homeManagerDiSistemaID);
+				ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.homeManagerDiSistemaTitle);
 			}
 			
 			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerFiliale)){
@@ -78,6 +81,7 @@ public class LoginController implements Initializable, ControlledScreen{
 				istanziaUtente(risultato);
 				ScreensFramework.loadManagerFilialeScreens(myController);
 				myController.setScreen(ScreensFramework.homeManagerDiFilialeID);
+				ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.homeManagerDiFilialeTitle);
 			}
 			
 			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.dipendenteFiliale)){
@@ -85,6 +89,7 @@ public class LoginController implements Initializable, ControlledScreen{
 				istanziaUtente(risultato);
 				ScreensFramework.loadDipendenteFilialeScreens(myController);
 				myController.setScreen(ScreensFramework.homeDipendenteDiFilialeID);
+				ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.homeDipendenteDiFilialeTitle);
 			}
 			
 			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals("utenteNonAssegnato")){
@@ -145,7 +150,7 @@ public class LoginController implements Initializable, ControlledScreen{
 			HashMap<String, String> inputParam = new HashMap<>();
 			inputParam.put("username", regUsername.getText());
 			inputParam.put("email", regEmail.getText());
-			inputParam.put("password", regPassword.getText());
+			inputParam.put("password", Md5Encrypter.encrypt(regPassword.getText()));
 			
 			HashMap<String, String> risultato = new HashMap<>();
 			risultato =	FrontController.request(comando, inputParam);

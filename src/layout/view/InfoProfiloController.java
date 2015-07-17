@@ -91,7 +91,7 @@ public class InfoProfiloController implements Initializable, ControlledScreen {
 		tfCognome.setText(Context.getInstance().getUtente().getCognome());
 		tfTelefono.setText(Context.getInstance().getUtente().getTelefono());
 		tfResidenza.setText(Context.getInstance().getUtente().getResidenza());
-		tfPassword.setText(Context.getInstance().getPassword());
+		//tfPassword.setText(Context.getInstance().getPassword());
 	}
 	
 	@FXML

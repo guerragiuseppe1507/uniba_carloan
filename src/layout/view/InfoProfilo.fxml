@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -37,7 +39,7 @@
                   <TextField fx:id="tfCognome" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="tfTelefono" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="tfResidenza" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nuova Password" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                <TextField fx:id="tfPassword" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
             </GridPane>
@@ -49,6 +51,7 @@
          <Text fx:id="tvUtente" layoutX="137.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          <Text layoutX="74.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo :" />
          <Text fx:id="tvTipo" layoutX="127.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+         <Rectangle arcHeight="2.0" arcWidth="2.0" fill="#ffffffa3" height="89.0" layoutX="66.0" layoutY="72.0" stroke="#0000005d" strokeType="INSIDE" width="202.0" />
          </children>
       </AnchorPane>
 </StackPane>

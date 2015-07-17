@@ -1,5 +1,6 @@
 package layout.view;
 
+import util.Md5Encrypter;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -26,26 +27,34 @@ public class ScreensFramework extends Application {
 	public static String loginFile = "Login.fxml";
 	public static String homeManagerDiSistemaID = "HomeManagerDiSistema";
 	public static String homeManagerDiSistemaFile = "HomeManagerDiSistema.fxml";
+	public static String homeManagerDiSistemaTitle = "Home Manager Di Sistema";
 	public static String homeManagerDiFilialeID = "HomeManagerDiFiliale";
 	public static String homeManagerDiFilialeFile = "HomeManagerDiFiliale.fxml";
+	public static String homeManagerDiFilialeTitle = "Home Manager Di Filiale";
 	public static String homeDipendenteDiFilialeID = "HomeDipendenteDiFiliale";
 	public static String homeDipendenteDiFilialeFile = "HomeDipendenteDiFiliale.fxml";
+	public static String homeDipendenteDiFilialeTitle = "Home Dipendente Di Filiale";
 	public static String insertManagerID = "InsertManager";
 	public static String insertManagerFile = "InsertManager.fxml";
+	public static String insertManagerTitle = "Gestione Manager";
 	public static String manageAutoID = "ManageAuto";
 	public static String manageAutoFile = "ManageAuto.fxml";
+	public static String manageAutoTitle = "Gestione Auto";
 	public static String gestioneDipendentiID = "GestioneDipendenti";
 	public static String gestioneDipendentiFile = "GestioneDipendenti.fxml";
+	public static String gestioneDipendentiTitle = "Gestione Dipendenti";
 	public static String gestioneProfiloID = "InfoProfilo";
 	public static String gestioneProfiloFile = "InfoProfilo.fxml";
+	public static String gestioneProfiloTitle = "Gestione Profilo";
 	
-	
-	//Variabile globale che memorizza la sessione dell' utente tramite la mail.
-	public static String userId;
 	private ScreensController mainContainer;
+	public static Stage PRIMARY_STAGE;
+	public static String APP_NAME = "CARLOAN";
 	
 	@Override
 	public void start(Stage primaryStage){
+		
+		this.PRIMARY_STAGE = primaryStage;
 		
 		//Vieni istanziato il controller delle schermate.
 		mainContainer = new ScreensController();
@@ -71,7 +80,7 @@ public class ScreensFramework extends Application {
 		primaryStage.setResizable(false);
 		
 		
-		primaryStage.setTitle("CARLOAN");
+		primaryStage.setTitle(APP_NAME);
 		
 		//Impostazione della scena iniziale e visualizzazione della stessa
 		primaryStage.setScene(scene);

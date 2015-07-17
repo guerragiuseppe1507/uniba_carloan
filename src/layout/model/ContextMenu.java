@@ -15,7 +15,7 @@ public class ContextMenu {
 	public ContextMenu(){}
     
     public static void showContextMenu(Pane c, ScreensController ctrl){
-
+    	final String APP_NAME = ScreensFramework.APP_NAME;
         
     	MenuBar mainMenu = new MenuBar();
     	c.getChildren().add(mainMenu);
@@ -37,6 +37,7 @@ public class ContextMenu {
 	            @Override
 	            public void handle(ActionEvent event) {
 	            	ctrl.setScreen(ScreensFramework.insertManagerID);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.insertManagerTitle);
 	            }
 	        });
 			
@@ -55,6 +56,7 @@ public class ContextMenu {
 	            @Override
 	            public void handle(ActionEvent event) {
 	            	ctrl.setScreen(ScreensFramework.manageAutoID);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.manageAutoTitle);
 	            }
 	        });
     		
@@ -63,6 +65,7 @@ public class ContextMenu {
 	            @Override
 	            public void handle(ActionEvent event) {
 	            	ctrl.setScreen(ScreensFramework.gestioneDipendentiID);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneDipendentiTitle);
 	            }
 	        });
     		
@@ -86,6 +89,7 @@ public class ContextMenu {
             @Override
             public void handle(ActionEvent event) {
             	ctrl.setScreen(ScreensFramework.loginID);
+            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME);
             	ctrl.resetScreens();
             }
         });
@@ -97,7 +101,7 @@ public class ContextMenu {
 	            @Override
 	            public void handle(ActionEvent event) {
 	            	ctrl.setScreen(ScreensFramework.gestioneProfiloID);
-	            	ctrl.resetScreens();
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneProfiloTitle);
 	            }
 			 });
 		}else{

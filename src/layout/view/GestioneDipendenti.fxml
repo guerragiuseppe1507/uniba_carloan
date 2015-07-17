@@ -12,11 +12,6 @@
 <AnchorPane prefHeight="750.0" prefWidth="1004.0">
    <children>
          <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
-      <Label layoutX="465.0" layoutY="103.0" prefHeight="57.0" prefWidth="360.0" text="  Gestione Dipendenti">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
       <TableView fx:id="usersTable" layoutX="55.0" layoutY="251.0" prefHeight="251.0" prefWidth="570.0">
          <columns>
             <TableColumn fx:id="username" prefWidth="75.0" text="Username" />
@@ -45,13 +40,9 @@
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
          </TableView>
-         <Label layoutX="55.0" layoutY="225.0" text="Utenti Lieri :" />
+         <Label layoutX="55.0" layoutY="225.0" text="Utenti Liberi :" />
          <Label layoutX="656.0" layoutY="225.0" text="Dipendenti della filiale :" />
-         <Label fx:id="filiale" alignment="CENTER" layoutX="460.0" layoutY="147.0" prefHeight="57.0" prefWidth="360.0" text="text" textAlignment="CENTER" wrapText="true">
-            <font>
-               <Font size="23.0" />
-            </font>
-         </Label>
+         <Label fx:id="filiale" alignment="TOP_LEFT" layoutX="656.0" layoutY="204.0" prefHeight="21.0" prefWidth="80.0" text="text" textFill="#0000007c" wrapText="true" />
    </children>
 </AnchorPane>
 </StackPane>

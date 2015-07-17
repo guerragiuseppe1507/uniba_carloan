@@ -26,11 +26,6 @@
 	      <Button layoutX="576.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Cancella Auto" />
 	      <Button layoutX="760.0" layoutY="554.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="129.0" text="Modifica Dati Auto" />
          <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
-         <Label layoutX="491.0" layoutY="54.0" prefHeight="47.0" prefWidth="312.0" text="    Gestione Auto">
-            <font>
-               <Font size="36.0" />
-            </font>
-         </Label>
 	   </children>
 	</AnchorPane>
 </StackPane>
