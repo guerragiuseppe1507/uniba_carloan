@@ -17,7 +17,7 @@ public class GestioneAuto {
 			 * e che le credenziali di accesso al sistema siano corrette.
 			 */
 			DAO dao = new DAO();
-			risultato = dao.getAuto();	
+			risultato = dao.getAuto(inputParam);	
 			return risultato;
 	}
 	
