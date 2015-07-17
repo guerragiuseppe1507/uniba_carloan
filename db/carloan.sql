@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS `auto` (
   `id_filiale` int(50) NOT NULL,
   `status` varchar(50) DEFAULT NULL,
   `chilometraggio` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`,`targa`),
+  `provenienza` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `targa` (`targa`),
   KEY `FK__filiale` (`id_filiale`),
   KEY `FK_auto_modello` (`id_modello`),
   CONSTRAINT `FK_auto_modello` FOREIGN KEY (`id_modello`) REFERENCES `modelli` (`id`),
@@ -33,53 +35,53 @@ CREATE TABLE IF NOT EXISTS `auto` (
 -- Dump dei dati della tabella carloan.auto: ~46 rows (circa)
 DELETE FROM `auto`;
 /*!40000 ALTER TABLE `auto` DISABLE KEYS */;
-INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilometraggio`) VALUES
-	(44, 1, 'targa1', 12, 'DISPONIBILE', 0),
-	(45, 11, 'targa2', 9, 'MANUTENZIONE', 0),
-	(46, 4, 'targa3', 8, 'DISPONIBILE', 0),
-	(47, 7, 'targa4', 11, 'DISPONIBILE', 0),
-	(48, 16, 'targa5', 13, 'DISPONIBILE', 0),
-	(49, 16, 'targa6', 8, 'DISPONIBILE', 0),
-	(50, 13, 'targa7', 8, 'DISPONIBILE', 0),
-	(51, 10, 'targa8', 9, 'DISPONIBILE', 0),
-	(52, 13, 'targa9', 8, 'DISPONIBILE', 0),
-	(53, 14, 'targa10', 12, 'DISPONIBILE', 0),
-	(54, 12, 'targa11', 12, 'DISPONIBILE', 0),
-	(55, 10, 'targa12', 12, 'DISPONIBILE', 0),
-	(56, 15, 'targa13', 12, 'MANUTENZIONE', 0),
-	(57, 16, 'targa14', 12, 'DISPONIBILE', 0),
-	(58, 6, 'targa15', 11, 'DISPONIBILE', 0),
-	(59, 8, 'targa16', 11, 'MANUTENZIONE', 0),
-	(60, 5, 'targa17', 11, 'DISPONIBILE', 0),
-	(61, 3, 'targa18', 11, 'DISPONIBILE', 0),
-	(62, 6, 'targa19', 11, 'DISPONIBILE', 0),
-	(63, 7, 'targa20', 9, 'DISPONIBILE', 0),
-	(64, 5, 'targa21', 9, 'DISPONIBILE', 0),
-	(65, 1, 'targa22', 9, 'DISPONIBILE', 0),
-	(66, 11, 'targa23', 9, 'DISPONIBILE', 0),
-	(67, 13, 'targa24', 8, 'DISPONIBILE', 0),
-	(68, 15, 'targa25', 8, 'DISPONIBILE', 0),
-	(69, 16, 'targa26', 8, 'DISPONIBILE', 0),
-	(70, 5, 'targa27', 8, 'MANUTENZIONE', 0),
-	(71, 6, 'targa28', 8, 'DISPONIBILE', 0),
-	(72, 9, 'targa29', 8, 'DISPONIBILE', 0),
-	(73, 11, 'targa30', 8, 'DISPONIBILE', 0),
-	(74, 1, 'targa31', 13, 'DISPONIBILE', 0),
-	(75, 1, 'targa32', 13, 'DISPONIBILE', 0),
-	(76, 14, 'targa33', 13, 'DISPONIBILE', 0),
-	(77, 6, 'targa34', 13, 'DISPONIBILE', 0),
-	(78, 8, 'targa35', 13, 'MANUTENZIONE', 0),
-	(79, 12, 'targa36', 13, 'DISPONIBILE', 0),
-	(80, 14, 'targa37', 9, 'DISPONIBILE', 0),
-	(81, 4, 'targa38', 9, 'DISPONIBILE', 0),
-	(82, 4, 'targa39', 9, 'DISPONIBILE', 0),
-	(83, 8, 'targa40', 11, 'DISPONIBILE', 0),
-	(84, 3, 'targa41', 11, 'DISPONIBILE', 0),
-	(85, 9, 'targa42', 12, 'DISPONIBILE', 0),
-	(86, 4, 'targa43', 12, 'DISPONIBILE', 0),
-	(87, 6, 'targa44', 12, 'DISPONIBILE', 0),
-	(88, 8, 'targa45', 13, 'DISPONIBILE', 0),
-	(89, 2, 'targa46', 13, 'MANUTENZIONE', 0);
+INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilometraggio`, `provenienza`) VALUES
+	(44, 1, 'targa1', 12, 'DISPONIBILE', 0, 'Italia'),
+	(45, 11, 'targa2', 9, 'MANUTENZIONE', 0, 'Italia'),
+	(46, 4, 'targa3', 8, 'DISPONIBILE', 0, 'Italia'),
+	(47, 7, 'targa4', 11, 'DISPONIBILE', 0, 'Italia'),
+	(48, 16, 'targa5', 13, 'DISPONIBILE', 0, 'Italia'),
+	(49, 16, 'targa6', 8, 'DISPONIBILE', 0, 'Italia'),
+	(50, 13, 'targa7', 8, 'DISPONIBILE', 0, 'Italia'),
+	(51, 10, 'targa8', 9, 'DISPONIBILE', 0, 'Italia'),
+	(52, 13, 'targa9', 8, 'DISPONIBILE', 0, 'Italia'),
+	(53, 14, 'targa10', 12, 'DISPONIBILE', 0, 'Italia'),
+	(54, 12, 'targa11', 12, 'DISPONIBILE', 0, 'Italia'),
+	(55, 10, 'targa12', 12, 'DISPONIBILE', 0, 'Italia'),
+	(56, 15, 'targa13', 12, 'MANUTENZIONE', 0, 'Italia'),
+	(57, 16, 'targa14', 12, 'DISPONIBILE', 0, 'Italia'),
+	(58, 6, 'targa15', 11, 'DISPONIBILE', 0, 'Italia'),
+	(59, 8, 'targa16', 11, 'MANUTENZIONE', 0, 'Italia'),
+	(60, 5, 'targa17', 11, 'DISPONIBILE', 0, 'Italia'),
+	(61, 3, 'targa18', 11, 'DISPONIBILE', 0, 'Italia'),
+	(62, 6, 'targa19', 11, 'DISPONIBILE', 0, 'Italia'),
+	(63, 7, 'targa20', 9, 'DISPONIBILE', 0, 'Italia'),
+	(64, 5, 'targa21', 9, 'DISPONIBILE', 0, 'Italia'),
+	(65, 1, 'targa22', 9, 'DISPONIBILE', 0, 'Italia'),
+	(66, 11, 'targa23', 9, 'DISPONIBILE', 0, 'Italia'),
+	(67, 13, 'targa24', 8, 'DISPONIBILE', 0, 'Italia'),
+	(68, 15, 'targa25', 8, 'DISPONIBILE', 0, 'Italia'),
+	(69, 16, 'targa26', 8, 'DISPONIBILE', 0, 'Italia'),
+	(70, 5, 'targa27', 8, 'MANUTENZIONE', 0, 'Italia'),
+	(71, 6, 'targa28', 8, 'DISPONIBILE', 0, 'Italia'),
+	(72, 9, 'targa29', 8, 'DISPONIBILE', 0, 'Italia'),
+	(73, 11, 'targa30', 8, 'DISPONIBILE', 0, 'Italia'),
+	(74, 1, 'targa31', 13, 'DISPONIBILE', 0, 'Italia'),
+	(75, 1, 'targa32', 13, 'DISPONIBILE', 0, 'Italia'),
+	(76, 14, 'targa33', 13, 'DISPONIBILE', 0, 'Italia'),
+	(77, 6, 'targa34', 13, 'DISPONIBILE', 0, 'Italia'),
+	(78, 8, 'targa35', 13, 'MANUTENZIONE', 0, 'Italia'),
+	(79, 12, 'targa36', 13, 'DISPONIBILE', 0, 'Italia'),
+	(80, 14, 'targa37', 9, 'DISPONIBILE', 0, 'Italia'),
+	(81, 4, 'targa38', 9, 'DISPONIBILE', 0, 'Italia'),
+	(82, 4, 'targa39', 9, 'DISPONIBILE', 0, 'Italia'),
+	(83, 8, 'targa40', 11, 'DISPONIBILE', 0, 'Italia'),
+	(84, 3, 'targa41', 11, 'DISPONIBILE', 0, 'Italia'),
+	(85, 9, 'targa42', 12, 'DISPONIBILE', 0, 'Italia'),
+	(86, 4, 'targa43', 12, 'DISPONIBILE', 0, 'Italia'),
+	(87, 6, 'targa44', 12, 'DISPONIBILE', 0, 'Italia'),
+	(88, 8, 'targa45', 13, 'DISPONIBILE', 0, 'Italia'),
+	(89, 2, 'targa46', 13, 'MANUTENZIONE', 0, 'Italia');
 /*!40000 ALTER TABLE `auto` ENABLE KEYS */;
 
 
@@ -133,9 +135,9 @@ CREATE TABLE IF NOT EXISTS `contratti` (
   KEY `FK_contratti_auto` (`id_auto`),
   KEY `FK_contratti_filiali` (`filiale_di_partenza`),
   KEY `FK_contratti_filiali_2` (`filiale_di_arrivo`),
-  CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `utenti` (`id`),
   CONSTRAINT `FK_contratti_auto` FOREIGN KEY (`id_auto`) REFERENCES `auto` (`id`),
   CONSTRAINT `FK_contratti_clienti` FOREIGN KEY (`id_cliente`) REFERENCES `clienti` (`id`),
+  CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `utenti` (`id`),
   CONSTRAINT `FK_contratti_filiali` FOREIGN KEY (`filiale_di_partenza`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK_contratti_filiali_2` FOREIGN KEY (`filiale_di_arrivo`) REFERENCES `filiali` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
@@ -158,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `dipendenti_di_filiale` (
   KEY `id_filiale` (`id_filiale`),
   CONSTRAINT `FK_dipendente_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK_dipendente_di_filiale_utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.dipendenti_di_filiale: ~15 rows (circa)
 DELETE FROM `dipendenti_di_filiale`;
@@ -168,17 +170,17 @@ INSERT INTO `dipendenti_di_filiale` (`id`, `id_utente`, `id_filiale`) VALUES
 	(8, 8, 9),
 	(9, 9, 9),
 	(10, 10, 11),
-	(12, 12, 11),
 	(13, 13, 12),
-	(15, 15, 12),
 	(16, 16, 13),
-	(18, 18, 13),
 	(19, 19, 8),
 	(20, 20, 8),
 	(21, 21, 8),
 	(31, 11, 11),
-	(35, 17, 13),
-	(38, 14, 12);
+	(38, 14, 12),
+	(40, 12, 11),
+	(42, 18, 13),
+	(44, 17, 13),
+	(49, 15, 12);
 /*!40000 ALTER TABLE `dipendenti_di_filiale` ENABLE KEYS */;
 
 
@@ -235,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `manager_di_filiale` (
   UNIQUE KEY `id_utente` (`id_utente`),
   CONSTRAINT `FK_manager_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK__utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.manager_di_filiale: ~5 rows (circa)
 DELETE FROM `manager_di_filiale`;
@@ -261,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `manager_di_sistema` (
 DELETE FROM `manager_di_sistema`;
 /*!40000 ALTER TABLE `manager_di_sistema` DISABLE KEYS */;
 INSERT INTO `manager_di_sistema` (`id`, `username`, `password`) VALUES
-	(1, 'admin', 'admin');
+	(1, 'admin', '21232f297a57a5a743894a0e4a801fc3');
 /*!40000 ALTER TABLE `manager_di_sistema` ENABLE KEYS */;
 
 
@@ -270,7 +272,8 @@ CREATE TABLE IF NOT EXISTS `modelli` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `id_fascia` int(50) NOT NULL,
-  PRIMARY KEY (`id`,`nome`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nome` (`nome`),
   KEY `FK_modello_fascia` (`id_fascia`),
   CONSTRAINT `FK_modello_fascia` FOREIGN KEY (`id_fascia`) REFERENCES `fasce` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
@@ -331,35 +334,36 @@ CREATE TABLE IF NOT EXISTS `utenti` (
   `cognome` varchar(50) DEFAULT NULL,
   `telefono` varchar(50) DEFAULT NULL,
   `residenza` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`,`username`),
-  UNIQUE KEY `email` (`email`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.utenti: ~21 rows (circa)
 DELETE FROM `utenti`;
 /*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
 INSERT INTO `utenti` (`id`, `username`, `email`, `password`, `nome`, `cognome`, `telefono`, `residenza`) VALUES
-	(2, 'utente1', 'mail1', 'password', NULL, NULL, NULL, NULL),
-	(3, 'utente2', 'mail2', 'password', NULL, NULL, NULL, NULL),
-	(4, 'utente3', 'mail3', 'password', NULL, NULL, NULL, NULL),
-	(5, 'utente4', 'mail4', 'password', NULL, NULL, NULL, NULL),
-	(6, 'utente5', 'mail5', 'password', NULL, NULL, NULL, NULL),
-	(7, 'utente6', 'mail6', 'password', NULL, NULL, NULL, NULL),
-	(8, 'utente7', 'mail7', 'password', NULL, NULL, NULL, NULL),
-	(9, 'utente8', 'mail8', 'password', NULL, NULL, NULL, NULL),
-	(10, 'utente9', 'mail9', 'password', NULL, NULL, NULL, NULL),
-	(11, 'utente10', 'mail10', 'password', NULL, NULL, NULL, NULL),
-	(12, 'utente11', 'mail11', 'password', NULL, NULL, NULL, NULL),
-	(13, 'utente12', 'mail12', 'password', NULL, NULL, NULL, NULL),
-	(14, 'utente13', 'mail13', 'password', NULL, NULL, NULL, NULL),
-	(15, 'utente14', 'mail14', 'password', NULL, NULL, NULL, NULL),
-	(16, 'utente15', 'mail15', 'password', NULL, NULL, NULL, NULL),
-	(17, 'utente16', 'mail16', 'password', NULL, NULL, NULL, NULL),
-	(18, 'utente17', 'mail17', 'password', NULL, NULL, NULL, NULL),
-	(19, 'utente18', 'mail18', 'password', NULL, NULL, NULL, NULL),
-	(20, 'utente19', 'mail19', 'password', NULL, NULL, NULL, NULL),
-	(21, 'utente20', 'mail20', 'password', NULL, NULL, NULL, NULL),
-	(22, 'utente 21', 'mail21', 'password', NULL, NULL, NULL, NULL);
+	(2, 'utente1', 'mail1', '5f4dcc3b5aa765d61d8327deb882cf99', '', '', NULL, NULL),
+	(3, 'utente2', 'mail2', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(4, 'utente3', 'mail3', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(5, 'utente4', 'mail4', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(6, 'utente5', 'mail5', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(7, 'utente6', 'mail6', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(8, 'utente7', 'mail7', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(9, 'utente8', 'mail8', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(10, 'utente9', 'mail9', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(11, 'utente10', 'mail10', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(12, 'utente11', 'mail11', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(13, 'utente12', 'mail12', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(14, 'utente13', 'mail13', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(15, 'utente14', 'mail14', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(16, 'utente15', 'mail15', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(17, 'utente16', 'mail16', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(18, 'utente17', 'mail17', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(19, 'utente18', 'mail18', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(20, 'utente19', 'mail19', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(21, 'utente20', 'mail20', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL),
+	(22, 'utente 21', 'mail21', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
