@@ -414,6 +414,15 @@ public class DAO {
 				" ON " + SchemaDb.TAB_AUTO+".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
 				" INNER JOIN "+ SchemaDb.TAB_FASCE+
 				" ON " + SchemaDb.TAB_MODELLI+".id_fascia = "+SchemaDb.TAB_FASCE+".id";
+		
+		if(inputParam.get("disponibilita").equals("disponibile")){
+			queryAuto += " WHERE status = ?";
+		} else if(inputParam.get("disponibilita").equals("non_disponibile")){
+			queryAuto += " WHERE NOT (status = ?)";
+		} else {
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "disponibilita non impostata");
+		}
 	
 		String id;
 		String nome_filiale;
@@ -426,6 +435,7 @@ public class DAO {
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			istruzione.setString(1, "DISPONIBILE");
 			ResultSet res = istruzione.executeQuery();
 			Boolean isAuto = res.first();
 			

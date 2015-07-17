@@ -1,7 +1,11 @@
 package layout.model;
 
+import java.util.ArrayList;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Auto {
 	
@@ -13,6 +17,7 @@ public class Auto {
 	private StringProperty fasce;
 	private StringProperty targa;
 	private StringProperty provenienza;
+	public static final String[] POSSIBILE_STATUS = {"DISPONIBILE", "MANUTENZIONE", "NOLEGGIATA"};
 	
 	public Auto(int id, String modello, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
 		

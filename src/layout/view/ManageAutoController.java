@@ -121,12 +121,17 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		filialeNonDisp.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		
 		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
+		
+		autoTableNonDisp.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> riempiTabellaAuto());
 		
 		autoTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> riempiTabellaAuto());
 		
 		//Popolamento Spinner
 		popolaSpinnerFasce();
+		popolaSpinnerStatus();
 		scegliProvenienza.setItems(CountryManager.getCountryNames());
 		
 		scegliProvenienza.getSelectionModel().selectedIndexProperty().addListener(
@@ -185,12 +190,26 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 
 	}
 	
+	private void popolaSpinnerStatus(){
+		ObservableList<String> statiAuto = FXCollections.observableArrayList();
+		
+		for(int i = 0 ; i < Auto.POSSIBILE_STATUS.length ; i++){
+			statiAuto.add(Auto.POSSIBILE_STATUS[i]);
+		}
+		
+		scegliStatusDaDispon.setItems(statiAuto);
+		scegliStatusDaNonDispon.setItems(statiAuto);
+	}
+	
 	private void riempiTabellaAuto(){
 		
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("disponibilita", "disponibile");
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
+		
+		autoData = FXCollections.observableArrayList();
 		
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
@@ -217,6 +236,50 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			provenienza.setCellValueFactory(cellData->cellData.getValue().provenienzaProperty());
 			
 			autoTable.setItems(autoData);
+			
+		} else {
+			
+			autoTable.setPlaceholder(new Label("No Auto Found"));
+			
+		}
+		
+	}
+	
+	private void riempiTabellaAutoNonDisp(){
+		
+		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("disponibilita", "non_disponibile");
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		autoData = FXCollections.observableArrayList();
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+			
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+				
+				autoData.add(new Auto(
+						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+						risultato.get("modello" + Integer.toString(i)),
+						risultato.get("nome_filiale" + Integer.toString(i)), 
+						risultato.get("status" + Integer.toString(i)),
+						risultato.get("targa"+Integer.toString(i)),
+						risultato.get("chilometraggio" + Integer.toString(i)),
+						risultato.get("fasce" + Integer.toString(i)),
+						risultato.get("provenienza" + Integer.toString(i)))
+				); 
+				
+			}
+			
+			modelloNonDisp.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
+			statusNonDisp.setCellValueFactory(cellData->cellData.getValue().statusProperty());
+			chilometraggioNonDisp.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
+			targaNonDisp.setCellValueFactory(cellData->cellData.getValue().targaProperty());
+			fasceNonDisp.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
+			provenienzaNonDisp.setCellValueFactory(cellData->cellData.getValue().provenienzaProperty());
+			
+			autoTableNonDisp.setItems(autoData);
 			
 		} else {
 			
