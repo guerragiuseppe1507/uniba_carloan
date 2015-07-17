@@ -46,6 +46,13 @@ public class ScreensFramework extends Application {
 	public static String gestioneProfiloID = "InfoProfilo";
 	public static String gestioneProfiloFile = "InfoProfilo.fxml";
 	public static String gestioneProfiloTitle = "Gestione Profilo";
+	public static String gestioneContrattoID = "GestioneContratto";
+	public static String gestioneContrattoFile = "GestioneContratto.fxml";
+	public static String gestioneContrattoTitle = "Gestione Contratto";
+	
+	
+	
+	
 	
 	private ScreensController mainContainer;
 	public static Stage PRIMARY_STAGE;
@@ -102,6 +109,7 @@ public class ScreensFramework extends Application {
 		c.loadScreen(ScreensFramework.manageAutoID,ScreensFramework.manageAutoFile);
 		c.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendentiFile);
 		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
+		c.loadScreen(ScreensFramework.gestioneContrattoID,ScreensFramework.gestioneContrattoFile);
 	}
 	
 	public static void loadDipendenteFilialeScreens(ScreensController c){

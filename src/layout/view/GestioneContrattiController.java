@@ -20,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import layout.model.Auto;
 import layout.model.ContextMenu;
 import layout.model.Contratto;
+import layout.model.Utente;
 
 public class GestioneContrattiController  implements Initializable, ControlledScreen {
 		
@@ -34,33 +35,33 @@ ScreensController myController;
 	@FXML
 	 private TableView<Contratto> tableContratto;
 	@FXML
-	 private TableView<Contratto>id;
+	 private TableColumn<Contratto, String>id;
 	@FXML
-	 private TableView<Contratto>tipoKm;
+	private TableColumn<Contratto, String>tipoKm;
 	 @FXML
-	 private TableView<Contratto>tariffa;
+	 private TableColumn<Contratto, String>tariffa;
 	 @FXML
-	 private TableView<Contratto>data_inizio;
+	 private TableColumn<Contratto, String>dataInizio;
 	 @FXML
-	 private TableView<Contratto>data_limite;
+	 private TableColumn<Contratto, String>dataLimite;
 	 @FXML
-	 private TableView<Contratto>data_rientro;
+	 private TableColumn<Contratto, String>dataRientro;
 	 @FXML
-	 private TableView<Contratto>acconto;
+	 private TableColumn<Contratto,String>acconto;
 	 @FXML
-	 private TableView<Contratto>stato;
+	 private TableColumn<Contratto, String>stato;
 	 @FXML
-	 private TableView<Contratto>id_cliente;
+	 private TableColumn<Contratto, String>idCliente;
 	 @FXML
-	 private TableView<Contratto>id_dipendente;
+	 private TableColumn<Contratto, String>idDipendente;
 	 @FXML
-	 private TableView<Contratto>id_auto;
+	 private TableColumn<Contratto, String>idAuto;
 	 @FXML
-	 private TableView<Contratto>tot_prezzo;
+	 private TableColumn<Contratto, String>totPrezzo;
 	 @FXML
-	 private TableView<Contratto>filiale_di_partenza;
+	 private TableColumn<Contratto, String>filialeDiPartenza;
 	 @FXML
-	 private TableView<Contratto>filiale_di_arrivo;
+	 private TableColumn<Contratto, String>filialeDiArrivo;
 	
 	 private ObservableList<Contratto> contrattoData = FXCollections.observableArrayList();
 	
@@ -72,7 +73,7 @@ ScreensController myController;
 			menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
 			menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 			
-			riempiTabellaAuto();
+			riempiTabellaContratto();
 		
 		}
 	
@@ -84,7 +85,7 @@ ScreensController myController;
 	
 	
 		
-		private void riempiTabellaContatto(){
+		private void riempiTabellaContratto(){
 			
 			String[] comando = new String[]{"businessTier.GestioneContratti", "recuperoDatiContratto"};
 			HashMap<String, String> inputParam = new HashMap<>();
@@ -96,27 +97,39 @@ ScreensController myController;
 				for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 					
 					contrattoData.add(new Contratto(
-							risultato.get("" + Integer.toString(i)),
-							risultato.get("" + Integer.toString(i)), 
-							risultato.get("" + Integer.toString(i)),
-							risultato.get(""+Integer.toString(i)),
-							risultato.get("" + Integer.toString(i)),
-							risultato.get("" + Integer.toString(i)))
-					); 
+							risultato.get("id" + Integer.toString(i)),
+							risultato.get("tipoKm" + Integer.toString(i)), 
+							risultato.get("tariffa" + Integer.toString(i)),
+							risultato.get("dataInizio"+Integer.toString(i)),
+							risultato.get("dataLimite" + Integer.toString(i)),
+							risultato.get("dataRientro" + Integer.toString(i)),
+							risultato.get("acconto" + Integer.toString(i)),
+							risultato.get("stato" + Integer.toString(i)),
+							risultato.get("idCliente" + Integer.toString(i)),
+							risultato.get("idDipendente" + Integer.toString(i)),
+							risultato.get("idAuto" + Integer.toString(i)),
+							risultato.get("totPrezzo" + Integer.toString(i)),
+							risultato.get("filialeDiPartenza" + Integer.toString(i)),
+							risultato.get("filialeDiArrivo" + Integer.toString(i)))); }
 					
-				}
 				
-				.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
-				.setCellValueFactory(cellData->cellData.getValue().nomeFilialeProperty());
-				.setCellValueFactory(cellData->cellData.getValue().statusProperty());
-				.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
-				.setCellValueFactory(cellData->cellData.getValue().targaProperty());
-				.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
-				.setItems(autoData);
+				tipoKm.setCellValueFactory(cellData->cellData.getValue().tipoKmProperty());
+				tariffa.setCellValueFactory(cellData->cellData.getValue().tariffaProperty());
+				dataInizio.setCellValueFactory(cellData->cellData.getValue().dataInizioProperty());
+				dataLimite.setCellValueFactory(cellData->cellData.getValue().dataLimiteProperty());
+				dataRientro.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				acconto.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				idCliente.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				idAuto.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				idDipendente.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				totPrezzo.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				filialeDiPartenza.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				filialeDiArrivo.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				tableContratto.setItems(contrattoData);
 				
 			} else {
 				
-				autoTable.setPlaceholder(new Label("No Auto Found"));
+				tableContratto.setPlaceholder(new Label("No Auto Found"));
 				
 			}
 			

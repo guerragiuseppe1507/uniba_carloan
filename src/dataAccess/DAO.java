@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+
+import javafx.beans.property.StringProperty;
+
 import com.mysql.jdbc.Statement;
 
 public class DAO {
@@ -1632,7 +1635,95 @@ public class DAO {
 		
 		
 	
+    public HashMap<String, String> getContratto(){
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_CONTRATTI +
+				" INNER JOIN "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
+				" ON " +SchemaDb.TAB_CONTRATTI+".id_filiale = " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id"+
+				" INNER JOIN "+ SchemaDb.TAB_CONTRATTI+
+				" ON " + SchemaDb.TAB_CONTRATTI+".id_modello = "+SchemaDb.TAB_MODELLI+".id"+
+				" INNER JOIN "+ SchemaDb.TAB_CLIENTI+
+				" ON " + SchemaDb.TAB_CONTRATTI+".id_cliente = "+SchemaDb.TAB_CLIENTI+".id";
 	
+		 String id;
+		 String tipoKm;
+		 String tariffa;
+		 String dataInizio;
+		 String dataLimite;
+		 String dataRientro;
+		 String acconto;
+		 String stato;
+		 String idCliente;
+		 String idDipendente;
+		 String idAuto;
+		 String totPrezzo;
+		 String filialeDiPartenza;
+		 String filialeDiArrivo;
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isAuto = res.first();
+			
+			if (isAuto){
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+
+				int pos = 0;
+				do{
+					
+					tipoKm = res.getString(SchemaDb.TAB_CONTRATTI+".nome");
+					idAuto = res.getString(SchemaDb.TAB_MODELLI+".nome");
+					tariffa = res.getString(SchemaDb.TAB_CONTRATTI+".tariffa");
+					dataInizio=res.getString(SchemaDb.TAB_CONTRATTI+".dataInizio");
+					dataLimite=res.getString(SchemaDb.TAB_CONTRATTI+".dataLimite");
+					dataRientro=res.getString(SchemaDb.TAB_CONTRATTI+".dataRientro");
+					acconto=res.getString(SchemaDb.TAB_CONTRATTI+".acconto");
+					stato=res.getString(SchemaDb.TAB_CONTRATTI+".stato");
+					idCliente=res.getString(SchemaDb.TAB_CLIENTI+".nome");
+					idDipendente=res.getString(SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".nome");
+					totPrezzo=res.getString(SchemaDb.TAB_CONTRATTI+".totPrezzo");
+					filialeDiPartenza=res.getString(SchemaDb.TAB_CONTRATTI+".filialeDiPartenza");
+					filialeDiArrivo=res.getString(SchemaDb.TAB_CONTRATTI+".filialeDiArrivo");
+					
+					risultato.put("tipoKm" + Integer.toString(pos), tipoKm);
+					risultato.put("idAuto" + Integer.toString(pos), idAuto);
+					risultato.put("tariffa" + Integer.toString(pos), tariffa);
+					risultato.put("dataInizio" + Integer.toString(pos),dataInizio);
+					risultato.put("dataLimite" + Integer.toString(pos),dataLimite);
+					risultato.put("dataRientro" + Integer.toString(pos),dataRientro);
+					risultato.put("acconto" + Integer.toString(pos),acconto);
+					risultato.put("stato" + Integer.toString(pos),stato);
+					risultato.put("idCliente" + Integer.toString(pos),idCliente);
+					risultato.put("totPrezzo" + Integer.toString(pos),totPrezzo);
+					risultato.put("filialeDiPartenza" + Integer.toString(pos),filialeDiPartenza);
+					risultato.put("filialeDiArrivo" + Integer.toString(pos),filialeDiArrivo);
+					
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+		
+	}
 	
 	
 	

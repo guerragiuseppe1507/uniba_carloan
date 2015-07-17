@@ -3,6 +3,7 @@ package layout.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import java.net.URL;
 
 
 
@@ -24,7 +25,7 @@ public class Contratto {
 	private StringProperty filialeDiArrivo;
 
 	
-	public Contratto(String Id, String TipoKm, String Tariffa,String DataInizio, String DataFine, String DataLimite, String DataRientro, String Acconto, String Stato,String IdCliente,  String IdDipendente, String IdAuto, String TotPrezzo, String FilialeDiPartenza, String FilialeDiArrivo){
+	public Contratto(String Id, String TipoKm, String Tariffa,String DataInizio, String DataLimite, String DataRientro, String Acconto, String Stato,String IdCliente,  String IdDipendente, String IdAuto, String TotPrezzo, String FilialeDiPartenza, String FilialeDiArrivo){
 		
 		this.id=new SimpleStringProperty(Id);
 		this.tipoKm=new SimpleStringProperty(TipoKm);
