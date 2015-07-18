@@ -51,11 +51,11 @@ ScreensController myController;
 	 @FXML
 	 private TableColumn<Contratto, String>stato;
 	 @FXML
-	 private TableColumn<Contratto, String>idCliente;
+	 private TableColumn<Contratto, String>nomeCliente;
 	 @FXML
-	 private TableColumn<Contratto, String>idDipendente;
+	 private TableColumn<Contratto, String>nomeDipendente;
 	 @FXML
-	 private TableColumn<Contratto, String>idAuto;
+	 private TableColumn<Contratto, String>modello;
 	 @FXML
 	 private TableColumn<Contratto, String>totPrezzo;
 	 @FXML
@@ -105,9 +105,9 @@ ScreensController myController;
 							risultato.get("dataRientro" + Integer.toString(i)),
 							risultato.get("acconto" + Integer.toString(i)),
 							risultato.get("stato" + Integer.toString(i)),
-							risultato.get("idCliente" + Integer.toString(i)),
-							risultato.get("idDipendente" + Integer.toString(i)),
-							risultato.get("idAuto" + Integer.toString(i)),
+							risultato.get("nomeCliente" + Integer.toString(i)),
+							risultato.get("nomeDipendente" + Integer.toString(i)),
+							risultato.get("nomeAuto" + Integer.toString(i)),
 							risultato.get("totPrezzo" + Integer.toString(i)),
 							risultato.get("filialeDiPartenza" + Integer.toString(i)),
 							risultato.get("filialeDiArrivo" + Integer.toString(i)))); }
@@ -119,9 +119,9 @@ ScreensController myController;
 				dataLimite.setCellValueFactory(cellData->cellData.getValue().dataLimiteProperty());
 				dataRientro.setCellValueFactory(cellData->cellData.getValue().dataRientroProperty());
 				acconto.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				idCliente.setCellValueFactory(cellData->cellData.getValue().idClienteProperty());
-				idAuto.setCellValueFactory(cellData->cellData.getValue().idAutoProperty());
-				idDipendente.setCellValueFactory(cellData->cellData.getValue().idDipendenteProperty());
+				nomeCliente.setCellValueFactory(cellData->cellData.getValue().nomeClienteProperty());
+				modello.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
+				nomeDipendente.setCellValueFactory(cellData->cellData.getValue().nomeDipendenteProperty());
 				totPrezzo.setCellValueFactory(cellData->cellData.getValue().totPrezzoProperty());
 				filialeDiPartenza.setCellValueFactory(cellData->cellData.getValue().filialeDiPartenzaProperty());
 				filialeDiArrivo.setCellValueFactory(cellData->cellData.getValue().filialeDiArrivoProperty());

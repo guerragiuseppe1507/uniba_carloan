@@ -1708,6 +1708,7 @@ public class DAO {
 					risultato.put("dataInizio" + Integer.toString(pos),dataInizio);
 					risultato.put("dataLimite" + Integer.toString(pos),dataLimite);
 					risultato.put("dataRientro" + Integer.toString(pos),dataRientro);
+					risultato.put("idDipendente" + Integer.toString(pos),idDipendente);
 					risultato.put("acconto" + Integer.toString(pos),acconto);
 					risultato.put("stato" + Integer.toString(pos),stato);
 					risultato.put("idCliente" + Integer.toString(pos),idCliente);

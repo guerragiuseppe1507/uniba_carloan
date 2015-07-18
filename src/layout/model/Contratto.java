@@ -17,15 +17,15 @@ public class Contratto {
 	private StringProperty dataRientro;
 	private StringProperty acconto;
 	private StringProperty stato;
-	private StringProperty idCliente;
-	private StringProperty idDipendente;
-	private StringProperty idAuto;
+	private StringProperty nomeCliente;
+	private StringProperty nomeDipendente;
+	private StringProperty modello;
 	private StringProperty totPrezzo;
 	private StringProperty filialeDiPartenza;
 	private StringProperty filialeDiArrivo;
 
 	
-	public Contratto(String Id, String TipoKm, String Tariffa,String DataInizio, String DataLimite, String DataRientro, String Acconto, String Stato,String IdCliente,  String IdDipendente, String IdAuto, String TotPrezzo, String FilialeDiPartenza, String FilialeDiArrivo){
+	public Contratto(String Id, String TipoKm, String Tariffa,String DataInizio, String DataLimite, String DataRientro, String Acconto, String Stato,String NomeCliente,  String NomeDipendente, String Modello, String TotPrezzo, String FilialeDiPartenza, String FilialeDiArrivo){
 		
 		this.id=new SimpleStringProperty(Id);
 		this.tipoKm=new SimpleStringProperty(TipoKm);
@@ -35,9 +35,9 @@ public class Contratto {
 		this.dataRientro=new SimpleStringProperty(DataRientro);
 		this.acconto=new SimpleStringProperty(Acconto);
 		this.stato=new SimpleStringProperty(Stato);
-		this.idCliente=new SimpleStringProperty(IdCliente);
-		this.idDipendente=new SimpleStringProperty(IdDipendente);
-		this.idAuto=new SimpleStringProperty(IdAuto);
+		this.nomeCliente=new SimpleStringProperty(NomeCliente);
+		this.nomeDipendente=new SimpleStringProperty(NomeDipendente);
+		this.modello=new SimpleStringProperty(Modello);
 		this.totPrezzo=new SimpleStringProperty(TotPrezzo);
 		this.filialeDiPartenza=new SimpleStringProperty(FilialeDiPartenza);
 		this.filialeDiArrivo=new SimpleStringProperty(FilialeDiArrivo);
@@ -53,9 +53,9 @@ public class Contratto {
 	public String dataRientro(){return dataRientro.get();} 
 	public String acconto(){ return acconto.get();}
 	public String stato(){return stato.get();}
-	public String idCliente(){return idCliente.get();}
-	public String idDipendente(){ return idDipendente.get();}
-	public String idAuto(){ return idAuto.get();}
+	public String nomeCliente(){return nomeCliente.get();}
+	public String nomeDipendente(){ return nomeDipendente.get();}
+	public String modello(){ return modello.get();}
 	public String totPrezzo(){return totPrezzo.get();};
 	public String filialeDiPartenza(){return filialeDiPartenza.get();}
 	public String filialeDiArrivo(){return filialeDiArrivo.get();}
@@ -69,9 +69,9 @@ public class Contratto {
 	public StringProperty dataRientroProperty(){return dataRientro;}
 	public StringProperty accontoProperty(){return acconto;}
 	public StringProperty statoProperty(){return stato;}
-	public StringProperty idClienteProperty(){return idCliente;}
-	public StringProperty idDipendenteProperty(){return idDipendente;}
-	public StringProperty idAutoProperty(){return idAuto;}
+	public StringProperty nomeClienteProperty(){return nomeCliente;}
+	public StringProperty nomeDipendenteProperty(){return nomeDipendente;}
+	public StringProperty modelloProperty(){return modello;}
 	public StringProperty totPrezzoProperty(){return totPrezzo;}
 	public StringProperty filialeDiPartenzaProperty(){return filialeDiPartenza;}
 	public StringProperty filialeDiArrivoProperty(){return filialeDiArrivo;}
