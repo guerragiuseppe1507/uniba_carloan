@@ -2,6 +2,7 @@ package layout.view;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
@@ -13,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -106,8 +108,17 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	private ObservableList<String> fasceData = FXCollections.observableArrayList();
 	private ObservableList<String> modelliData = FXCollections.observableArrayList();
 	
+	
+	//elementi scelti dagli spinner
 	private String modelloScelto;
 	private String nazioneScelta;
+
+	private String statusSceltoDaDisp;
+	private String statusSceltoDaNonDisp;
+	
+	//elementi scelti dalle tabelle
+	private Auto autoDispScelta;
+	private Auto autoNonDispScelta;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
@@ -124,21 +135,26 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		riempiTabellaAutoNonDisp();
 		
 		autoTableNonDisp.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> riempiTabellaAuto());
+	            (observable, oldValue, newValue) -> handleScegliAutoNonDispon(newValue));
 		
 		autoTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> riempiTabellaAuto());
+	            (observable, oldValue, newValue) -> handleScegliAutoDispon(newValue));
 		
 		//Popolamento Spinner
 		popolaSpinnerFasce();
 		popolaSpinnerStatus();
+		
+		scegliStatusDaDispon.getSelectionModel().selectedIndexProperty().addListener(
+				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliStatusDaDispon(new_value));
+		scegliStatusDaNonDispon.getSelectionModel().selectedIndexProperty().addListener(
+				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliStatusDaNonDispon(new_value));
+		
 		scegliProvenienza.setItems(CountryManager.getCountryNames());
 		
 		scegliProvenienza.getSelectionModel().selectedIndexProperty().addListener(
 				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliProvenienza(new_value));
 		scegliFascia.getSelectionModel().selectedIndexProperty().addListener(
-				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliFascia(new_value));
-		
+				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliFascia(new_value));	
 	
 	}
 	
@@ -146,6 +162,37 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		myController = screenParent;
 		ContextMenu.showContextMenu(menu,myController);
 	}
+	
+	
+	//gestione scelta tabella
+	
+	private void handleScegliAutoDispon(Auto auto){
+		autoDispScelta = auto;
+		examplePlateAutoDisp.setText(NumberPlateValidator.getPlateExample(auto.getProvenienza()));
+		scegliStatusDaDispon.getSelectionModel().select(auto.getStatus());
+		nuovaTargaAutoDisp.setText(auto.getTarga());
+	}
+	
+	private void handleScegliAutoNonDispon(Auto auto){
+		autoNonDispScelta = auto;
+		examplePlateAutoNonDisp.setText(NumberPlateValidator.getPlateExample(auto.getProvenienza()));
+		scegliStatusDaNonDispon.getSelectionModel().select(auto.getStatus());
+		nuovaTargaAutoNonDisp.setText(auto.getTarga());
+	}
+	
+	//Gestione scelta spinner
+	
+	
+	private void handleScegliStatusDaDispon(Number value){
+		statusSceltoDaDisp = scegliStatusDaDispon.getItems().get(value.intValue());
+	}
+	
+	
+	private void handleScegliStatusDaNonDispon(Number value){
+		statusSceltoDaNonDisp = scegliStatusDaNonDispon.getItems().get(value.intValue());
+	}
+	
+	
 	
 	private void handleScegliProvenienza(Number value){
 		nazioneScelta = scegliProvenienza.getItems().get(value.intValue());
@@ -165,6 +212,10 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	private void handleScegliModello(Number value){
 		modelloScelto = scegliModello.getItems().get(value.intValue());
 	}
+	
+	
+	
+	//Popolazione spinner
 	
 	private void popolaSpinnerModelli(String fascia){
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiModelli"};
@@ -201,11 +252,37 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		scegliStatusDaNonDispon.setItems(statiAuto);
 	}
 	
+	private void popolaSpinnerFasce(){
+		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiFasce"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+			
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+				
+				fasceData.add(
+						risultato.get("nome_fascia" + Integer.toString(i))
+				); 
+				
+			}
+		}
+		
+		scegliFascia.setItems(fasceData);
+	}
+	
+	
+	
+	//Popolazione tabelle
+	
+	
 	private void riempiTabellaAuto(){
 		
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();
 		inputParam.put("disponibilita", "disponibile");
+		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
@@ -250,6 +327,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();
 		inputParam.put("disponibilita", "non_disponibile");
+		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
@@ -289,41 +367,52 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		
 	}
 	
-	private void popolaSpinnerFasce(){
-		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiFasce"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				fasceData.add(
-						risultato.get("nome_fascia" + Integer.toString(i))
-				); 
-				
-			}
-		}
-		
-		scegliFascia.setItems(fasceData);
-	}
+	
+	//gestione pulsanti
 	
 	@FXML
 	private void handleCancellaAutoDisp() {
+		if(autoDispScelta != null){
+			Optional<ButtonType> result = NotificationManager.setConfirm("L'auto non sarà più disponbile nel sistema.\n\nContinuare?");
+			if (result.get() == ButtonType.OK){
+				queryCancellaAuto(autoDispScelta.getId());
+			}
+		}else{
+			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
+		}
 		
 	}
 	@FXML
 	private void handleCanbiaStatusAutoDisp() {
-		
+		if (autoDispScelta == null){
+			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
+		}else if(statusSceltoDaDisp == null){
+			NotificationManager.setWarning("Scegli il Nuovo status");
+		}else{
+			queryModificaStatus(autoDispScelta.getId());
+		}
 	}
+	
 	@FXML
 	private void handleCancellaAutoNonDisp() {
-		
+		if(autoNonDispScelta != null){
+			Optional<ButtonType> result = NotificationManager.setConfirm("L'auto non sarà più disponbile nel sistema.\n\nContinuare?");
+			if (result.get() == ButtonType.OK){
+			    queryCancellaAuto(autoNonDispScelta.getId());
+			}
+		}else{
+			NotificationManager.setWarning("Scegli un auto tra quelle non disponibili prima.");
+		}
 	}
 	@FXML
 	private void handleCanbiaStatusAutoNonDisp() {
-		
+		if (autoNonDispScelta == null){
+			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
+		}else if(statusSceltoDaNonDisp == null){
+			NotificationManager.setWarning("Scegli il Nuovo status");
+		}else{
+			queryModificaStatus(autoNonDispScelta.getId());
+		}
 	}
 	@FXML
 	private void handleInserisciAuto() {
@@ -336,17 +425,54 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			NotificationManager.setError("Targa non conforme agli standard della nazione scelta.\n"+
 										"Nazione Scelta : "+nazioneScelta);
 		} else {
-			System.out.println("si puo fare");
+			queryInsertAuto(nuovaTarga.getText(), nazioneScelta, modelloScelto);
 		}
 
 	}
 	@FXML
 	private void handleCanbiaTargaAutoNonDisp() {
-		
+			
+		if(nuovaTargaAutoNonDisp.getText().equals("")){
+			NotificationManager.setWarning("Inserisci Una Targa.");
+		}else if(autoNonDispScelta == null){
+			NotificationManager.setWarning("Scegli un auto tra quelle non disponibili prima.");
+		}else if(!NumberPlateValidator.validate(nuovaTargaAutoNonDisp.getText(),
+				autoNonDispScelta.getProvenienza())){
+			NotificationManager.setWarning("Targa non nel formato standard della sua nazione.");
+		}else{
+			queryCambiaTarga(nuovaTargaAutoNonDisp.getText(),autoNonDispScelta.getId());
+		}
+
 	}
+	
 	@FXML
 	private void handleCanbiaTargaAutoDisp() {
-		
+		if(nuovaTargaAutoDisp.getText().equals("")){
+			NotificationManager.setWarning("Inserisci Una Targa.");
+		}else if(autoDispScelta == null){
+			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
+		}else if(!NumberPlateValidator.validate(nuovaTargaAutoDisp.getText(),
+				autoDispScelta.getProvenienza())){
+			NotificationManager.setWarning("Targa non nel formato standard della sua nazione.");
+		}else{
+			queryCambiaTarga(nuovaTargaAutoDisp.getText(),autoDispScelta.getId());
+		}
+	}
+	
+	private void queryCambiaTarga(String targa,int idAuto){
+		System.out.println("OK");
+	}
+	
+	private void queryCancellaAuto(int idAuto){
+		System.out.println("OK");
+	}
+	
+	private void queryInsertAuto(String targa, String nazione, String modello){
+		System.out.println("OK");
+	}
+	
+	private void queryModificaStatus(int idAuto){
+		System.out.println("OK");
 	}
 	
 }

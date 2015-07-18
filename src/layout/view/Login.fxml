@@ -9,31 +9,35 @@
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.LoginController">
-	<AnchorPane>
-	   <children>
-	      <TextField fx:id="usernameLabel" layoutX="962.0" layoutY="297.0" />
-	      <PasswordField fx:id="passwordLabel" layoutX="962.0" layoutY="351.0" />
-	      <Label layoutX="767.0" layoutY="302.0" text="E-mail / Nome Utente" />
-	      <Label layoutX="767.0" layoutY="356.0" text="Password" />
-	      <Button layoutX="766.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="68.0" prefWidth="384.0" text="Login" />
-         <Button layoutX="131.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="68.0" prefWidth="384.0" text="Register" />
-         <Line endY="400.0" layoutX="640.0" layoutY="243.0" />
-         <Text layoutX="131.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-         <Text layoutX="131.0" layoutY="355.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
-         <Text layoutX="131.0" layoutY="404.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-         <TextField fx:id="regUsername" layoutX="328.0" layoutY="282.0" />
-         <TextField fx:id="regEmail" layoutX="328.0" layoutY="334.0" />
-         <TextField fx:id="regPassword" layoutX="328.0" layoutY="383.0" />
-         <Text layoutX="490.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CARLOAN">
-            <font>
-               <Font name="Calibri Light" size="78.0" />
-            </font>
-         </Text>
-         <Label layoutX="288.0" layoutY="223.0" text="Registrati :" />
-         <Label layoutX="636.0" layoutY="223.0" text="o" />
-         <Label layoutX="932.0" layoutY="223.0" text="Accedi :" />
-         <Line endY="20.0" layoutX="640.0" layoutY="206.0" />
-         <Label layoutX="687.0" layoutY="95.0" text="Benvenuto in" />
-	   </children>
-	</AnchorPane>
+   <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="768.0" prefWidth="1024.0">
+      <content>
+      	<AnchorPane prefWidth="1024.0">
+      	   <children>
+      	      <TextField fx:id="usernameLabel" layoutX="962.0" layoutY="297.0" />
+      	      <PasswordField fx:id="passwordLabel" layoutX="962.0" layoutY="351.0" />
+      	      <Label layoutX="767.0" layoutY="302.0" text="E-mail / Nome Utente" />
+      	      <Label layoutX="767.0" layoutY="356.0" text="Password" />
+      	      <Button layoutX="766.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="68.0" prefWidth="384.0" text="Login" />
+               <Button layoutX="131.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="68.0" prefWidth="384.0" text="Register" />
+               <Line endY="400.0" layoutX="640.0" layoutY="243.0" />
+               <Text layoutX="131.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+               <Text layoutX="131.0" layoutY="355.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+               <Text layoutX="131.0" layoutY="404.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+               <TextField fx:id="regUsername" layoutX="328.0" layoutY="282.0" />
+               <TextField fx:id="regEmail" layoutX="328.0" layoutY="334.0" />
+               <TextField fx:id="regPassword" layoutX="328.0" layoutY="383.0" />
+               <Text layoutX="490.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CARLOAN">
+                  <font>
+                     <Font name="Calibri Light" size="78.0" />
+                  </font>
+               </Text>
+               <Label layoutX="288.0" layoutY="223.0" text="Registrati :" />
+               <Label layoutX="636.0" layoutY="223.0" text="o" />
+               <Label layoutX="932.0" layoutY="223.0" text="Accedi :" />
+               <Line endY="20.0" layoutX="640.0" layoutY="206.0" />
+               <Label layoutX="687.0" layoutY="95.0" text="Benvenuto in" />
+      	   </children>
+      	</AnchorPane>
+      </content>
+   </ScrollPane>
 </StackPane>
