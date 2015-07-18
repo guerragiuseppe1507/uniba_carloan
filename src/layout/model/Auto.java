@@ -17,7 +17,7 @@ public class Auto {
 	private StringProperty fasce;
 	private StringProperty targa;
 	private StringProperty provenienza;
-	public static final String[] POSSIBILE_STATUS = {"DISPONIBILE", "MANUTENZIONE", "NOLEGGIATA"};
+	public static final String[] POSSIBILE_STATUS = {"DISPONIBILE", "MANUTENZIONE", "NOLEGGIATA", "ROTTAMAZIONE", "VENDUTA"};
 	
 	public Auto(int id, String modello, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
 		
