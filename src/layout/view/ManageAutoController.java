@@ -15,10 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -210,7 +208,11 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	}
 	
 	private void handleScegliModello(Number value){
-		modelloScelto = scegliModello.getItems().get(value.intValue());
+		try{
+			modelloScelto = scegliModello.getItems().get(value.intValue());
+		}catch(ArrayIndexOutOfBoundsException e){
+			scegliModello.getSelectionModel().select(null);
+		}	
 	}
 	
 	
