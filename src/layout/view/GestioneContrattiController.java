@@ -107,7 +107,7 @@ ScreensController myController;
 							risultato.get("stato" + Integer.toString(i)),
 							risultato.get("nomeCliente" + Integer.toString(i)),
 							risultato.get("nomeDipendente" + Integer.toString(i)),
-							risultato.get("nomeAuto" + Integer.toString(i)),
+							risultato.get("modello" + Integer.toString(i)),
 							risultato.get("totPrezzo" + Integer.toString(i)),
 							risultato.get("filialeDiPartenza" + Integer.toString(i)),
 							risultato.get("filialeDiArrivo" + Integer.toString(i)))); }
@@ -120,6 +120,7 @@ ScreensController myController;
 				dataRientro.setCellValueFactory(cellData->cellData.getValue().dataRientroProperty());
 				acconto.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
 				nomeCliente.setCellValueFactory(cellData->cellData.getValue().nomeClienteProperty());
+				stato.setCellValueFactory(cellData->cellData.getValue().statoProperty());
 				modello.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
 				nomeDipendente.setCellValueFactory(cellData->cellData.getValue().nomeDipendenteProperty());
 				totPrezzo.setCellValueFactory(cellData->cellData.getValue().totPrezzoProperty());
