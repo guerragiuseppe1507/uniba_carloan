@@ -73,7 +73,7 @@ public class Contratto {
 	public StringProperty idDipendenteProperty(){return idDipendente;}
 	public StringProperty idAutoProperty(){return idAuto;}
 	public StringProperty totPrezzoProperty(){return totPrezzo;}
-	public StringProperty filialeDiPatenzaProperty(){return filialeDiPartenza;}
+	public StringProperty filialeDiPartenzaProperty(){return filialeDiPartenza;}
 	public StringProperty filialeDiArrivoProperty(){return filialeDiArrivo;}
 	
 	

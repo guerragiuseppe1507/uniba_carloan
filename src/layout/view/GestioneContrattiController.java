@@ -117,14 +117,14 @@ ScreensController myController;
 				tariffa.setCellValueFactory(cellData->cellData.getValue().tariffaProperty());
 				dataInizio.setCellValueFactory(cellData->cellData.getValue().dataInizioProperty());
 				dataLimite.setCellValueFactory(cellData->cellData.getValue().dataLimiteProperty());
-				dataRientro.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				dataRientro.setCellValueFactory(cellData->cellData.getValue().dataRientroProperty());
 				acconto.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				idCliente.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				idAuto.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				idDipendente.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				totPrezzo.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				filialeDiPartenza.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
-				filialeDiArrivo.setCellValueFactory(cellData->cellData.getValue().accontoProperty());
+				idCliente.setCellValueFactory(cellData->cellData.getValue().idClienteProperty());
+				idAuto.setCellValueFactory(cellData->cellData.getValue().idAutoProperty());
+				idDipendente.setCellValueFactory(cellData->cellData.getValue().idDipendenteProperty());
+				totPrezzo.setCellValueFactory(cellData->cellData.getValue().totPrezzoProperty());
+				filialeDiPartenza.setCellValueFactory(cellData->cellData.getValue().filialeDiPartenzaProperty());
+				filialeDiArrivo.setCellValueFactory(cellData->cellData.getValue().filialeDiArrivoProperty());
 				tableContratto.setItems(contrattoData);
 				
 			} else {
