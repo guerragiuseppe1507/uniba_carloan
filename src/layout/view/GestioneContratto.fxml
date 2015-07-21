@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -8,9 +12,18 @@
 
 <StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.GestioneContrattiController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane fx:id="menu" prefHeight="750.0" prefWidth="1004.0">
          <children>
-            <TableView fx:id="tableContratto" layoutX="79.0" layoutY="218.0" prefHeight="280.0" prefWidth="1190.0">
+            <Label layoutX="399.0" layoutY="60.0" prefHeight="53.0" prefWidth="436.0" text="Gestione Contratti" textAlignment="CENTER">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <padding>
+                  <Insets left="60.0" />
+               </padding>
+            </Label>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="278.0" layoutX="89.0" layoutY="375.0" stroke="BLACK" strokeType="INSIDE" width="1103.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="117.0" />
+            <TableView fx:id="tableContratto" layoutX="117.0" layoutY="174.0" prefHeight="156.0" prefWidth="1076.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="144.0">
                <columns>
                   <TableColumn fx:id="tipoKm" prefWidth="75.0" text="tipo km" />
                   <TableColumn fx:id="tariffa" prefWidth="75.0" text="tariffa" />
@@ -19,20 +32,99 @@
                   <TableColumn fx:id="dataRientro" prefWidth="75.0" text="data rientro" />
                   <TableColumn fx:id="acconto" prefWidth="75.0" text="acconto" />
                   <TableColumn fx:id="stato" prefWidth="75.0" text="stato" />
-                  <TableColumn fx:id="nomeCliente" prefWidth="75.0" text="nome cliente" />
-                  <TableColumn fx:id="nomeDipendente" prefWidth="96.0" text="nome dipendente" />
+                  <TableColumn fx:id="nomeCliente" prefWidth="75.0" text="cliente" />
+                  <TableColumn fx:id="nomeDipendente" prefWidth="96.0" text="dipendente" />
                   <TableColumn fx:id="modello" prefWidth="73.0" text="modello" />
                   <TableColumn fx:id="totPrezzo" prefWidth="83.0" text="tot prezzo" />
                   <TableColumn fx:id="filialeDiPartenza" prefWidth="138.0" text="filiale di partenza" />
-                  <TableColumn fx:id="filialeDiArrivo" prefWidth="124.0" text="filiale di arrivo" />
+                  <TableColumn fx:id="filialeDiArrivo" prefWidth="95.0" text="filiale di arrivo" />
                </columns>
             </TableView>
-            <Label layoutX="399.0" layoutY="60.0" prefHeight="53.0" prefWidth="436.0" text="       Gestione Contratti" textAlignment="CENTER">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-            <AnchorPane fx:id="menu" prefHeight="750.0" prefWidth="1280.0" />
+            <GridPane layoutX="93.0" layoutY="384.0" prefHeight="265.0" prefWidth="1067.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="140.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="152.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="184.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="134.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="362.0" minWidth="10.0" prefWidth="158.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="387.0" minWidth="10.0" prefWidth="171.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="367.0" minWidth="10.0" prefWidth="150.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Chilometraggio" />
+                  <Label text="Tariffa" GridPane.rowIndex="1" />
+                  <Label text="Data Inizio" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Data Limite" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Data Rientro" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Acconto" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="inserisciDataInizio" prefHeight="25.0" prefWidth="105.0" GridPane.columnIndex="3" />
+                  <TextField fx:id="inserisciDataLimite" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="inserisciDataRientro" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="inserisciAcconto" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Label text="Nome Cliente" GridPane.columnIndex="4">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Nome Dipendente" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <ComboBox fx:id="scegliCliente" layoutX="889.0" layoutY="31.0" prefWidth="150.0" GridPane.columnIndex="5" />
+                  <ComboBox fx:id="scegliNomeDipendente" prefWidth="150.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <Label text="Modello" GridPane.rowIndex="3" />
+                  <Label text="Filiale di Partenza" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Filiale Di Arrivo" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <ComboBox fx:id="scegliFascia" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="scegliFilialeDiArrivo" prefWidth="150.0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                  <ComboBox fx:id="scegliModello" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="importo" text="Importo totale" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                     <GridPane.margin>
+                        <Insets left="50.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Button mnemonicParsing="false" text="Calcola Importo" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Button mnemonicParsing="false" text="Conferma" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="scegliChilometraggio" prefWidth="150.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="scegliTariffa" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Fascia" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="scegliFilialeDiPartenza" prefWidth="150.0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+               </children>
+               <effect>
+                  <ColorAdjust />
+               </effect>
+            </GridPane>
          </children>
       </AnchorPane>
    </children>

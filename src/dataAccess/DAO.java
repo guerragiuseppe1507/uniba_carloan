@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import javafx.beans.property.StringProperty;
+import layout.view.GestioneContrattiController;
 
 import com.mysql.jdbc.Statement;
 
@@ -1741,14 +1742,84 @@ public class DAO {
 	
 	
 	
+public HashMap<String, String> getClienti(){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_CLIENTI;
+								
+		String id;
+		String nome;
+		String cognome;
+		String email;
+		String residenza;
+		String dataDiNascita;
+		String codiceFiscale;
+		String codicePatente;
+		
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			ResultSet res = istruzione.executeQuery();
+			Boolean isUtente = res.first();
+			
+			if (isUtente){
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+
+				int pos = 0;
+				do{
+					
+					
+					nome = res.getString("nome");
+					cognome = res.getString("cognome");
+					email = res.getString("mail");
+					residenza = res.getString("residenza");
+					dataDiNascita = res.getString("data_di_nascita");
+					codiceFiscale=res.getString("cod_fiscale");
+					codicePatente=res.getString("cod_patente");
+					
+					risultato.put("mmail" + Integer.toString(pos), email);
+					risultato.put("nome" + Integer.toString(pos), nome);
+					risultato.put("cognome" + Integer.toString(pos), cognome);
+					risultato.put("residenza" + Integer.toString(pos), residenza);
+					risultato.put("data_di_nascita"+ Integer.toString(pos), dataDiNascita);
+					risultato.put("cod_fiscale" + Integer.toString(pos), codiceFiscale);
+					risultato.put("cod_patente" + Integer.toString(pos), codicePatente);
+					pos++;
+					
+				}while(res.next());
+				
+				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
+				
+			}else{
+				
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		return risultato;
+	
+}
 	
 	
 	
 	
-	
-	
-	
-	
+		private int prezzoFascia(){
+			char c=GestioneContrattiController.fasciaScelta;
+			
+			
+			
+			
+			
+		}
+		
 	
 	
 	

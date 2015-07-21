@@ -110,7 +110,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	//elementi scelti dagli spinner
 	private String modelloScelto;
 	private String nazioneScelta;
-
 	private String statusSceltoDaDisp;
 	private String statusSceltoDaNonDisp;
 	

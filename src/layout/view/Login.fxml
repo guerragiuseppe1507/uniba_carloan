@@ -13,8 +13,8 @@
       <content>
       	<AnchorPane prefWidth="1024.0">
       	   <children>
-      	      <TextField fx:id="usernameLabel" layoutX="962.0" layoutY="297.0" />
-      	      <PasswordField fx:id="passwordLabel" layoutX="962.0" layoutY="351.0" />
+      	      <TextField fx:id="usernameLabel" layoutX="962.0" layoutY="297.0" text="utente5" />
+      	      <PasswordField fx:id="passwordLabel" layoutX="962.0" layoutY="351.0" text="password" />
       	      <Label layoutX="767.0" layoutY="302.0" text="E-mail / Nome Utente" />
       	      <Label layoutX="767.0" layoutY="356.0" text="Password" />
       	      <Button layoutX="766.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="68.0" prefWidth="384.0" text="Login" />
