@@ -110,7 +110,6 @@ ScreensController myController;
 	 
 	//elementi scelti dagli spinner
 	private String modelloScelto;
-	
 	private ObservableList<String> fasceData = FXCollections.observableArrayList();
 	private ObservableList<String> modelliData = FXCollections.observableArrayList();
 	private ObservableList<String> clientiData = FXCollections.observableArrayList();
@@ -128,15 +127,15 @@ ScreensController myController;
 			menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 			
 			riempiTabellaContratto();
-		/*	popolaSpinnerFasce();
+			popolaSpinnerFasce();
 			popolaSpinnerClienti();
 			
 			scegliFascia.getSelectionModel().selectedIndexProperty().addListener(
 				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliFascia(new_value));	
-			*/
+		
 		}
 	
-	 			public void setScreenParent(ScreensController screenParent){
+		public void setScreenParent(ScreensController screenParent){
 			myController = screenParent;
 			ContextMenu.showContextMenu(menu,myController);
 		}
