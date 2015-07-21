@@ -1806,7 +1806,24 @@ public HashMap<String, String> getClienti(){
 		}
 		return risultato;
 	
-}
+		}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

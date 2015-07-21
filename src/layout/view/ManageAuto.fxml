@@ -82,12 +82,12 @@
          <Label fx:id="filialeNonDisp" layoutX="657.0" layoutY="220.0" text="Filiale" textFill="#00000080" />
          <ComboBox fx:id="scegliStatusDaDispon" layoutX="40.0" layoutY="541.0" prefHeight="39.0" prefWidth="253.0" />
          <ComboBox fx:id="scegliStatusDaNonDispon" layoutX="678.0" layoutY="541.0" prefHeight="39.0" prefWidth="253.0" />
-         <Label layoutX="312.0" layoutY="93.0" text="Esempio :" textFill="#00000080">
+         <Label layoutX="321.0" layoutY="75.0" text="Esempio :" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
          </Label>
-         <Label fx:id="examplePlate" layoutX="367.0" layoutY="93.0" text="[scegli provenienza]" textFill="#00000080">
+         <Label fx:id="examplePlate" layoutX="376.0" layoutY="75.0" text="[scegli provenienza]" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
