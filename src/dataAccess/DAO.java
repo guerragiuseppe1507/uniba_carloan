@@ -1806,21 +1806,8 @@ public HashMap<String, String> getClienti(){
 		}
 		return risultato;
 	
-}
-	
-	
-	
-	
-		private int prezzoFascia(){
-			char c=GestioneContrattiController.fasciaScelta;
-			
-			
-			
-			
-			
 		}
-		
-	
+
 	
 	
 	
