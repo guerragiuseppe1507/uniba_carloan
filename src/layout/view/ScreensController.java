@@ -1,5 +1,6 @@
 package layout.view;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import javafx.animation.KeyFrame;
@@ -11,7 +12,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
@@ -61,7 +65,6 @@ public class ScreensController extends StackPane {
 	//Se non c'è nessuna schermata già visualizzata, la nuova schermata viene direttamente aggiunta alla radice.
 	public boolean setScreen(final String name){
 		if (screens.get(name) != null){
-			final DoubleProperty opacity = opacityProperty();
 			
 			if (!getChildren().isEmpty()){                     		//Se c'è più di una schermata.
 				
@@ -73,6 +76,32 @@ public class ScreensController extends StackPane {
 				getChildren().add(screens.get(name));				//Non c'è nient'altro visualizzato, mostra direttamente
 				
 			}
+			return true;
+		} else {
+			System.out.println("La schermata non è stata caricata! \n");
+			return false;
+		}
+	}
+	
+	//Questo Metodo Visualizza la  schermata scelta in una nuova finestra
+	public boolean setScreenNewWindow(final String name, final String res, final String title){
+		if (screens.get(name) != null){
+			Parent root;
+			try {
+	            root = FXMLLoader.load(getClass().getResource(res));
+	            Stage stage = new Stage();
+	            stage.setTitle(title);
+	            stage.initModality(Modality.APPLICATION_MODAL);
+	            stage.setScene(new Scene(root));
+	            stage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
+	            stage.show();
+
+	            //hide this current window (if this is whant you want
+	            //((Node)(event.getSource())).getScene().getWindow().hide();
+
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 			return true;
 		} else {
 			System.out.println("La schermata non è stata caricata! \n");
