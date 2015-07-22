@@ -30,10 +30,10 @@
                                   <TableColumn fx:id="nomeCliente" prefWidth="75.0" text="Nome" />
                                   <TableColumn fx:id="cognomeCliente" prefWidth="75.0" text="Cognome" />
                                     <TableColumn fx:id="emailCliente" prefWidth="75.0" text="E-mail" />
-                                    <TableColumn fx:id="Residenza" prefWidth="75.0" text="Residenza" />
+                                    <TableColumn fx:id="residenzaCliente" prefWidth="75.0" text="Residenza" />
                                     <TableColumn fx:id="dataDiNascitaCliente" prefWidth="115.0" text="Data di nascita" />
                                     <TableColumn fx:id="codiceFiscaleCliente" prefWidth="101.0" text="Codice fiscale" />
-                                    <TableColumn fx:id="patenteCliente" prefWidth="111.0" text="Patente" />
+                                    <TableColumn fx:id="codicePatenteCliente" prefWidth="111.0" text="Patente" />
                                 </columns>
                               </TableView>
                               <Text layoutX="14.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto disponibili per il noleggio" wrappingWidth="352.13671875">

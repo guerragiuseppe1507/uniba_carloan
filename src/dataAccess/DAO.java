@@ -1761,9 +1761,9 @@ public HashMap<String, String> getClienti(){
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
 			ResultSet res = istruzione.executeQuery();
-			Boolean isUtente = res.first();
+			Boolean isCliente = res.first();
 			
-			if (isUtente){
+			if (isCliente){
 				
 				risultato.put(util.ResultKeys.ESITO, "true");
 
@@ -1771,13 +1771,13 @@ public HashMap<String, String> getClienti(){
 				do{
 					
 					
-					nome = res.getString((SchemaDb.TAB_CLIENTI+"nome"));
-					cognome = res.getString(SchemaDb.TAB_CLIENTI+"cognome");
-					email = res.getString(SchemaDb.TAB_CLIENTI+"mail");
-					residenza = res.getString(SchemaDb.TAB_CLIENTI+"residenza");
-					dataDiNascita = res.getString(SchemaDb.TAB_CLIENTI+"data_di_nascita");
-					codiceFiscale=res.getString(SchemaDb.TAB_CLIENTI+"cod_fiscale");
-					codicePatente=res.getString(SchemaDb.TAB_CLIENTI+"cod_patente");
+					nome = res.getString((SchemaDb.TAB_CLIENTI+".nome"));
+					cognome = res.getString(SchemaDb.TAB_CLIENTI+".cognome");
+					email = res.getString(SchemaDb.TAB_CLIENTI+".mail");
+					residenza = res.getString(SchemaDb.TAB_CLIENTI+".residenza");
+					dataDiNascita = res.getString(SchemaDb.TAB_CLIENTI+".data_di_nascita");
+					codiceFiscale=res.getString(SchemaDb.TAB_CLIENTI+".cod_fiscale");
+					codicePatente=res.getString(SchemaDb.TAB_CLIENTI+".cod_patente");
 					
 					risultato.put("email" + Integer.toString(pos), email);
 					risultato.put("nome" + Integer.toString(pos), nome);

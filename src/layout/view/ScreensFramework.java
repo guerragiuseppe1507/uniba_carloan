@@ -49,9 +49,9 @@ public class ScreensFramework extends Application {
 	public static String gestioneContrattoID = "GestioneContratto";
 	public static String gestioneContrattoFile = "GestioneContratto.fxml";
 	public static String gestioneContrattoTitle = "Gestione Contratto";
-	public static String InserimentoContrattoID = "InserimenoContratto";
-	public static String InserimentoContrattoFile = "InserimenoContratto.fxml";
-	public static String InserimentoContrattoTitle = "Inserimeno Contratto";
+	public static String InserimentoContrattoID = "InserimentoContratto";
+	public static String InserimentoContrattoFile = "InserimentoContratto.fxml";
+	public static String InserimentoContrattoTitle = "Inserimento Contratto";
 	
 	
 	
