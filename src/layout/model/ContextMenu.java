@@ -76,15 +76,29 @@ public class ContextMenu {
 	            	ctrl.setScreen(ScreensFramework.gestioneDipendentiID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneDipendentiTitle);
 	            }
+	            
+	            
 	        });
     		
     	}else if(Context.getInstance().getUserType().equals(Context.dipendenteFiliale)){
     		
     		Menu gestisci = new Menu("Gestisci");
     		mainMenu.getMenus().addAll(gestisci);
-    		
+    		MenuItem inserimentoContratto = new MenuItem("Inserimento Contratto");
     		//TODO voci del menu
-    	} 
+    		gestisci.getItems().addAll(inserimentoContratto);
+    		
+    		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.setScreen(ScreensFramework.manageAutoID);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.manageAutoTitle);
+	            }
+	        });
+    		
+    	}
+    	
+    	
     	
     	Menu account = new Menu("Account");
 		mainMenu.getMenus().addAll(account);

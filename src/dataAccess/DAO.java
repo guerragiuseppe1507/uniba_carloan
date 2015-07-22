@@ -1779,7 +1779,7 @@ public HashMap<String, String> getClienti(){
 					codiceFiscale=res.getString("cod_fiscale");
 					codicePatente=res.getString("cod_patente");
 					
-					risultato.put("mmail" + Integer.toString(pos), email);
+					risultato.put("mail" + Integer.toString(pos), email);
 					risultato.put("nome" + Integer.toString(pos), nome);
 					risultato.put("cognome" + Integer.toString(pos), cognome);
 					risultato.put("residenza" + Integer.toString(pos), residenza);

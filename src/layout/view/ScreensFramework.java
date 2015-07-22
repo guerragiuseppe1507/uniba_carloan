@@ -49,7 +49,9 @@ public class ScreensFramework extends Application {
 	public static String gestioneContrattoID = "GestioneContratto";
 	public static String gestioneContrattoFile = "GestioneContratto.fxml";
 	public static String gestioneContrattoTitle = "Gestione Contratto";
-	
+	public static String InserimentoContrattoID = "InserimenoContratto";
+	public static String InserimentoContrattoFile = "InserimenoContratto.fxml";
+	public static String InserimentoContrattoTitle = "Inserimeno Contratto";
 	
 	
 	
@@ -110,12 +112,14 @@ public class ScreensFramework extends Application {
 		c.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendentiFile);
 		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
 		c.loadScreen(ScreensFramework.gestioneContrattoID,ScreensFramework.gestioneContrattoFile);
+		
 	}
 	
 	public static void loadDipendenteFilialeScreens(ScreensController c){
 		//Il controller carica tutte le schermate date come parametro al metodo loadScreen.
 		c.loadScreen(ScreensFramework.homeDipendenteDiFilialeID,ScreensFramework.homeDipendenteDiFilialeFile);
 		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
+		c.loadScreen(ScreensFramework.InserimentoContrattoID,ScreensFramework.InserimentoContrattoFile);
 	}
 	
 	
