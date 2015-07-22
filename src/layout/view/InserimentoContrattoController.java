@@ -16,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import layout.model.Cliente;
 import layout.model.ContextMenu;
-
+import layout.model.Contratto;
 
 
 
@@ -112,11 +112,7 @@ ScreensController myController;
 
 			tableClienti.setItems(clienteData);
 			
-		}
-		
-	}
-	
-}
+		}}}
 	
 	
 	

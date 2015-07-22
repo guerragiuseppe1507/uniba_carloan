@@ -47,10 +47,12 @@ public class ContextMenu {
     		mainMenu.getMenus().addAll(gestisci);
     		
     		//TODO voci del menu
+    		
     		MenuItem gestisciAuto = new MenuItem("Gestisci Auto");
     		MenuItem gestisciDipendente = new MenuItem("Gestisci Dipendenti");
     		MenuItem gestisciContratto = new MenuItem("Gestisci Contratti");
-    		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente, gestisciContratto);
+    		MenuItem inserimentoContratto= new MenuItem("Inseimento Contratto");
+    		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente, gestisciContratto,inserimentoContratto);
     		
     	
     		gestisciAuto.setOnAction(new EventHandler<ActionEvent>() {
@@ -80,6 +82,16 @@ public class ContextMenu {
 	            
 	        });
     		
+
+    		
+    		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.setScreen(ScreensFramework.InserimentoContrattoID);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.InserimentoContrattoTitle);
+	            }
+	        });
+    		
     	}else if(Context.getInstance().getUserType().equals(Context.dipendenteFiliale)){
     		
     		Menu gestisci = new Menu("Gestisci");
@@ -91,8 +103,8 @@ public class ContextMenu {
     		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.setScreen(ScreensFramework.manageAutoID);
-	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.manageAutoTitle);
+	            	ctrl.setScreen(ScreensFramework.InserimentoContrattoID);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.InserimentoContrattoTitle);
 	            }
 	        });
     		
