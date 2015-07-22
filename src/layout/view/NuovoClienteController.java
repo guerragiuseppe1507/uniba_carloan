@@ -9,12 +9,12 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 	ScreensController myController;
 	
 	 @Override
-		public void initialize(URL url, ResourceBundle rb){
+	public void initialize(URL url, ResourceBundle rb){
 
-		}
+	}
 
-		public void setScreenParent(ScreensController screenParent){
-			myController = screenParent;
-		}
+	public void setScreenParent(ScreensController screenParent){
+		myController = screenParent;
+	}
 		
 }

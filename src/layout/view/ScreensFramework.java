@@ -48,9 +48,9 @@ public class ScreensFramework extends Application {
 	public static String gestioneContrattoID = "GestioneContratto";
 	public static String gestioneContrattoFile = "GestioneContratto.fxml";
 	public static String gestioneContrattoTitle = "Gestione Contratto";
-	public static String InserimentoContrattoID = "InserimenoContratto";
-	public static String InserimentoContrattoFile = "InserimenoContratto.fxml";
-	public static String InserimentoContrattoTitle = "Inserimeno Contratto";
+	public static String InserimentoContrattoID = "InserimentoContratto";
+	public static String InserimentoContrattoFile = "InserimentoContratto.fxml";
+	public static String InserimentoContrattoTitle = "Inserimento Contratto";
 	
 	//Schermate pop-up
 	
@@ -115,7 +115,7 @@ public class ScreensFramework extends Application {
 		c.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendentiFile);
 		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
 		c.loadScreen(ScreensFramework.gestioneContrattoID,ScreensFramework.gestioneContrattoFile);
-		
+		c.loadScreen(ScreensFramework.InserimentoContrattoID,ScreensFramework.InserimentoContrattoFile);
 	}
 	
 	public static void loadDipendenteFilialeScreens(ScreensController c){
