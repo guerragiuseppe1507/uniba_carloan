@@ -51,7 +51,7 @@ public class ContextMenu {
     		MenuItem gestisciAuto = new MenuItem("Gestisci Auto");
     		MenuItem gestisciDipendente = new MenuItem("Gestisci Dipendenti");
     		MenuItem gestisciContratto = new MenuItem("Gestisci Contratti");
-    		MenuItem inserimentoContratto= new MenuItem("Inseimento Contratto");
+    		MenuItem inserimentoContratto= new MenuItem("Inserimento Contratto");
     		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente, gestisciContratto,inserimentoContratto);
     		
     	
