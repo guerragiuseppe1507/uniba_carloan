@@ -85,28 +85,25 @@ public class ScreensController extends StackPane {
 	
 	//Questo Metodo Visualizza la  schermata scelta in una nuova finestra
 	public boolean setScreenNewWindow(final String name, final String res, final String title){
-		if (screens.get(name) != null){
-			Parent root;
-			try {
-	            root = FXMLLoader.load(getClass().getResource(res));
-	            Stage stage = new Stage();
-	            stage.setTitle(title);
-	            stage.initModality(Modality.APPLICATION_MODAL);
-	            stage.setScene(new Scene(root));
-	            stage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
-	            stage.show();
+		
+		Parent root;
+		try {
+            root = FXMLLoader.load(getClass().getResource(res));
+            Stage stage = new Stage();
+            stage.setTitle(ScreensFramework.APP_NAME+" - "+title);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
+            stage.show();
 
-	            //hide this current window (if this is whant you want
-	            //((Node)(event.getSource())).getScene().getWindow().hide();
+            //hide this current window (if this is whant you want
+            //((Node)(event.getSource())).getScene().getWindow().hide();
 
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-			return true;
-		} else {
-			System.out.println("La schermata non è stata caricata! \n");
-			return false;
-		}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		return true;
+		
 	}
 	
 	//Rimuove la schermata con il nome dato dalla collezione

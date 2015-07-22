@@ -5,26 +5,21 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import layout.model.Auto;
 import layout.model.Cliente;
 import layout.model.ContextMenu;
-import layout.model.Contratto;
-
-
-
-
-
-
-
-
 
 public class InserimentoContrattoController implements Initializable, ControlledScreen {
 ScreensController myController;
@@ -35,7 +30,11 @@ ScreensController myController;
 	@FXML
 	AnchorPane menu;
 	
+	
 	//Sezione Coontratti Stipulati
+	@FXML
+	Button newClient;
+	
 	
 	 @FXML
 	 private TableView<Cliente> tableClienti;
@@ -53,6 +52,60 @@ ScreensController myController;
 	 private TableColumn<Cliente,String>codiceFiscaleCliente;
 	 @FXML
 	 private TableColumn<Cliente, String>codicePatenteCliente;
+	 
+	 
+	 @FXML
+	 private TableView<Auto> autoTable;
+	@FXML
+	private TableColumn<Auto, String> modello;
+	@FXML
+	private TableColumn<Auto, String> targa;
+	@FXML
+	private TableColumn<Auto, String> status;
+	@FXML
+	private TableColumn<Auto, String> chilometraggio;
+	@FXML
+	private TableColumn<Auto, String> fasce;	
+	@FXML
+	private TableColumn<Auto, String> provenienza;
+	
+	
+	@FXML
+	Label chilometraggioLabel;
+	@FXML
+	Label modelloLabel;
+	@FXML
+	Label fasciaLabel;
+	@FXML
+	Label tarffaLabel;
+	@FXML
+	Label targaLabel;
+	@FXML
+	Label dataInizioLabel;
+	@FXML
+	Label dataRientroLabel;
+	@FXML
+	Label filialeDiPartenzaLabel;
+	@FXML
+	Label filialeDiArrivoLabel;
+	@FXML
+	Label accontoLabel;
+	@FXML
+	Label chilometragggioLabel;
+	@FXML
+	Label prezzoTariffaLabel;
+	@FXML
+	Label prezzoFasciaLabel;
+	
+	@FXML
+	TextField inserisciAcconto;
+	@FXML
+    ComboBox<String> scegliFilialeDiArrivo;
+	@FXML
+    ComboBox<String> scegliChilometraggio;
+	@FXML
+    ComboBox<String> scegliTariffa;
+	
 	
 	
 	 
@@ -99,7 +152,8 @@ ScreensController myController;
 						risultato.get("residenza"+Integer.toString(i)),
 						risultato.get("dataDiNascita" + Integer.toString(i)),
 						risultato.get("codiceFiscale" + Integer.toString(i)),
-						risultato.get("codicePatente" + Integer.toString(i)))); }
+						risultato.get("codicePatente" + Integer.toString(i)))); 
+			}
 				
 			
 			nomeCliente.setCellValueFactory(cellData->cellData.getValue().nomeProperty());
@@ -112,7 +166,18 @@ ScreensController myController;
 
 			tableClienti.setItems(clienteData);
 			
-		}}}
+		}
+		
+	}
+	
+	@FXML
+	public void handleNewClient(){
+		myController.setScreenNewWindow(ScreensFramework.InserimentoClienteID,
+				ScreensFramework.InserimentoClienteFile, 
+				ScreensFramework.InserimentoClienteTitle);
+	}
+	
+}
 	
 	
 	

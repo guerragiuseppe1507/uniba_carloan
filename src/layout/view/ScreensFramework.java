@@ -1,6 +1,5 @@
 package layout.view;
 
-import util.Md5Encrypter;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -53,7 +52,11 @@ public class ScreensFramework extends Application {
 	public static String InserimentoContrattoFile = "InserimentoContratto.fxml";
 	public static String InserimentoContrattoTitle = "Inserimento Contratto";
 	
+	//Schermate pop-up
 	
+	public static String InserimentoClienteID = "NuovoCliente";
+	public static String InserimentoClienteFile = "NuovoCliente.fxml";
+	public static String InserimentoClienteTitle = "Nuovo Cliente";
 	
 	
 	private ScreensController mainContainer;
@@ -63,7 +66,7 @@ public class ScreensFramework extends Application {
 	@Override
 	public void start(Stage primaryStage){
 		
-		this.PRIMARY_STAGE = primaryStage;
+		ScreensFramework.PRIMARY_STAGE = primaryStage;
 		
 		//Vieni istanziato il controller delle schermate.
 		mainContainer = new ScreensController();
@@ -112,7 +115,7 @@ public class ScreensFramework extends Application {
 		c.loadScreen(ScreensFramework.gestioneDipendentiID,ScreensFramework.gestioneDipendentiFile);
 		c.loadScreen(ScreensFramework.gestioneProfiloID,ScreensFramework.gestioneProfiloFile);
 		c.loadScreen(ScreensFramework.gestioneContrattoID,ScreensFramework.gestioneContrattoFile);
-		
+		c.loadScreen(ScreensFramework.InserimentoContrattoID,ScreensFramework.InserimentoContrattoFile);
 	}
 	
 	public static void loadDipendenteFilialeScreens(ScreensController c){
