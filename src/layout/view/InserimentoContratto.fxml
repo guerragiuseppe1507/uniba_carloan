@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.InserimentoContrattoController">
+<fx:root fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" type="StackPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.InserimentoContrattoController">
    <children>
       <AnchorPane prefHeight="738.0" prefWidth="1280.0" StackPane.alignment="TOP_LEFT">
          <children>
@@ -71,7 +71,7 @@
                                  </rowConstraints>
                                  <children>
                                     <TextField fx:id="inserisciAcconto" prefHeight="31.0" prefWidth="113.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                    <ComboBox fx:id="scegliFilialeDiArrivo" prefHeight="31.0" prefWidth="189.0" GridPane.columnIndex="3" />
+                                    <ComboBox fx:id="scegliFiliale" prefHeight="31.0" prefWidth="189.0" GridPane.columnIndex="3" />
                                     <ComboBox fx:id="scegliChilometraggio" prefWidth="150.0" GridPane.columnIndex="1" />
                                     <ComboBox fx:id="scegliTariffa" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa" GridPane.rowIndex="1" />
@@ -129,4 +129,4 @@
          </children>
       </AnchorPane>
    </children>
-</StackPane>
+</fx:root>

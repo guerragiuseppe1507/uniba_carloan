@@ -19,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import layout.model.Auto;
 import layout.model.Cliente;
+import layout.model.Context;
 import layout.model.ContextMenu;
 
 public class InserimentoContrattoController implements Initializable, ControlledScreen {
@@ -56,8 +57,8 @@ ScreensController myController;
 	 
 	 @FXML
 	 private TableView<Auto> autoTable;
-	@FXML
-	private TableColumn<Auto, String> modello;
+	 @FXML
+	 private TableColumn<Auto, String> modello;
 	@FXML
 	private TableColumn<Auto, String> targa;
 	@FXML
@@ -71,46 +72,48 @@ ScreensController myController;
 	
 	
 	@FXML
-	Label chilometraggioLabel;
+	private Label chilometraggioLabel;
 	@FXML
-	Label modelloLabel;
+	private Label modelloLabel;
 	@FXML
-	Label fasciaLabel;
+	private Label fasciaLabel;
 	@FXML
-	Label tarffaLabel;
+	private Label tarffaLabel;
 	@FXML
-	Label targaLabel;
+	private Label targaLabel;
 	@FXML
-	Label dataInizioLabel;
+	private Label dataInizioLabel;
 	@FXML
-	Label dataRientroLabel;
+	private Label dataRientroLabel;
 	@FXML
-	Label filialeDiPartenzaLabel;
+	private Label filialeDiPartenzaLabel;
 	@FXML
-	Label filialeDiArrivoLabel;
+	private Label filialeDiArrivoLabel;
 	@FXML
-	Label accontoLabel;
+	private Label accontoLabel;
 	@FXML
-	Label chilometragggioLabel;
+	private Label chilometragggioLabel;
 	@FXML
-	Label prezzoTariffaLabel;
+	private Label prezzoTariffaLabel;
 	@FXML
-	Label prezzoFasciaLabel;
+	private Label prezzoFasciaLabel;
 	
 	@FXML
-	TextField inserisciAcconto;
+	private TextField inserisciAcconto;
 	@FXML
-    ComboBox<String> scegliFilialeDiArrivo;
+	private ComboBox<String> scegliFiliale;
 	@FXML
-    ComboBox<String> scegliChilometraggio;
+	private ComboBox<String> scegliChilometraggio;
 	@FXML
-    ComboBox<String> scegliTariffa;
+	private ComboBox<String> scegliTariffa;
 	
 	
+	public static final String[] POSSIBILE_CHILOMETRAGGIO = {"LIMITATO", "ILLIMITATO"};
+	public static final String[] POSSIBILE_TARIFFA = {"GIORNALIERA", "SETTIMANALE"};
 	
-	 
+	private ObservableList<String> filialiData = FXCollections.observableArrayList();
 	 private ObservableList<Cliente> clienteData = FXCollections.observableArrayList();
-	
+	 private ObservableList<Auto> autoData = FXCollections.observableArrayList(); 
 	 
 	 
 	 
@@ -123,6 +126,11 @@ ScreensController myController;
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
 		riempiTabellaClienti();
+		riempiTabellaAuto();
+		
+		popolaSpinnerChilometraggio();
+		popolaSpinnerTariffa();
+		popolaSpinnerFiliali();
 		
 	}
 
@@ -145,7 +153,7 @@ ScreensController myController;
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				clienteData.add(new Cliente(
-						risultato.get("id"+Integer.toString(i)),
+						Integer.parseInt(risultato.get("id"+Integer.toString(i))),
 						risultato.get("nome" + Integer.toString(i)),
 						risultato.get("cognome" + Integer.toString(i)), 
 						risultato.get("email" + Integer.toString(i)),
@@ -177,6 +185,102 @@ ScreensController myController;
 				ScreensFramework.InserimentoClienteTitle);
 	}
 	
+	
+	
+	
+private void riempiTabellaAuto(){
+		
+		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("disponibilita", "disponibile");
+		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		autoData = FXCollections.observableArrayList();
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+			
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+				
+				autoData.add(new Auto(
+						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+						risultato.get("modello" + Integer.toString(i)),
+						risultato.get("nome_filiale" + Integer.toString(i)), 
+						risultato.get("status" + Integer.toString(i)),
+						risultato.get("targa"+Integer.toString(i)),
+						risultato.get("chilometraggio" + Integer.toString(i)),
+						risultato.get("fasce" + Integer.toString(i)),
+						risultato.get("provenienza" + Integer.toString(i)))
+				); 
+				
+			}
+			
+			modello.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
+			status.setCellValueFactory(cellData->cellData.getValue().statusProperty());
+			chilometraggio.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
+			targa.setCellValueFactory(cellData->cellData.getValue().targaProperty());
+			fasce.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
+			provenienza.setCellValueFactory(cellData->cellData.getValue().provenienzaProperty());
+			
+			autoTable.setItems(autoData);
+			
+		} else {
+			
+			autoTable.setPlaceholder(new Label("No Auto Found"));
+			
+		}
+		
+	}
+ 
+
+	private void popolaSpinnerChilometraggio(){
+		ObservableList<String> tipiChilometraggi = FXCollections.observableArrayList();
+		
+		for(int i = 0 ; i < POSSIBILE_CHILOMETRAGGIO.length ; i++){
+			tipiChilometraggi.add(POSSIBILE_CHILOMETRAGGIO[i]);
+		}
+		scegliChilometraggio.setItems(tipiChilometraggi);
+		
+	}
+
+
+
+	private void popolaSpinnerTariffa(){
+		ObservableList<String> tipiTariffa = FXCollections.observableArrayList();
+		
+		for(int i = 0 ; i < POSSIBILE_TARIFFA.length ; i++){
+			tipiTariffa.add(POSSIBILE_TARIFFA[i]);
+		}
+		scegliTariffa.setItems(tipiTariffa);
+		
+	}
+
+	
+	
+	 private void popolaSpinnerFiliali(){
+		String[] comando = new String[]{"businessTier.GestioneFiliali", "recuperoDatiFiliali"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+			
+			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
+				
+				filialiData.add(
+						risultato.get("nome" + Integer.toString(i))
+				); 
+				
+			}
+		}
+		
+		scegliFiliale.setItems(filialiData);
+	}
+
+
 }
 	
 	

@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Cliente {
-	private StringProperty id;
+	private int id;
 	private StringProperty nome;
 	private StringProperty cognome;
 	private StringProperty email;
@@ -15,19 +15,19 @@ public class Cliente {
 	
 	
 	
-	public Cliente(String id, String Nome, String Cognome, String Email,String data_di_nascita, String Residenza, String codice_fiscale, String codice_patente){
-		this.id = new SimpleStringProperty(id);
+	public Cliente(int id, String Nome, String Cognome, String Email,String Data_Di_Nascita, String Residenza, String codice_fiscale, String codice_patente){
+		this.id =id;
 		this.nome=new SimpleStringProperty(Nome);
 		this.cognome=new SimpleStringProperty(Cognome);
 		this.email= new SimpleStringProperty(Email);
-		this.dataDiNascita = new SimpleStringProperty(data_di_nascita);
+		this.dataDiNascita = new SimpleStringProperty(Data_Di_Nascita);
 		this.residenza = new SimpleStringProperty(Residenza);
 		this.codiceFiscale=new SimpleStringProperty(codice_fiscale);
 		this.codicePatente=new SimpleStringProperty(codice_patente);
 		
 	}
 	
-	public String getId(){return id.get();};
+	public int getId(){return id;};
 	public String getnome(){return nome.get();}
 	public String getcognome(){return cognome.get();}
 	public String getemail(){return email.get();}
@@ -36,7 +36,7 @@ public class Cliente {
 	public String getcodiceFiscale(){return codiceFiscale.get();}
 	public String getcodicePatente(){return codicePatente.get();}
 	
-	public StringProperty idProperty(){ return id;}
+	
 	public StringProperty nomeProperty(){return nome;}
 	public StringProperty cognomeProperty(){return cognome;}
 	public StringProperty emailProperty(){return email;}

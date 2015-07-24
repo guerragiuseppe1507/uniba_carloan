@@ -1770,7 +1770,7 @@ public HashMap<String, String> getClienti(){
 				int pos = 0;
 				do{
 					
-					
+					id=res.getString((SchemaDb.TAB_CLIENTI+".id"));
 					nome = res.getString((SchemaDb.TAB_CLIENTI+".nome"));
 					cognome = res.getString(SchemaDb.TAB_CLIENTI+".cognome");
 					email = res.getString(SchemaDb.TAB_CLIENTI+".mail");
@@ -1779,13 +1779,14 @@ public HashMap<String, String> getClienti(){
 					codiceFiscale=res.getString(SchemaDb.TAB_CLIENTI+".cod_fiscale");
 					codicePatente=res.getString(SchemaDb.TAB_CLIENTI+".cod_patente");
 					
-					risultato.put("email" + Integer.toString(pos), email);
+					risultato.put("id" + Integer.toString(pos), id);
 					risultato.put("nome" + Integer.toString(pos), nome);
 					risultato.put("cognome" + Integer.toString(pos), cognome);
-					risultato.put("residenza" + Integer.toString(pos), residenza);
-					risultato.put("dataDiNascita"+ Integer.toString(pos), dataDiNascita);
-					risultato.put("codiceFiscale" + Integer.toString(pos), codiceFiscale);
-					risultato.put("codicePatente" + Integer.toString(pos), codicePatente);
+					risultato.put("email" + Integer.toString(pos), email);
+					risultato.put("residenza " + Integer.toString(pos), residenza);
+					risultato.put("dataDiNascita "+ Integer.toString(pos), dataDiNascita);
+					risultato.put("codiceFiscale " + Integer.toString(pos), codiceFiscale);
+					risultato.put("codicePatente " + Integer.toString(pos), codicePatente);
 					pos++;
 					
 				}while(res.next());
