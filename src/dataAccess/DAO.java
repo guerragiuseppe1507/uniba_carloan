@@ -1770,8 +1770,8 @@ public HashMap<String, String> getClienti(){
 				int pos = 0;
 				do{
 					
-					id=res.getString((SchemaDb.TAB_CLIENTI+".id"));
-					nome = res.getString((SchemaDb.TAB_CLIENTI+".nome"));
+					id=res.getString(SchemaDb.TAB_CLIENTI+".id");
+					nome = res.getString(SchemaDb.TAB_CLIENTI+".nome");
 					cognome = res.getString(SchemaDb.TAB_CLIENTI+".cognome");
 					email = res.getString(SchemaDb.TAB_CLIENTI+".mail");
 					residenza = res.getString(SchemaDb.TAB_CLIENTI+".residenza");

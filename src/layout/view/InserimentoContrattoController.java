@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import presentationTier.FrontController;
+import util.NumberPlateValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -78,7 +80,7 @@ ScreensController myController;
 	@FXML
 	private Label fasciaLabel;
 	@FXML
-	private Label tarffaLabel;
+	private Label tariffaLabel;
 	@FXML
 	private Label targaLabel;
 	@FXML
@@ -91,8 +93,6 @@ ScreensController myController;
 	private Label filialeDiArrivoLabel;
 	@FXML
 	private Label accontoLabel;
-	@FXML
-	private Label chilometragggioLabel;
 	@FXML
 	private Label prezzoTariffaLabel;
 	@FXML
@@ -107,14 +107,14 @@ ScreensController myController;
 	@FXML
 	private ComboBox<String> scegliTariffa;
 	
-	
 	public static final String[] POSSIBILE_CHILOMETRAGGIO = {"LIMITATO", "ILLIMITATO"};
 	public static final String[] POSSIBILE_TARIFFA = {"GIORNALIERA", "SETTIMANALE"};
 	
 	private ObservableList<String> filialiData = FXCollections.observableArrayList();
-	 private ObservableList<Cliente> clienteData = FXCollections.observableArrayList();
-	 private ObservableList<Auto> autoData = FXCollections.observableArrayList(); 
-	 
+	private ObservableList<Cliente> clienteData = FXCollections.observableArrayList();
+	private ObservableList<Auto> autoData = FXCollections.observableArrayList(); 
+	
+	private Auto autoDispScelta;
 	 
 	 
 	 @Override
@@ -132,6 +132,9 @@ ScreensController myController;
 		popolaSpinnerTariffa();
 		popolaSpinnerFiliali();
 		
+		
+		autoTable.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> handleScegliAuto(newValue));
 	}
 
 	public void setScreenParent(ScreensController screenParent){
@@ -281,6 +284,35 @@ private void riempiTabellaAuto(){
 	}
 
 
+	 
+	 //Riepiloghi
+	 public void onActionTariffa(){
+
+		 tariffaLabel.setText(scegliTariffa.getValue());
+		 
+	 }
+	 
+	 public void onActionChilometraggio(){
+		 chilometraggioLabel.setText(scegliChilometraggio.getValue());
+		 
+	 }
+	 
+	 public void onActionFiliale(){
+		 filialeDiArrivoLabel.setText(scegliFiliale.getValue());
+		 
+	 }
+	 
+	 public void onActionAcconto(){
+		 accontoLabel.setText(inserisciAcconto.getText());
+	 }
+	 
+	 public void handleScegliAuto(Auto auto){
+			autoDispScelta = auto;
+			fasciaLabel.setText(auto.getFasce());
+			modelloLabel.setText(auto.getModello());
+			targaLabel.setText(auto.getTarga());
+		}
+	 
 }
 	
 	

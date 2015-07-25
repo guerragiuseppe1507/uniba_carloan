@@ -34,7 +34,7 @@ public class Auto {
 	
 	public int getId(){return id;}
 	
-	public String modello(){return modello.get();}
+	public String getModello(){return modello.get();}
 	public String getnomeFiliale(){return nomeFiliale.get();}
 	public String getChilometraggio(){return chilometraggio.get();}
 	public String getStatus(){return status.get();}
@@ -49,6 +49,7 @@ public class Auto {
 	public StringProperty fasceProperty(){return fasce;}
 	public StringProperty targaProperty(){return targa;}
 	public StringProperty provenienzaProperty(){return provenienza;}
+
 
 }
 

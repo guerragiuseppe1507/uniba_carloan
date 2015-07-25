@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" type="StackPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.InserimentoContrattoController">
+<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.InserimentoContrattoController">
    <children>
       <AnchorPane prefHeight="738.0" prefWidth="1280.0" StackPane.alignment="TOP_LEFT">
          <children>
@@ -70,10 +70,10 @@
                                     <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <TextField fx:id="inserisciAcconto" prefHeight="31.0" prefWidth="113.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                    <ComboBox fx:id="scegliFiliale" prefHeight="31.0" prefWidth="189.0" GridPane.columnIndex="3" />
-                                    <ComboBox fx:id="scegliChilometraggio" prefWidth="150.0" GridPane.columnIndex="1" />
-                                    <ComboBox fx:id="scegliTariffa" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="inserisciAcconto" onKeyReleased="#onActionAcconto" prefHeight="31.0" prefWidth="113.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <ComboBox fx:id="scegliFiliale" onAction="#onActionFiliale" prefHeight="31.0" prefWidth="189.0" GridPane.columnIndex="3" />
+                                    <ComboBox fx:id="scegliChilometraggio" onAction="#onActionChilometraggio" prefWidth="150.0" GridPane.columnIndex="1" />
+                                    <ComboBox fx:id="scegliTariffa" onAction="#onActionTariffa" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa" GridPane.rowIndex="1" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" GridPane.columnIndex="2" />
@@ -101,24 +101,22 @@
                         <Text layoutX="18.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fascia Auto" />
                         <Text layoutX="18.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modello" />
                         <Text layoutX="18.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Targa" />
-                        <Text layoutX="18.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Rientro" />
-                        <Text layoutX="15.0" layoutY="446.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Partenza" />
-                        <Text layoutX="18.0" layoutY="501.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" />
-                        <Text layoutX="18.0" layoutY="555.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" />
+                        <Text layoutX="15.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Partenza" />
+                        <Text layoutX="16.0" layoutY="483.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" />
+                        <Text layoutX="18.0" layoutY="546.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" />
                         <Text layoutX="18.0" layoutY="607.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo chilometraggio " />
                         <Text layoutX="20.0" layoutY="671.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Tariffa" wrappingWidth="78.18161010742188" />
                         <Text layoutX="16.0" layoutY="731.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Fascia" wrappingWidth="78.18161010742188" />
-                        <Text layoutX="20.0" layoutY="336.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Stipulazione" />
-                        <Label fx:id="chilometraggioLabel" layoutX="213.0" layoutY="61.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Text layoutX="15.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Stipulazione" />
+                        <Label fx:id="chilometraggioLabel" layoutX="213.0" layoutY="61.0" prefHeight="17.0" prefWidth="78.0" />
                         <Label fx:id="modelloLabel" layoutX="213.0" layoutY="216.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
                         <Label fx:id="fasciaLabel" layoutX="213.0" layoutY="156.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="tarffaLabel" layoutX="215.0" layoutY="106.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="tariffaLabel" layoutX="215.0" layoutY="106.0" prefHeight="17.0" prefWidth="78.0" />
                         <Label fx:id="targaLabel" layoutX="213.0" layoutY="271.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="dataInizioLabel" layoutX="213.0" layoutY="323.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="dataRientroLabel" layoutX="213.0" layoutY="367.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="filialeDiPartenzaLabel" layoutX="213.0" layoutY="433.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="filialeDiArrivoLabel" layoutX="213.0" layoutY="488.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="accontoLabel" layoutX="213.0" layoutY="542.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="dataInizioLabel" layoutX="213.0" layoutY="340.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="filialeDiPartenzaLabel" layoutX="213.0" layoutY="400.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="filialeDiArrivoLabel" layoutX="213.0" layoutY="470.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Label fx:id="accontoLabel" layoutX="213.0" layoutY="533.0" prefHeight="17.0" prefWidth="78.0" />
                         <Label fx:id="chilometragggioLabel" layoutX="213.0" layoutY="594.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
                         <Label fx:id="prezzoTariffaLabel" layoutX="213.0" layoutY="658.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
                         <Label fx:id="prezzoFasciaLabel" layoutX="213.0" layoutY="715.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
@@ -129,4 +127,4 @@
          </children>
       </AnchorPane>
    </children>
-</fx:root>
+</StackPane>
