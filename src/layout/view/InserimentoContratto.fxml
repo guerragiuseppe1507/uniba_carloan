@@ -14,7 +14,7 @@
       <AnchorPane prefHeight="738.0" prefWidth="1280.0" StackPane.alignment="TOP_LEFT">
          <children>
             <AnchorPane fx:id="menu" layoutY="-1.0" prefHeight="30.0" prefWidth="1280.0" />
-            <SplitPane dividerPositions="0.5453834115805947" layoutY="29.0" prefHeight="730.0" prefWidth="1280.0">
+            <SplitPane dividerPositions="0.5" layoutY="29.0" prefHeight="730.0" prefWidth="1280.0">
               <items>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
                     <content>
@@ -104,22 +104,22 @@
                         <Text layoutX="15.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Partenza" />
                         <Text layoutX="16.0" layoutY="483.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" />
                         <Text layoutX="18.0" layoutY="546.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" />
-                        <Text layoutX="18.0" layoutY="607.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo chilometraggio " />
-                        <Text layoutX="20.0" layoutY="671.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Tariffa" wrappingWidth="78.18161010742188" />
-                        <Text layoutX="16.0" layoutY="731.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Fascia" wrappingWidth="78.18161010742188" />
+                        <Text layoutX="18.0" layoutY="607.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Chilometraggio " />
+                        <Text layoutX="18.0" layoutY="663.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Giornaliero" wrappingWidth="108.18161010742188" />
+                        <Text layoutX="22.0" layoutY="711.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Fascia" wrappingWidth="78.18161010742188" />
                         <Text layoutX="15.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Stipulazione" />
                         <Label fx:id="chilometraggioLabel" layoutX="213.0" layoutY="61.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="modelloLabel" layoutX="213.0" layoutY="216.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="fasciaLabel" layoutX="213.0" layoutY="156.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="modelloLabel" layoutX="213.0" layoutY="216.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Label fx:id="fasciaLabel" layoutX="213.0" layoutY="156.0" prefHeight="17.0" prefWidth="78.0" />
                         <Label fx:id="tariffaLabel" layoutX="215.0" layoutY="106.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="targaLabel" layoutX="213.0" layoutY="271.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="dataInizioLabel" layoutX="213.0" layoutY="340.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="filialeDiPartenzaLabel" layoutX="213.0" layoutY="400.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="targaLabel" layoutX="213.0" layoutY="271.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Label fx:id="dataInizioLabel" layoutX="213.0" layoutY="340.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Label fx:id="filialeDiPartenzaLabel" layoutX="213.0" layoutY="400.0" prefHeight="17.0" prefWidth="78.0" />
                         <Label fx:id="filialeDiArrivoLabel" layoutX="213.0" layoutY="470.0" prefHeight="17.0" prefWidth="78.0" />
                         <Label fx:id="accontoLabel" layoutX="213.0" layoutY="533.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="chilometragggioLabel" layoutX="213.0" layoutY="594.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="prezzoTariffaLabel" layoutX="213.0" layoutY="658.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
-                        <Label fx:id="prezzoFasciaLabel" layoutX="213.0" layoutY="715.0" prefHeight="17.0" prefWidth="78.0" text="Label" />
+                        <Label fx:id="chilometragggioLabel" layoutX="213.0" layoutY="594.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Label fx:id="prezzoTariffaLabel" layoutX="213.0" layoutY="650.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Label fx:id="prezzoFasciaLabel" layoutX="215.0" layoutY="698.0" prefHeight="17.0" prefWidth="78.0" />
                      </children>
                   </AnchorPane>
               </items>

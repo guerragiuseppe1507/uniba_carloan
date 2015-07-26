@@ -144,7 +144,7 @@ ScreensController myController;
 	
 	
 	
-	private void riempiTabellaClienti(){
+        void riempiTabellaClienti(){
 		
 		String[] comando = new String[]{"businessTier.GestioneClienti", "recuperoDatiCliente"};
 		HashMap<String, String> inputParam = new HashMap<>();

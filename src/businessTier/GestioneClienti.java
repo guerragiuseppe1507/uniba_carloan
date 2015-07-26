@@ -2,7 +2,7 @@
 
 	import java.util.HashMap;
 
-	import dataAccess.DAO;
+import dataAccess.DAO;
 
 	public class GestioneClienti {
 
@@ -19,6 +19,16 @@
 			return risultato;
 		
 		
+		}
+		
+		public HashMap<String, String> inserisciDatiClienti(HashMap<String, String> inputParam){
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			
+			DAO dao = new DAO();
+			risultato = dao.inserisciCliente(inputParam);
+			
+			return risultato;
 		}
 		
 		

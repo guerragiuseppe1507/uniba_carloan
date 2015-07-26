@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.NuovoClienteController">
+
+<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.NuovoClienteController">
    <children>
-      <Label layoutX="248.0" layoutY="162.0" text="NON MI INGOZZA" />
+      <AnchorPane>
+         <children>
+            <Text layoutX="522.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insersci Nuovo Cliente">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Text layoutX="397.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" />
+            <Text layoutX="397.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cognome" />
+            <Text layoutX="397.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Indirizzo e-mail" />
+            <Text layoutX="397.0" layoutY="418.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Residenza" />
+            <Text layoutX="397.0" layoutY="468.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Di Nascita" />
+            <Text layoutX="397.0" layoutY="518.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Codice Fiscale" />
+            <Text layoutX="397.0" layoutY="568.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Codice Patente" />
+            <TextField fx:id="nomeText" layoutX="667.0" layoutY="251.0" />
+            <TextField fx:id="cognomeText" layoutX="667.0" layoutY="301.0" />
+            <TextField fx:id="mailText" layoutX="667.0" layoutY="351.0" />
+            <TextField fx:id="residenzaText" layoutX="667.0" layoutY="401.0" />
+            <TextField fx:id="codiceFiscaleText" layoutX="667.0" layoutY="501.0" />
+            <TextField fx:id="codicePatenteText" layoutX="667.0" layoutY="551.0" />
+            <DatePicker fx:id="dataDiNascitaPicker" layoutX="667.0" layoutY="451.0" prefHeight="25.0" prefWidth="149.0" />
+            <Button fx:id="Inserisci" layoutX="389.0" layoutY="618.0" mnemonicParsing="false" onAction="#OnActionInsersciCliente" text="Inserisci Cliente" />
+            <Label fx:id="resultLabel" layoutX="667.0" layoutY="622.0" prefHeight="17.0" prefWidth="149.0" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</StackPane>

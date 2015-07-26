@@ -1810,7 +1810,37 @@ public HashMap<String, String> getClienti(){
 		}
 
 	
+public HashMap<String, String> inserisciCliente(HashMap<String,String> inputParam){
 	
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_CLIENTI +" (nome, cognome, mail, residenza, data_di_nascita, cod_patente, cod_fiscale) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("nome"));
+			istruzione.setString(2, inputParam.get("cognome"));
+			istruzione.setString(3, inputParam.get("mail"));
+			istruzione.setString(3, inputParam.get("residenza"));
+			istruzione.setString(3, inputParam.get("data_di_nascita"));
+			istruzione.setString(3, inputParam.get("cod_patente"));
+			istruzione.setString(3, inputParam.get("cod_fiscale"));
+			
+			istruzione.execute();
+			
+			risultato.put(util.ResultKeys.ESITO, "true");
+
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+
+	}
 	
 	
 	
