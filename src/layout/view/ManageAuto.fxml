@@ -16,8 +16,8 @@
 	          <TableColumn fx:id="modello" prefWidth="131.0" text="Modello" />
 	          <TableColumn fx:id="targa" prefWidth="82.0" text="Targa" />
 	            <TableColumn fx:id="status" prefWidth="103.0" text="Status" />
-	            <TableColumn fx:id="chilometraggio" prefWidth="10.0" text="Km" />
-	            <TableColumn fx:id="fasce" prefWidth="10.0" text="Fascia" />
+	            <TableColumn fx:id="chilometraggio" maxWidth="60.0" minWidth="40.0" prefWidth="40.0" text="Km" />
+	            <TableColumn fx:id="fasce" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Fascia" />
                <TableColumn fx:id="provenienza" prefWidth="154.0" text="Provenienza" />
 	        </columns>
             <columnResizePolicy>
@@ -29,8 +29,8 @@
 	          <TableColumn fx:id="modelloNonDisp" prefWidth="131.0" text="Modello" />
 	          <TableColumn fx:id="targaNonDisp" prefWidth="82.0" text="Targa" />
 	            <TableColumn fx:id="statusNonDisp" prefWidth="103.0" text="Status" />
-	            <TableColumn fx:id="chilometraggioNonDisp" prefWidth="139.0" text="Km" />
-	            <TableColumn fx:id="fasceNonDisp" prefWidth="102.0" text="Fascia" />
+	            <TableColumn fx:id="chilometraggioNonDisp" maxWidth="60.0" minWidth="40.0" prefWidth="40.0" text="Km" />
+	            <TableColumn fx:id="fasceNonDisp" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Fascia" />
                <TableColumn fx:id="provenienzaNonDisp" prefWidth="75.0" text="Provenienza" />
 	        </columns>
             <columnResizePolicy>

@@ -146,7 +146,7 @@ ScreensController myController;
 	
         void riempiTabellaClienti(){
 		
-		String[] comando = new String[]{"businessTier.GestioneClienti", "recuperoDatiCliente"};
+		String[] comando = new String[]{"businessTier.GestioneClienti", "recuperoDatiClienti"};
 		HashMap<String, String> inputParam = new HashMap<>();
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
@@ -160,8 +160,8 @@ ScreensController myController;
 						risultato.get("nome" + Integer.toString(i)),
 						risultato.get("cognome" + Integer.toString(i)), 
 						risultato.get("email" + Integer.toString(i)),
-						risultato.get("residenza"+Integer.toString(i)),
 						risultato.get("dataDiNascita" + Integer.toString(i)),
+						risultato.get("residenza"+Integer.toString(i)),
 						risultato.get("codiceFiscale" + Integer.toString(i)),
 						risultato.get("codicePatente" + Integer.toString(i)))); 
 			}

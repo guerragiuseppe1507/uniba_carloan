@@ -1783,10 +1783,10 @@ public HashMap<String, String> getClienti(){
 					risultato.put("nome" + Integer.toString(pos), nome);
 					risultato.put("cognome" + Integer.toString(pos), cognome);
 					risultato.put("email" + Integer.toString(pos), email);
-					risultato.put("residenza " + Integer.toString(pos), residenza);
-					risultato.put("dataDiNascita "+ Integer.toString(pos), dataDiNascita);
-					risultato.put("codiceFiscale " + Integer.toString(pos), codiceFiscale);
-					risultato.put("codicePatente " + Integer.toString(pos), codicePatente);
+					risultato.put("residenza" + Integer.toString(pos), residenza);
+					risultato.put("dataDiNascita"+ Integer.toString(pos), dataDiNascita);
+					risultato.put("codiceFiscale" + Integer.toString(pos), codiceFiscale);
+					risultato.put("codicePatente" + Integer.toString(pos), codicePatente);
 					pos++;
 					
 				}while(res.next());
