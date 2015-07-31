@@ -1,9 +1,11 @@
 package layout.model;
 
+import java.util.Comparator;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Cliente {
+public class Cliente implements Comparable<Cliente> {
 	private int id;
 	private StringProperty nome;
 	private StringProperty cognome;
@@ -28,13 +30,13 @@ public class Cliente {
 	}
 	
 	public int getId(){return id;};
-	public String getnome(){return nome.get();}
-	public String getcognome(){return cognome.get();}
-	public String getemail(){return email.get();}
+	public String getNome(){return nome.get();}
+	public String getCognome(){return cognome.get();}
+	public String getEmail(){return email.get();}
 	public String getResidenza(){return residenza.get();}
-	public String getdataDiNascita(){return dataDiNascita.get();}
-	public String getcodiceFiscale(){return codiceFiscale.get();}
-	public String getcodicePatente(){return codicePatente.get();}
+	public String getDataDiNascita(){return dataDiNascita.get();}
+	public String getCodiceFiscale(){return codiceFiscale.get();}
+	public String getCodicePatente(){return codicePatente.get();}
 	
 	
 	public StringProperty nomeProperty(){return nome;}
@@ -44,6 +46,12 @@ public class Cliente {
 	public StringProperty dataDiNascitaProperty(){return dataDiNascita;}
 	public StringProperty codiceFiscaleProperty(){return codiceFiscale;}
 	public StringProperty codicePatenteProperty(){return codicePatente;}
+
+
+	@Override
+	public int compareTo(Cliente other) {
+		return this.getNome().compareTo(other.getNome());
+	}
 
 }
 

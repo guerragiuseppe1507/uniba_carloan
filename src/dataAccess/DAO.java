@@ -1816,18 +1816,18 @@ public HashMap<String, String> inserisciCliente(HashMap<String,String> inputPara
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
-		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_CLIENTI +" (nome, cognome, mail, residenza, data_di_nascita, cod_patente, cod_fiscale) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_CLIENTI +" (nome, cognome, mail, residenza, data_di_nascita, cod_fiscale , cod_patente) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
 			istruzione.setString(1, inputParam.get("nome"));
 			istruzione.setString(2, inputParam.get("cognome"));
 			istruzione.setString(3, inputParam.get("mail"));
-			istruzione.setString(3, inputParam.get("residenza"));
-			istruzione.setString(3, inputParam.get("data_di_nascita"));
-			istruzione.setString(3, inputParam.get("cod_patente"));
-			istruzione.setString(3, inputParam.get("cod_fiscale"));
-			
+			istruzione.setString(4, inputParam.get("residenza"));
+			istruzione.setString(5, inputParam.get("data_di_nascita"));
+			istruzione.setString(6, inputParam.get("cod_fiscale"));
+			istruzione.setString(7, inputParam.get("cod_patente"));
+				
 			istruzione.execute();
 			
 			risultato.put(util.ResultKeys.ESITO, "true");

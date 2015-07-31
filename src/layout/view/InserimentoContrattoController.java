@@ -1,6 +1,7 @@
 package layout.view;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -24,7 +25,7 @@ import layout.model.Cliente;
 import layout.model.Context;
 import layout.model.ContextMenu;
 
-public class InserimentoContrattoController implements Initializable, ControlledScreen {
+public class InserimentoContrattoController implements Initializable, ControlledScreen,InterStageCallBackListener {
 ScreensController myController;
 	
 	@FXML
@@ -144,12 +145,14 @@ ScreensController myController;
 	
 	
 	
-        void riempiTabellaClienti(){
+    private void riempiTabellaClienti(){
 		
 		String[] comando = new String[]{"businessTier.GestioneClienti", "recuperoDatiClienti"};
 		HashMap<String, String> inputParam = new HashMap<>();
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
+		
+		clienteData = FXCollections.observableArrayList();
 		
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			
@@ -175,6 +178,8 @@ ScreensController myController;
 			codiceFiscaleCliente.setCellValueFactory(cellData->cellData.getValue().codiceFiscaleProperty());
 			codicePatenteCliente.setCellValueFactory(cellData->cellData.getValue().codicePatenteProperty());
 
+			FXCollections.sort(clienteData);
+
 			tableClienti.setItems(clienteData);
 			
 		}
@@ -186,12 +191,14 @@ ScreensController myController;
 		myController.setScreenNewWindow(ScreensFramework.InserimentoClienteID,
 				ScreensFramework.InserimentoClienteFile, 
 				ScreensFramework.InserimentoClienteTitle);
+		InterStageEventsHandler.getInstance().setCaller(this);
 	}
 	
+	public void callBack(){
+		riempiTabellaClienti();
+	}
 	
-	
-	
-private void riempiTabellaAuto(){
+	private void riempiTabellaAuto(){
 		
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();

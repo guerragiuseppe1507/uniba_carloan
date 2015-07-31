@@ -21,7 +21,7 @@ import dataAccess.DAO;
 		
 		}
 		
-		public HashMap<String, String> inserisciDatiClienti(HashMap<String, String> inputParam){
+		public HashMap<String, String> inserisciDatiCliente(HashMap<String, String> inputParam){
 			
 			HashMap<String, String> risultato = new HashMap<>();
 			

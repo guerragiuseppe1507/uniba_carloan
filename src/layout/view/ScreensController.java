@@ -24,6 +24,7 @@ public class ScreensController extends StackPane {
 	
 
 	private HashMap<String, Node> screens = new HashMap<>();
+	private Stage winStage;
 	
 	public ScreensController(){
 		super();
@@ -82,19 +83,23 @@ public class ScreensController extends StackPane {
 			return false;
 		}
 	}
+
 	
 	//Questo Metodo Visualizza la  schermata scelta in una nuova finestra
 	public boolean setScreenNewWindow(final String name, final String res, final String title){
 		
 		Parent root;
 		try {
-            root = FXMLLoader.load(getClass().getResource(res));
-            Stage stage = new Stage();
-            stage.setTitle(ScreensFramework.APP_NAME+" - "+title);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
-            stage.show();
+			FXMLLoader myLoader = new FXMLLoader(getClass().getResource(res));
+            root = myLoader.load();
+            ControlledScreen myScreenController = ((ControlledScreen) myLoader.getController());
+			myScreenController.setScreenParent(this);
+			winStage = new Stage();
+			winStage.setTitle(ScreensFramework.APP_NAME+" - "+title);
+			winStage.initModality(Modality.APPLICATION_MODAL);
+			winStage.setScene(new Scene(root));
+			winStage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
+			winStage.show();
 
             //hide this current window (if this is whant you want
             //((Node)(event.getSource())).getScene().getWindow().hide();
@@ -104,6 +109,10 @@ public class ScreensController extends StackPane {
         }
 		return true;
 		
+	}
+	
+	public void closeWinStage(){
+		winStage.close();
 	}
 	
 	//Rimuove la schermata con il nome dato dalla collezione
