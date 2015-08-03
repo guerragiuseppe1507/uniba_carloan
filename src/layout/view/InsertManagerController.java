@@ -20,10 +20,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import layout.model.ContextMenu;
-import layout.model.DipendenteDiFiliale;
-import layout.model.Filiale;
-import layout.model.ManagerDiFiliale;
-import layout.model.Utente;
+import layout.model.TableManager;
+import layout.model.entities.DipendenteDiFiliale;
+import layout.model.entities.Filiale;
+import layout.model.entities.ManagerDiFiliale;
+import layout.model.entities.Utente;
 
 public class InsertManagerController implements Initializable, ControlledScreen{
 	
@@ -37,18 +38,6 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 	
 	@FXML
     private TableView<Utente> usersTable;
-    @FXML
-    private TableColumn<Utente, String> usersUsernameColumn;
-    @FXML
-    private TableColumn<Utente, String> usersEmailColumn;
-    @FXML
-    private TableColumn<Utente, String> usersNomeColumn;
-    @FXML
-    private TableColumn<Utente, String> usersCognomeColumn;
-    @FXML
-    private TableColumn<Utente, String> usersTelefonoColumn;
-    @FXML
-    private TableColumn<Utente, String> usersResidenzaColumn;
     
     @FXML
     private TableView<Filiale> filialiTable;
@@ -92,7 +81,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		riempiTabellaFiliali();
 		
 		filialiTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> riempiTabellaDipendenti(newValue));
+	            (observable, oldValue, newValue) -> TableManager.riempiTabellaUtenti(usersTable, "filiale",Integer.toString(newValue.getId())));
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
@@ -151,7 +140,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			riempiTabellaManager();
-			riempiTabellaDipendenti(selectedFiliale);
+			TableManager.riempiTabellaUtenti(usersTable, "filiale",Integer.toString(selectedFiliale.getId()));
 		}
 		
 	}
@@ -181,7 +170,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 				managersDiFiliale.add(tmp);				
 			}
 			
-			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
+			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty("username"));
 			managerDiFilialeNomeFColumn.setCellValueFactory(cellData -> cellData.getValue().getFiliale().nomeProperty());
 			
 			managerDiFilialeTable.setItems(managerDiFilialeData);
@@ -228,89 +217,10 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 	}
 	
-	private void riempiTabellaDipendenti(Filiale filiale){
-		
-		selectedFiliale = filiale;
-		
-		String idFiliale = Integer.toString(filiale.getId());
-		
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("idFiliale", idFiliale);
-		
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		usersData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			
-		
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				usersData.add(new DipendenteDiFiliale(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)), 
-						risultato.get("email" + Integer.toString(i)), 
-						risultato.get("nome" + Integer.toString(i)), 
-						risultato.get("cognome" + Integer.toString(i)), 
-						risultato.get("telefono" + Integer.toString(i)), 
-						risultato.get("residenza" + Integer.toString(i))));
-				
-			}
-			
-			usersUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			usersEmailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-			usersNomeColumn.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
-			usersCognomeColumn.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
-			usersTelefonoColumn.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
-			usersResidenzaColumn.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
-			
-			usersTable.setItems(usersData);
-			
-		} else {
-			usersTable.getItems().clear();
-			usersTable.setPlaceholder(new Label("No Users Found"));
-		}
-		
-	}
 	
 	@FXML
 	public void caricaUtentiLiberiHandler(){
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtentiLiberi"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		usersData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-					
-				usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)), 
-						risultato.get("email" + Integer.toString(i)), 
-						risultato.get("nome" + Integer.toString(i)), 
-						risultato.get("cognome" + Integer.toString(i)), 
-						risultato.get("telefono" + Integer.toString(i)), 
-						risultato.get("residenza" + Integer.toString(i))));		
-			}
-			
-			usersUsernameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			usersEmailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-			usersNomeColumn.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
-			usersCognomeColumn.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
-			usersTelefonoColumn.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
-			usersResidenzaColumn.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
-			
-			usersTable.setItems(usersData);
-			
-		} else {
-			usersTable.getItems().clear();
-			usersTable.setPlaceholder(new Label("No Users Found"));
-		
-		}
+		TableManager.riempiTabellaUtenti(usersTable, "liberi");
 	}
 
 }

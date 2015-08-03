@@ -20,10 +20,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import layout.model.Auto;
-import layout.model.Cliente;
 import layout.model.Context;
 import layout.model.ContextMenu;
+import layout.model.entities.Auto;
+import layout.model.entities.Cliente;
 
 public class InserimentoContrattoController implements Initializable, ControlledScreen,InterStageCallBackListener {
 ScreensController myController;

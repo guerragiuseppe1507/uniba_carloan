@@ -1,9 +1,9 @@
-package layout.model;
+package layout.model.entities;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Utente {
+public class Utente implements Comparable<Utente>{
 	
 	private int id;
 	private StringProperty username;
@@ -13,6 +13,7 @@ public class Utente {
 	private StringProperty telefono;
 	private StringProperty residenza;
 	private Filiale filiale;
+	public static String[] properties = {"username", "email", "nome", "cognome", "telefono", "residenza"};
 	
 	public Utente(int id, String username, String email, String nome, 
 			String cognome, String telefono, String residenza){
@@ -46,12 +47,43 @@ public class Utente {
 	public String getTelefono()throws NullPointerException{return telefono.get();}
 	public String getResidenza()throws NullPointerException{return residenza.get();}
 	
-	public StringProperty usernameProperty(){return username;}
-	public StringProperty emailProperty()throws NullPointerException{return email;}
-	public StringProperty nomeProperty()throws NullPointerException{return nome;}
-	public StringProperty cognomeProperty()throws NullPointerException{return cognome;}
-	public StringProperty telefonoProperty()throws NullPointerException{return telefono;}
-	public StringProperty residenzaProperty()throws NullPointerException{return residenza;}
+	public StringProperty getProperty(String propertyName) throws NullPointerException{
+		
+		StringProperty wanted;
+		
+		switch (propertyName){
+			case("username"): 	
+				wanted = username;
+				break;
+			case("email"): 	
+				wanted = email;
+				break;
+			case("nome"): 	
+				wanted = nome;
+				break;
+			case("cognome"): 	
+				wanted = cognome;
+				break;
+			case("telefono"): 	
+				wanted = telefono;
+				break;
+			case("residenza"): 	
+				wanted = residenza;
+				break;
+			default:
+				wanted = null;
+				break;
+		}
+		
+		return wanted;
+		
+	}
 	
 	public Filiale getFiliale()throws NullPointerException{return filiale;}
+
+	@Override
+	public int compareTo(Utente other) {
+		return this.getUsername().compareTo(other.getUsername());
+	}
+	
 }

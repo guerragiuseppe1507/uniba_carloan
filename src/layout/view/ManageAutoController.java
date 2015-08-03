@@ -24,7 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import layout.model.Context;
 import layout.model.ContextMenu;
-import layout.model.Auto;
+import layout.model.entities.Auto;
 
 
 public class ManageAutoController implements Initializable, ControlledScreen{

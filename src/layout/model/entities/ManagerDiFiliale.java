@@ -1,4 +1,4 @@
-package layout.model;
+package layout.model.entities;
 
 public class ManagerDiFiliale extends Utente{
 

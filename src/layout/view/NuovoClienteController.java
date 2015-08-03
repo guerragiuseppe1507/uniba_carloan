@@ -19,7 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import layout.model.Context;
-import layout.model.Utente;
+import layout.model.entities.Utente;
 
 
 public class NuovoClienteController  implements Initializable, ControlledScreen {
@@ -50,16 +50,10 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 	 private TextField codiceFiscaleText;
 	 @FXML
 	 private TextField codicePatenteText;
-	
-	 @FXML
-	 private Label resultLabel;
 	 
 	 
 	 @Override
 	public void initialize(URL url, ResourceBundle rb){
-		 container.setPrefHeight(ScreensFramework.DEFAULT_HEIGHT);
-		 container.setPrefWidth(ScreensFramework.DEFAULT_WIDTH); 
-		 
 		 
 	}
 
@@ -121,7 +115,6 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 		risultato =	FrontController.request(comando, inputParam);
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
-			resultLabel.setText("QueryInserita");
 			InterStageEventsHandler.getInstance().getCaller().callBack();
 			myController.closeWinStage();
 		} else {

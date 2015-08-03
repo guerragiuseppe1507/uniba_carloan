@@ -1689,6 +1689,7 @@ public class DAO {
 				int pos = 0;
 				do{
 					
+					id = res.getString(SchemaDb.TAB_CONTRATTI+".id");
 					tipoKm = res.getString(SchemaDb.TAB_CONTRATTI+".tipo_km");
 					tariffa = res.getString(SchemaDb.TAB_CONTRATTI+".tariffa");
 					dataInizio=res.getString(SchemaDb.TAB_CONTRATTI+".data_inizio");
@@ -1703,6 +1704,7 @@ public class DAO {
 					filialeDiPartenza=res.getString(SchemaDb.TAB_CONTRATTI+".filiale_di_partenza");
 					filialeDiArrivo=res.getString(SchemaDb.TAB_CONTRATTI+".filiale_di_arrivo");
 					
+					risultato.put("id" + Integer.toString(pos), id);
 					risultato.put("tipoKm" + Integer.toString(pos), tipoKm);
 					risultato.put("modello" + Integer.toString(pos), modello);
 					risultato.put("tariffa" + Integer.toString(pos), tariffa);

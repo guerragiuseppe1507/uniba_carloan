@@ -21,10 +21,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import layout.model.Context;
 import layout.model.ContextMenu;
-import layout.model.DipendenteDiFiliale;
-import layout.model.Filiale;
-import layout.model.ManagerDiFiliale;
-import layout.model.Utente;
+import layout.model.TableManager;
+import layout.model.entities.DipendenteDiFiliale;
+import layout.model.entities.Filiale;
+import layout.model.entities.ManagerDiFiliale;
+import layout.model.entities.Utente;
 
 
 
@@ -42,40 +43,13 @@ ScreensController myController;
     private Label filiale;
 	
 	@FXML
-    private TableView<Utente> usersTable;
-    @FXML
-    private TableColumn<Utente, String>username;
-    @FXML
-    private TableColumn<Utente, String>email;
-    @FXML
-    private TableColumn<Utente, String>nome;
-    @FXML
-    private TableColumn<Utente, String>cognome;
-    @FXML
-    private TableColumn<Utente, String>telefono;
-    @FXML
-    private TableColumn<Utente, String>residenza;
-    
+    private TableView<Utente> usersTable;  
     
     @FXML
-    private TableView<DipendenteDiFiliale> dipendentTable;
-    @FXML
-    private TableColumn<DipendenteDiFiliale, String>usernameDipendent;
-    @FXML
-    private TableColumn<DipendenteDiFiliale, String>emailDipendent;
-    @FXML
-    private TableColumn<DipendenteDiFiliale, String>nomeDipendent;
-    @FXML
-    private TableColumn<DipendenteDiFiliale, String>cognomeDipendent;
-    @FXML
-    private TableColumn<DipendenteDiFiliale, String>telefonoDipendent;
-    @FXML
-    private TableColumn<DipendenteDiFiliale, String>residenzaDipendent;
-    
-    private ObservableList<Utente> usersData;
-    private ObservableList<DipendenteDiFiliale> employeeData;
+    private TableView<Utente> employeeTable;
+
     private Utente selectedUtente;
-    private DipendenteDiFiliale selectedDipendent;
+    private Utente selectedDipendent;
 
 
 
@@ -89,17 +63,14 @@ ScreensController myController;
 		
 		filiale.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		
-		usersData = FXCollections.observableArrayList();
-		employeeData = FXCollections.observableArrayList();
-		
-		riempiTabellaUtenti();
-		riempiTabellaDipendenti(Context.getInstance().getUtente().getFiliale());
+		TableManager.riempiTabellaUtenti(usersTable, "liberi");
+		TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
 		
-		dipendentTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> getDipendent(newValue));
+		employeeTable.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> getEmployee(newValue));
 
 	}
     
@@ -107,7 +78,7 @@ ScreensController myController;
 		selectedUtente = u;
 	}
 	
-	private void getDipendent(DipendenteDiFiliale u){
+	private void getEmployee(Utente u){
 		selectedDipendent = u;
 	}
     
@@ -117,95 +88,6 @@ ScreensController myController;
 		ContextMenu.showContextMenu(menu,myController);
 	}
 	
-	
-	private void riempiTabellaUtenti(){
-			
-			
-			
-			
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtentiLiberi"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		usersData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			
-		
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				usersData.add(new Utente(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)), 
-						risultato.get("email" + Integer.toString(i)), 
-						risultato.get("nome" + Integer.toString(i)), 
-						risultato.get("cognome" + Integer.toString(i)), 
-						risultato.get("telefono" + Integer.toString(i)), 
-						risultato.get("residenza" + Integer.toString(i))));
-				
-			}
-			
-			username.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			email.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-			nome.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
-			cognome.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
-			telefono.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
-			residenza.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
-			
-			usersTable.setItems(usersData);
-			
-		} else {
-			usersTable.getItems().clear();
-			usersTable.setPlaceholder(new Label("No Users Found"));
-		}
-	    
-	}
-	
-	private void riempiTabellaDipendenti(Filiale filiale){
-		
-		String idFiliale = Integer.toString(filiale.getId());
-		
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiUtenti"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("idFiliale", idFiliale);
-		
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		employeeData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			
-		
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				employeeData.add(new DipendenteDiFiliale(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)), 
-						risultato.get("email" + Integer.toString(i)), 
-						risultato.get("nome" + Integer.toString(i)), 
-						risultato.get("cognome" + Integer.toString(i)), 
-						risultato.get("telefono" + Integer.toString(i)), 
-						risultato.get("residenza" + Integer.toString(i))));
-				
-			}
-			
-			usernameDipendent.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-			emailDipendent.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-			nomeDipendent.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
-			cognomeDipendent.setCellValueFactory(cellData -> cellData.getValue().cognomeProperty());
-			telefonoDipendent.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
-			residenzaDipendent.setCellValueFactory(cellData -> cellData.getValue().residenzaProperty());
-			
-			dipendentTable.setItems(employeeData);
-			
-		} else {
-			dipendentTable.getItems().clear();
-			dipendentTable.setPlaceholder(new Label("No Employees Found"));
-		}
-		
-	}
 	
 	@FXML
 	public void handleAssunzione(){
@@ -217,8 +99,8 @@ ScreensController myController;
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			riempiTabellaUtenti();
-			riempiTabellaDipendenti(Context.getInstance().getUtente().getFiliale());
+			TableManager.riempiTabellaUtenti(usersTable, "liberi");
+			TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 		}else{
 			NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
 		}
@@ -235,8 +117,8 @@ ScreensController myController;
 		risultato =	FrontController.request(comando, inputParam);
 		
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			riempiTabellaUtenti();
-			riempiTabellaDipendenti(Context.getInstance().getUtente().getFiliale());
+			TableManager.riempiTabellaUtenti(usersTable, "liberi");
+			TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 		}else{
 			NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
 		}

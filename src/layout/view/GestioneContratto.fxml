@@ -22,22 +22,7 @@
                   <Insets left="60.0" />
                </padding>
             </Label>
-            <TableView fx:id="tableContratto" layoutX="117.0" layoutY="174.0" prefHeight="297.0" prefWidth="1019.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="144.0">
-               <columns>
-                  <TableColumn fx:id="tipoKm" prefWidth="75.0" text="tipo km" />
-                  <TableColumn fx:id="tariffa" prefWidth="75.0" text="tariffa" />
-                  <TableColumn fx:id="dataInizio" prefWidth="75.0" text="data inizio" />
-                  <TableColumn fx:id="dataLimite" prefWidth="75.0" text="data limite" />
-                  <TableColumn fx:id="dataRientro" prefWidth="75.0" text="data rientro" />
-                  <TableColumn fx:id="acconto" prefWidth="75.0" text="acconto" />
-                  <TableColumn fx:id="stato" prefWidth="75.0" text="stato" />
-                  <TableColumn fx:id="nomeCliente" prefWidth="75.0" text="cliente" />
-                  <TableColumn fx:id="nomeDipendente" prefWidth="96.0" text="dipendente" />
-                  <TableColumn fx:id="modello" prefWidth="73.0" text="modello" />
-                  <TableColumn fx:id="totPrezzo" prefWidth="83.0" text="tot prezzo" />
-                  <TableColumn fx:id="filialeDiPartenza" prefWidth="138.0" text="filiale di partenza" />
-                  <TableColumn fx:id="filialeDiArrivo" prefWidth="95.0" text="filiale di arrivo" />
-               </columns>
+            <TableView fx:id="contrattoTable" layoutX="117.0" layoutY="174.0" prefHeight="297.0" prefWidth="1019.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="144.0">
             </TableView>
             <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
          </children>

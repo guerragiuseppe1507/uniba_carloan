@@ -15,8 +15,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import layout.model.Context;
-import layout.model.Filiale;
-import layout.model.Utente;
+import layout.model.entities.Filiale;
+import layout.model.entities.Utente;
 
 public class LoginController implements Initializable, ControlledScreen{
 	

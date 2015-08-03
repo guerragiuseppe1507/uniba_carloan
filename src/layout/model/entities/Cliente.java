@@ -1,4 +1,4 @@
-package layout.model;
+package layout.model.entities;
 
 import java.util.Comparator;
 

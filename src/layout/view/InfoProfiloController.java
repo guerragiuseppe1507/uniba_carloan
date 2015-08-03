@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 
 
 
+
 import presentationTier.FrontController;
 import util.NotificationManager;
 import util.ResultKeys;
@@ -26,7 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import layout.model.Context;
 import layout.model.ContextMenu;
-import layout.model.Utente;
+import layout.model.entities.Utente;
 
 
 public class InfoProfiloController implements Initializable, ControlledScreen {

@@ -1,5 +1,7 @@
 package layout.model;
 
+import layout.model.entities.Utente;
+
 /*Questa classe implementa il pattern Singleton e permette l'istanziazione privata dei campi
  * Email e Competizione, con i relativi accessi al loro contenuto. E' stato necessario
  * implementare questa classe per permettere a più schermate della gui di condividere e 

@@ -53,8 +53,6 @@
              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
-               <TextField fx:id="nuovaTarga" GridPane.columnIndex="1" />
-               <Label text="Targa :" />
                <Label text="Fascia : " GridPane.columnIndex="2">
                   <GridPane.margin>
                      <Insets left="20.0" />
@@ -63,10 +61,12 @@
                   <GridPane.margin>
                      <Insets left="20.0" />
                   </GridPane.margin></Label>
-               <Label text="Provenienza :" GridPane.rowIndex="1" />
-               <ComboBox fx:id="scegliProvenienza" prefHeight="31.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               <Label text="Provenienza :" />
+               <ComboBox fx:id="scegliProvenienza" prefHeight="31.0" prefWidth="214.0" GridPane.columnIndex="1" />
                <ComboBox fx:id="scegliFascia" prefHeight="31.0" prefWidth="231.0" GridPane.columnIndex="3" />
                <ComboBox fx:id="scegliModello" prefHeight="31.0" prefWidth="250.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+               <TextField fx:id="nuovaTarga" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               <Label text="Targa :" GridPane.rowIndex="1" />
             </children>
          </GridPane>
          <Button layoutX="841.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleInserisciAuto" prefHeight="77.0" prefWidth="278.0" text="Inserisci Auto" />
@@ -82,12 +82,12 @@
          <Label fx:id="filialeNonDisp" layoutX="657.0" layoutY="220.0" text="Filiale" textFill="#00000080" />
          <ComboBox fx:id="scegliStatusDaDispon" layoutX="40.0" layoutY="541.0" prefHeight="39.0" prefWidth="253.0" />
          <ComboBox fx:id="scegliStatusDaNonDispon" layoutX="678.0" layoutY="541.0" prefHeight="39.0" prefWidth="253.0" />
-         <Label layoutX="321.0" layoutY="75.0" text="Esempio :" textFill="#00000080">
+         <Label layoutX="328.0" layoutY="167.0" text="Esempio :" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
          </Label>
-         <Label fx:id="examplePlate" layoutX="376.0" layoutY="75.0" text="[scegli provenienza]" textFill="#00000080">
+         <Label fx:id="examplePlate" layoutX="383.0" layoutY="167.0" text="[scegli provenienza]" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>

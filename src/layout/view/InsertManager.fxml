@@ -19,14 +19,6 @@
 	         </columnResizePolicy>
 	      </TableView>
 	      <TableView fx:id="usersTable" layoutX="54.0" layoutY="430.0" prefHeight="258.0" prefWidth="766.0">
-	        <columns>
-	          <TableColumn fx:id="usersUsernameColumn" prefWidth="75.0" text="Username" />
-	          <TableColumn fx:id="usersEmailColumn" prefWidth="75.0" text="E-mail" />
-	            <TableColumn fx:id="usersNomeColumn" prefWidth="75.0" text="Nome" />
-	            <TableColumn fx:id="usersCognomeColumn" prefWidth="75.0" text="Cognome" />
-	            <TableColumn fx:id="usersTelefonoColumn" prefWidth="75.0" text="Telefono" />
-	            <TableColumn fx:id="usersResidenzaColumn" prefWidth="75.0" text="Residenza" />
-	        </columns>
 	         <columnResizePolicy>
 	            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 	         </columnResizePolicy>
