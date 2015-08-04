@@ -38,27 +38,14 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 	
 	@FXML
     private TableView<Utente> usersTable;
-    
+   
     @FXML
     private TableView<Filiale> filialiTable;
-    @FXML
-    private TableColumn<Filiale, String> filialiNomeColumn;
-    @FXML
-    private TableColumn<Filiale, String> filialiLuogoColumn;
-    @FXML
-    private TableColumn<Filiale, String> filialiTelefonoColumn;
     
     @FXML
     private TableView<ManagerDiFiliale> managerDiFilialeTable;
-    @FXML
-    private TableColumn<ManagerDiFiliale, String> managerDiFilialeNomeMColumn;
-    @FXML
-    private TableColumn<ManagerDiFiliale, String> managerDiFilialeNomeFColumn;
 	
     private ArrayList<ManagerDiFiliale> managersDiFiliale;
-    private ObservableList<ManagerDiFiliale> managerDiFilialeData;
-	private ObservableList<Utente> usersData;
-	private ObservableList<Filiale> filialiData;
 	
 	private Filiale selectedFiliale;
 	private Utente selectedUtente;
@@ -72,16 +59,16 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
 		managersDiFiliale = new ArrayList<ManagerDiFiliale>();
-		managerDiFilialeData = FXCollections.observableArrayList();
-		usersData = FXCollections.observableArrayList();
-		filialiData = FXCollections.observableArrayList();
 		
 		riempiTabellaManager();
 		
 		riempiTabellaFiliali();
 		
 		filialiTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> TableManager.riempiTabellaUtenti(usersTable, "filiale",Integer.toString(newValue.getId())));
+	            (observable, oldValue, newValue) -> {
+	            	selectedFiliale = newValue;
+	            	riempiTabellaUtenti(Integer.toString(newValue.getId()));
+	            	});
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
@@ -91,6 +78,29 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 	public void setScreenParent(ScreensController screenParent){
 		myController = screenParent;
 		ContextMenu.showContextMenu(menu,myController);
+	}
+	
+	
+	private void riempiTabellaManager(){
+		
+		managersDiFiliale = TableManager.riempiTabellaManager(managerDiFilialeTable);
+		
+	}
+	
+	private void riempiTabellaFiliali(){
+		
+		TableManager.riempiTabellaFiliali(filialiTable);
+		
+	}
+	
+	private void riempiTabellaUtenti(String idFiliale){
+		
+		TableManager.riempiTabellaUtenti(usersTable, "filiale",idFiliale);
+		
+	}
+	
+	private void getUser(Utente u){
+		selectedUtente = u;
 	}
 	
 	@FXML
@@ -125,6 +135,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 			}
 			
 		}catch(NullPointerException e){
+			e.printStackTrace();
 			NotificationManager.setWarning("Utente non selezionato");
 		}
 		
@@ -140,83 +151,10 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
 			riempiTabellaManager();
-			TableManager.riempiTabellaUtenti(usersTable, "filiale",Integer.toString(selectedFiliale.getId()));
+			riempiTabellaUtenti(Integer.toString(idFiliale));
 		}
 		
 	}
-	
-	private void getUser(Utente u){
-		selectedUtente = u;
-	}
-	
-	private void riempiTabellaManager(){
-		
-		String[] comando = new String[]{"businessTier.GestioneUtenti", "recuperoDatiManagerDiFiliale"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		managerDiFilialeData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				ManagerDiFiliale tmp = new ManagerDiFiliale(Integer.parseInt(risultato.get("id_utente" + Integer.toString(i))),
-						risultato.get("username" + Integer.toString(i)));
-				tmp.setFiliale(new Filiale(Integer.parseInt(risultato.get("id_filiale" + Integer.toString(i))),
-						risultato.get("nome" + Integer.toString(i))));
-				managerDiFilialeData.add(tmp); 
-				managersDiFiliale.add(tmp);				
-			}
-			
-			managerDiFilialeNomeMColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty("username"));
-			managerDiFilialeNomeFColumn.setCellValueFactory(cellData -> cellData.getValue().getFiliale().nomeProperty());
-			
-			managerDiFilialeTable.setItems(managerDiFilialeData);
-			managerDiFilialeTable.setSelectionModel(null);
-			
-		} else {
-			
-			managerDiFilialeTable.setPlaceholder(new Label("No Managers Found"));
-			
-		}
-		
-	}
-	
-	private void riempiTabellaFiliali(){
-		
-		String[] comando = new String[]{"businessTier.GestioneFiliali", "recuperoDatiFiliali"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				filialiData.add(new Filiale(Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("nome" + Integer.toString(i)), 
-						risultato.get("luogo" + Integer.toString(i)), 
-						risultato.get("telefono" + Integer.toString(i))) 
-				); 
-				
-			}
-			
-			filialiNomeColumn.setCellValueFactory(cellData -> cellData.getValue().nomeProperty());
-			filialiLuogoColumn.setCellValueFactory(cellData -> cellData.getValue().luogoProperty());
-			filialiTelefonoColumn.setCellValueFactory(cellData -> cellData.getValue().telefonoProperty());
-			
-			filialiTable.setItems(filialiData);
-			
-		} else {
-			
-			filialiTable.setPlaceholder(new Label("No Filiali Found"));
-			
-		}
-		
-	}
-	
 	
 	@FXML
 	public void caricaUtentiLiberiHandler(){

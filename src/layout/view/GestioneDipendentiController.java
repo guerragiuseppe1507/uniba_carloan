@@ -63,8 +63,8 @@ ScreensController myController;
 		
 		filiale.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		
-		TableManager.riempiTabellaUtenti(usersTable, "liberi");
-		TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+		riempiTabUtentiLiberi();
+		riempiTabDipendenti();
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
@@ -73,6 +73,14 @@ ScreensController myController;
 	            (observable, oldValue, newValue) -> getEmployee(newValue));
 
 	}
+    
+    private void riempiTabUtentiLiberi(){
+    	TableManager.riempiTabellaUtenti(usersTable, "liberi");
+    }
+    
+    private void riempiTabDipendenti(){
+    	TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+    }
     
 	private void getUser(Utente u){
 		selectedUtente = u;
@@ -99,8 +107,8 @@ ScreensController myController;
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			TableManager.riempiTabellaUtenti(usersTable, "liberi");
-			TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+			riempiTabUtentiLiberi();
+			riempiTabDipendenti();
 		}else{
 			NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
 		}
@@ -117,11 +125,13 @@ ScreensController myController;
 		risultato =	FrontController.request(comando, inputParam);
 		
 		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			TableManager.riempiTabellaUtenti(usersTable, "liberi");
-			TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+			riempiTabUtentiLiberi();
+			riempiTabDipendenti();
 		}else{
 			NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
 		}
 		
 	}
 }
+
+

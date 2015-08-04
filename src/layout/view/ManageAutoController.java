@@ -24,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import layout.model.Context;
 import layout.model.ContextMenu;
+import layout.model.TableManager;
 import layout.model.entities.Auto;
 
 
@@ -60,18 +61,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	 private TableView<Auto> autoTableNonDisp;
 	@FXML
-	private TableColumn<Auto, String> modelloNonDisp;
-	@FXML
-	private TableColumn<Auto, String> targaNonDisp;
-	@FXML
-	private TableColumn<Auto, String> statusNonDisp;
-	@FXML
-	private TableColumn<Auto, String> chilometraggioNonDisp;
-	@FXML
-	private TableColumn<Auto, String> fasceNonDisp;	
-	@FXML
-	private TableColumn<Auto, String> provenienzaNonDisp;
-	@FXML
 	private ComboBox<String> scegliStatusDaNonDispon;
 	@FXML
 	private TextField nuovaTargaAutoNonDisp;
@@ -81,18 +70,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	//Sezione auto disponibili
 	@FXML
 	 private TableView<Auto> autoTable;
-	@FXML
-	private TableColumn<Auto, String> modello;
-	@FXML
-	private TableColumn<Auto, String> targa;
-	@FXML
-	private TableColumn<Auto, String> status;
-	@FXML
-	private TableColumn<Auto, String> chilometraggio;
-	@FXML
-	private TableColumn<Auto, String> fasce;	
-	@FXML
-	private TableColumn<Auto, String> provenienza;
 	@FXML
 	private ComboBox<String> scegliStatusDaDispon;
 	@FXML
@@ -279,92 +256,15 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	
 	
 	private void riempiTabellaAuto(){
-		
-		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("disponibilita", "disponibile");
-		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		autoData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				autoData.add(new Auto(
-						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("modello" + Integer.toString(i)),
-						risultato.get("nome_filiale" + Integer.toString(i)), 
-						risultato.get("status" + Integer.toString(i)),
-						risultato.get("targa"+Integer.toString(i)),
-						risultato.get("chilometraggio" + Integer.toString(i)),
-						risultato.get("fasce" + Integer.toString(i)),
-						risultato.get("provenienza" + Integer.toString(i)))
-				); 
-				
-			}
-			
-			modello.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
-			status.setCellValueFactory(cellData->cellData.getValue().statusProperty());
-			chilometraggio.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
-			targa.setCellValueFactory(cellData->cellData.getValue().targaProperty());
-			fasce.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
-			provenienza.setCellValueFactory(cellData->cellData.getValue().provenienzaProperty());
-			
-			autoTable.setItems(autoData);
-			
-		} else {
-			
-			autoTable.setPlaceholder(new Label("No Auto Found"));
-			
-		}
+		TableManager.riempiTabellaAuto(autoTable,
+				Integer.toString(Context.getInstance().getUtente().getFiliale().getId()),"disponibile");
 		
 	}
 	
 	private void riempiTabellaAutoNonDisp(){
 		
-		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("disponibilita", "non_disponibile");
-		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		autoData = FXCollections.observableArrayList();
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				autoData.add(new Auto(
-						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("modello" + Integer.toString(i)),
-						risultato.get("nome_filiale" + Integer.toString(i)), 
-						risultato.get("status" + Integer.toString(i)),
-						risultato.get("targa"+Integer.toString(i)),
-						risultato.get("chilometraggio" + Integer.toString(i)),
-						risultato.get("fasce" + Integer.toString(i)),
-						risultato.get("provenienza" + Integer.toString(i)))
-				); 
-				
-			}
-			
-			modelloNonDisp.setCellValueFactory(cellData->cellData.getValue().modelloProperty());
-			statusNonDisp.setCellValueFactory(cellData->cellData.getValue().statusProperty());
-			chilometraggioNonDisp.setCellValueFactory(cellData->cellData.getValue().chilometraggioProperty());
-			targaNonDisp.setCellValueFactory(cellData->cellData.getValue().targaProperty());
-			fasceNonDisp.setCellValueFactory(cellData->cellData.getValue().fasceProperty());
-			provenienzaNonDisp.setCellValueFactory(cellData->cellData.getValue().provenienzaProperty());
-			
-			autoTableNonDisp.setItems(autoData);
-			
-		} else {
-			
-			autoTable.setPlaceholder(new Label("No Auto Found"));
-			
-		}
+		TableManager.riempiTabellaAuto(autoTableNonDisp,
+				Integer.toString(Context.getInstance().getUtente().getFiliale().getId()),"non_disponibile");
 		
 	}
 	

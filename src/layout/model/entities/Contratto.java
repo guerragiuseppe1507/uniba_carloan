@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 
 
 
-public class Contratto {
+public class Contratto implements Comparable<Contratto>{
 	
 	private int id;
 	private StringProperty tipoKm;
@@ -22,6 +22,8 @@ public class Contratto {
 	private StringProperty totPrezzo;
 	private StringProperty filialeDiPartenza;
 	private StringProperty filialeDiArrivo;
+	public static final String[] POSSIBILE_CHILOMETRAGGIO = {"LIMITATO", "ILLIMITATO"};
+	public static final String[] POSSIBILE_TARIFFA = {"GIORNALIERA", "SETTIMANALE"};
 	public static String[] properties = {"tipoKm", "tariffa", "dataInizio", "dataLimite", "dataRientro", "acconto"
 		, "stato", "nomeCliente", "nomeDipendente", "modello", "totPrezzo", "filialeDiPartenza", "filialeDiArrivo"};
 
@@ -49,20 +51,20 @@ public class Contratto {
 	}
 	
 	
-	public int Id(){return id;}
-	public String tipoKm(){return tipoKm.get();}
-	public String tariffa(){return tariffa.get();}
-	public String dataInizio(){return dataInizio.get();}
-	public String dataLimite(){return dataLimite.get();}
-	public String dataRientro(){return dataRientro.get();} 
-	public String acconto(){ return acconto.get();}
-	public String stato(){return stato.get();}
-	public String nomeCliente(){return nomeCliente.get();}
-	public String nomeDipendente(){ return nomeDipendente.get();}
-	public String modello(){ return modello.get();}
-	public String totPrezzo(){return totPrezzo.get();};
-	public String filialeDiPartenza(){return filialeDiPartenza.get();}
-	public String filialeDiArrivo(){return filialeDiArrivo.get();}
+	public int getId(){return id;}
+	public String getTipoKm(){return tipoKm.get();}
+	public String getTariffa(){return tariffa.get();}
+	public String getDataInizio(){return dataInizio.get();}
+	public String getDataLimite(){return dataLimite.get();}
+	public String getDataRientro(){return dataRientro.get();} 
+	public String getAcconto(){ return acconto.get();}
+	public String getStato(){return stato.get();}
+	public String getNomeCliente(){return nomeCliente.get();}
+	public String getNomeDipendente(){ return nomeDipendente.get();}
+	public String getModello(){ return modello.get();}
+	public String getTotPrezzo(){return totPrezzo.get();};
+	public String getFilialeDiPartenza(){return filialeDiPartenza.get();}
+	public String getFilialeDiArrivo(){return filialeDiArrivo.get();}
 	
 	public StringProperty getProperty(String propertyName){
 		
@@ -115,6 +117,12 @@ public class Contratto {
 		
 		return wanted;
 		
+
+	}
+	
+	@Override
+	public int compareTo(Contratto other) {
+		return this.getDataInizio().compareTo(other.getDataInizio());
 	}
 	
 }	

@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Auto {
+public class Auto implements Comparable<Auto>{
 	
 	private int id;
 	private StringProperty modello;
@@ -18,6 +18,7 @@ public class Auto {
 	private StringProperty targa;
 	private StringProperty provenienza;
 	public static final String[] POSSIBILE_STATUS = {"DISPONIBILE", "MANUTENZIONE", "NOLEGGIATA", "ROTTAMAZIONE", "VENDUTA"};
+	public static String[] properties = {"modello", "nomeFiliale", "chilometraggio", "status", "fasce", "targa", "provenienza"};
 	
 	public Auto(int id, String modello, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
 		
@@ -42,13 +43,45 @@ public class Auto {
 	public String getTarga(){return targa.get();}
 	public String getProvenienza(){return provenienza.get();}
 	
-	public StringProperty modelloProperty(){return modello;}
-	public StringProperty nomeFilialeProperty(){return nomeFiliale;}
-	public StringProperty chilometraggioProperty(){return chilometraggio;}
-	public StringProperty statusProperty(){return status;}
-	public StringProperty fasceProperty(){return fasce;}
-	public StringProperty targaProperty(){return targa;}
-	public StringProperty provenienzaProperty(){return provenienza;}
+	public StringProperty getProperty(String propertyName) throws NullPointerException{
+		
+		StringProperty wanted;
+		
+		switch (propertyName){
+			case("modello"): 	
+				wanted = modello;
+				break;
+			case("nomeFiliale"): 	
+				wanted = nomeFiliale;
+				break;
+			case("chilometraggio"): 	
+				wanted = chilometraggio;
+				break;
+			case("status"): 	
+				wanted = status;
+				break;
+			case("fasce"): 	
+				wanted = fasce;
+				break;
+			case("targa"): 	
+				wanted = targa;
+				break;
+			case("provenienza"): 	
+				wanted = provenienza;
+				break;
+			default:
+				wanted = null;
+				break;
+		}
+		
+		return wanted;
+		
+	}
+
+	@Override
+	public int compareTo(Auto other) {
+		return this.getTarga().compareTo(other.getTarga());
+	}
 
 
 }

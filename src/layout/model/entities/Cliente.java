@@ -14,7 +14,7 @@ public class Cliente implements Comparable<Cliente> {
 	private StringProperty residenza;
 	private StringProperty codiceFiscale;
 	private StringProperty codicePatente;
-	
+	public static String[] properties = {"nome", "cognome", "email", "residenza", "dataDiNascita", "codiceFiscale", "codicePatente"};
 	
 	
 	public Cliente(int id, String Nome, String Cognome, String Email,String Data_Di_Nascita, String Residenza, String codice_fiscale, String codice_patente){
@@ -38,15 +38,40 @@ public class Cliente implements Comparable<Cliente> {
 	public String getCodiceFiscale(){return codiceFiscale.get();}
 	public String getCodicePatente(){return codicePatente.get();}
 	
-	
-	public StringProperty nomeProperty(){return nome;}
-	public StringProperty cognomeProperty(){return cognome;}
-	public StringProperty emailProperty(){return email;}
-	public StringProperty residenzaProperty(){return residenza;}
-	public StringProperty dataDiNascitaProperty(){return dataDiNascita;}
-	public StringProperty codiceFiscaleProperty(){return codiceFiscale;}
-	public StringProperty codicePatenteProperty(){return codicePatente;}
-
+	public StringProperty getProperty(String propertyName) throws NullPointerException{
+		
+		StringProperty wanted;
+		
+		switch (propertyName){
+			case("nome"): 	
+				wanted = nome;
+				break;
+			case("cognome"): 	
+				wanted = cognome;
+				break;
+			case("email"): 	
+				wanted = email;
+				break;
+			case("residenza"): 	
+				wanted = residenza;
+				break;
+			case("dataDiNascita"): 	
+				wanted = dataDiNascita;
+				break;
+			case("codiceFiscale"): 	
+				wanted = codiceFiscale;
+				break;
+			case("codicePatente"): 	
+				wanted = codicePatente;
+				break;
+			default:
+				wanted = null;
+				break;
+		}
+		
+		return wanted;
+		
+	}
 
 	@Override
 	public int compareTo(Cliente other) {
