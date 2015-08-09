@@ -177,7 +177,6 @@ public class TableManager {
 		
 	}
 	
-	
 	public static void riempiTabellaAuto(TableView<Auto> autoTable,String filiale, String... filter){
 		
 		ObservableList<Auto> autoData = FXCollections.observableArrayList();

@@ -1843,11 +1843,34 @@ public HashMap<String, String> inserisciCliente(HashMap<String,String> inputPara
 		return risultato;
 
 	}
+
+
+
+
+public HashMap<String, String> deleteAuto(HashMap<String,String> inputParam){
 	
+	HashMap<String, String> risultato = new HashMap<String, String>();
+	risultato = connetti();
+	if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 	
+	String deleteAuto= "DELETE FROM " +SchemaDb.TAB_AUTO + " WHERE id = ?";
+
+	try {
+		PreparedStatement istruzione = connessione.prepareStatement(deleteAuto);
+		istruzione.setString(1, inputParam.get("ida"));		
+		istruzione.execute();
+		
+		risultato.put(util.ResultKeys.ESITO, "true");
+
+	} catch (SQLException e){
+		e.printStackTrace();
+		risultato.put(util.ResultKeys.ESITO, "false");
+		risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+	}
 	
-	
-	
+	return risultato;
+
+}
 	
 	
 	

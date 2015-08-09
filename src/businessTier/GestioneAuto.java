@@ -45,7 +45,17 @@ public class GestioneAuto {
 		return risultato;
 	}
 		
-	
+	public HashMap<String, String> cancellaAuto(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		/* Accede al database per controllare che l'auto sia presente nel sistema
+		 * e che le credenziali di accesso al sistema siano corrette.
+		 */
+		DAO dao = new DAO();
+		risultato = dao.deleteAuto(inputParam);	
+		return risultato;
+	}
 	
 	
 }

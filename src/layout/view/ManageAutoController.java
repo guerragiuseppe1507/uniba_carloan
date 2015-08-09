@@ -1,10 +1,13 @@
 package layout.view;
 
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dataAccess.SchemaDb;
 import presentationTier.FrontController;
 import util.CountryManager;
 import util.NotificationManager;
@@ -26,6 +29,7 @@ import layout.model.Context;
 import layout.model.ContextMenu;
 import layout.model.TableManager;
 import layout.model.entities.Auto;
+import layout.model.entities.ManagerDiFiliale;
 
 
 public class ManageAutoController implements Initializable, ControlledScreen{
@@ -284,7 +288,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		
 	}
 	@FXML
-	private void handleCanbiaStatusAutoDisp() {
+	private void handleCambiaStatusAutoDisp() {
 		if (autoDispScelta == null){
 			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
 		}else if(statusSceltoDaDisp == null){
@@ -306,7 +310,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		}
 	}
 	@FXML
-	private void handleCanbiaStatusAutoNonDisp() {
+	private void handleCambiaStatusAutoNonDisp() {
 		if (autoNonDispScelta == null){
 			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
 		}else if(statusSceltoDaNonDisp == null){
@@ -331,7 +335,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 
 	}
 	@FXML
-	private void handleCanbiaTargaAutoNonDisp() {
+	private void handleCambiaTargaAutoNonDisp() {
 			
 		if(nuovaTargaAutoNonDisp.getText().equals("")){
 			NotificationManager.setWarning("Inserisci Una Targa.");
@@ -347,7 +351,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	}
 	
 	@FXML
-	private void handleCanbiaTargaAutoDisp() {
+	private void handleCambiaTargaAutoDisp() {
 		if(nuovaTargaAutoDisp.getText().equals("")){
 			NotificationManager.setWarning("Inserisci Una Targa.");
 		}else if(autoDispScelta == null){
@@ -365,15 +369,20 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	}
 	
 	private void queryCancellaAuto(int idAuto){
-		System.out.println("OK");
-	}
+		String[] comando = new String[]{"businessTier.GestioneAuto", "cancellaAuto"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("ida", Integer.toString(idAuto));
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		risultato =	FrontController.request(comando, inputParam);
+		
+		}
 	
 	private void queryInsertAuto(String targa, String nazione, String modello){
 		System.out.println("OK");
 	}
 	
-	private void queryModificaStatus(int idAuto){
+	private void queryModificaStatus(int id){
 		System.out.println("OK");
 	}
-	
 }
