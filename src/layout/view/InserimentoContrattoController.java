@@ -178,7 +178,7 @@ ScreensController myController;
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
 				filialiData.add(
-						risultato.get("nome" + Integer.toString(i))
+						risultato.get("id" + Integer.toString(i))
 				); 
 				
 			}

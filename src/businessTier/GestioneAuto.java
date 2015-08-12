@@ -49,13 +49,47 @@ public class GestioneAuto {
 		
 		HashMap<String, String> risultato = new HashMap<>();
 		
-		/* Accede al database per controllare che l'auto sia presente nel sistema
-		 * e che le credenziali di accesso al sistema siano corrette.
+		/* Accede al database per eliminare un auto tra quelle disponibili
 		 */
 		DAO dao = new DAO();
 		risultato = dao.deleteAuto(inputParam);	
 		return risultato;
 	}
+	
+	public HashMap<String, String> modificaStatus(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		/* Accede al database per modificae lo status di un auto a scelta tra quelle disponibili
+		 */
+		DAO dao = new DAO();
+		risultato = dao.changeStatus(inputParam);	
+		return risultato;
+	}
+	
+	
+public HashMap<String, String> modificaTarga(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		// Accede al database per modificare la targa di un auto a scelta tra quelle disponibili
+		 
+		DAO dao = new DAO();
+		risultato = dao.changeTarga(inputParam);	
+		return risultato;
+	}
+	
+public HashMap<String, String> inserisciAuto(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		// Accede al database per modificaRe lo status di un auto a scelta tra quelle disponibili
+	
+		DAO dao = new DAO();
+		risultato = dao.insertAuto(inputParam);	
+		return risultato;
+	}
+	
 	
 	
 }

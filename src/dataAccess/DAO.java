@@ -1857,7 +1857,7 @@ public HashMap<String, String> deleteAuto(HashMap<String,String> inputParam){
 
 	try {
 		PreparedStatement istruzione = connessione.prepareStatement(deleteAuto);
-		istruzione.setString(1, inputParam.get("ida"));		
+		istruzione.setString(1, inputParam.get("autoCanc"));		
 		istruzione.execute();
 		
 		risultato.put(util.ResultKeys.ESITO, "true");
@@ -1872,11 +1872,90 @@ public HashMap<String, String> deleteAuto(HashMap<String,String> inputParam){
 
 }
 	
+public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
+	
+	HashMap<String, String> risultato = new HashMap<String, String>();
+	risultato = connetti();
+	if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+	
+	String updateStatus="UPDATE "+ SchemaDb.TAB_AUTO
+			+" SET status = ? WHERE id = ?";
+
+	try {
+		PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
+		istruzione.setString(1, inputParam.get("upStatus"));
+		istruzione.setString(2, inputParam.get("idStatus"));
+		istruzione.execute();
+		
+		risultato.put(util.ResultKeys.ESITO, "true");
+
+	} catch (SQLException e){
+		e.printStackTrace();
+		risultato.put(util.ResultKeys.ESITO, "false");
+		risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+	}
+	
+	return risultato;
+}
+	
+	public HashMap<String, String> insertAuto(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String newAuto="INSERT INTO"+SchemaDb.TAB_AUTO+" (id, id_modello, targa, id_filiale, status,chilometraggio, provenienza) VALUES (NULL, ?,?, ?, ?, 0, ITALIA)";
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(newAuto);
+			
+			istruzione.setString(2, takeIdModello(inputParam));
+			istruzione.setString(3, inputParam.get("targa"));
+			istruzione.setString(4, takeIdFiliale(inputParam));
+			istruzione.setString(5, inputParam.get("status"));
+			istruzione.setString(6, inputParam.get("Provenienza"));
+			istruzione.execute();
+			
+			risultato.put(util.ResultKeys.ESITO, "true");
+
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+
+
+}	
 	
 	
 	
-	
-	
+	public HashMap<String, String> changeTarga(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String updateStatus="UPDATE "+ SchemaDb.TAB_AUTO
+				+" SET targa = ? WHERE id = ?";
+
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
+			istruzione.setString(1, inputParam.get("upTarga"));
+			istruzione.setString(2, inputParam.get("idTarga"));
+			istruzione.execute();
+			
+			risultato.put(util.ResultKeys.ESITO, "true");
+
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+	}
 	
 	
 	
