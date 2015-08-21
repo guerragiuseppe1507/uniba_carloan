@@ -18,7 +18,7 @@
               <items>
                   <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="730.0" minWidth="730.0" prefWidth="730.0" SplitPane.resizableWithParent="false">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="888.0" prefWidth="730.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="860.0" prefWidth="730.0">
                            <children>
                               <Text layoutX="35.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Clienti" wrappingWidth="90.13671875">
                                  <font>
@@ -39,7 +39,7 @@
                               </TableView>
                               <Button fx:id="newClient" layoutX="505.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleNewClient" prefHeight="31.0" prefWidth="161.0" text="Inserisci Cliente" />
                               <Line endX="530.0" layoutX="136.0" layoutY="73.0" startX="-100.0" />
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="177.0" layoutX="35.0" layoutY="653.0" stroke="BLACK" strokeType="INSIDE" width="632.0" />
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="140.0" layoutX="35.0" layoutY="653.0" stroke="BLACK" strokeType="INSIDE" width="632.0" />
                               <GridPane layoutX="44.0" layoutY="660.0" prefHeight="167.0" prefWidth="608.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="129.0" />
@@ -50,18 +50,16 @@
                                  <rowConstraints>
                                     <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
                                     <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
                                     <TextField fx:id="inserisciAcconto" onKeyReleased="#onActionAcconto" prefHeight="31.0" prefWidth="113.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                     <ComboBox fx:id="scegliFiliale" onAction="#onActionFiliale" prefHeight="31.0" prefWidth="211.0" GridPane.columnIndex="3" />
-                                    <ComboBox fx:id="scegliChilometraggio" onAction="#onActionChilometraggio" prefWidth="150.0" GridPane.columnIndex="1" />
-                                    <ComboBox fx:id="scegliTariffa" onAction="#onActionTariffa" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa" GridPane.rowIndex="1" />
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio" />
+                                    <ComboBox fx:id="scegliChilometraggio" onAction="#onActionChilometraggio" prefWidth="150.0" GridPane.columnIndex="1"  GridPane.rowIndex="1"/>
+                                    <ComboBox fx:id="scegliTariffa" onAction="#onActionTariffa" prefWidth="150.0" GridPane.columnIndex="1" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa"  />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio" GridPane.rowIndex="1"/>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" GridPane.columnIndex="2" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                    <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="203.0" text="Inserisci Contratto" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                  </children>
                                  <effect>
                                     <ColorAdjust />
@@ -72,37 +70,44 @@
                         </AnchorPane>
                     </content>
                   </ScrollPane>
-                <AnchorPane prefHeight="720.0" prefWidth="1280.0">
+                <AnchorPane prefHeight="740.0" prefWidth="1280.0">
                      <children>
-                        <Text layoutX="18.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Riepilog Contratto">
+                        <Text layoutX="166.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Riepilogo Contratto">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Text>
-                        <Text layoutX="15.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio" />
-                        <Text layoutX="18.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa" />
-                        <Text layoutX="18.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fascia Auto" />
-                        <Text layoutX="18.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modello" />
-                        <Text layoutX="18.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Targa" />
-                        <Text layoutX="15.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Partenza" />
-                        <Text layoutX="16.0" layoutY="483.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" />
-                        <Text layoutX="18.0" layoutY="546.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" />
-                        <Text layoutX="18.0" layoutY="607.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Chilometraggio " />
-                        <Text layoutX="18.0" layoutY="663.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Giornaliero" wrappingWidth="108.18161010742188" />
-                        <Text layoutX="22.0" layoutY="711.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prezzo Fascia" wrappingWidth="78.18161010742188" />
-                        <Text layoutX="15.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Stipulazione" />
-                        <Label fx:id="chilometraggioLabel" layoutX="213.0" layoutY="61.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="modelloLabel" layoutX="213.0" layoutY="216.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="fasciaLabel" layoutX="213.0" layoutY="156.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="tariffaLabel" layoutX="215.0" layoutY="106.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="targaLabel" layoutX="213.0" layoutY="271.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="dataInizioLabel" layoutX="213.0" layoutY="340.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="filialeDiPartenzaLabel" layoutX="213.0" layoutY="400.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="filialeDiArrivoLabel" layoutX="213.0" layoutY="470.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="accontoLabel" layoutX="213.0" layoutY="533.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="chilometraggioLabel" layoutX="213.0" layoutY="594.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="prezzoTariffaLabel" layoutX="213.0" layoutY="650.0" prefHeight="17.0" prefWidth="78.0" />
-                        <Label fx:id="prezzoFasciaLabel" layoutX="215.0" layoutY="698.0" prefHeight="17.0" prefWidth="78.0" />
+                        <Text layoutX="57.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio" />
+                        <Text layoutX="57.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa" />
+                        <Text layoutX="58.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fascia Auto" />
+                        <Text layoutX="58.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modello" />
+                        <Text layoutX="57.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Targa" />
+                        <Text layoutX="57.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Partenza" />
+                        <Text layoutX="57.0" layoutY="397.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" />
+                        <Text layoutX="58.0" layoutY="532.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" />
+                        <Text layoutX="57.0" layoutY="349.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Stipulazione" />
+                        <Label fx:id="chilometraggioLabel" layoutX="358.0" layoutY="165.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="modelloLabel" layoutX="356.0" layoutY="263.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="fasciaLabel" layoutX="356.0" layoutY="239.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="tariffaLabel" layoutX="357.0" layoutY="189.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="targaLabel" layoutX="356.0" layoutY="287.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="dataInizioLabel" layoutX="358.0" layoutY="336.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="filialeDiPartenzaLabel" layoutX="358.0" layoutY="360.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="filialeDiArrivoLabel" layoutX="357.0" layoutY="384.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="accontoLabel" layoutX="356.0" layoutY="519.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Text fx:id="tariffaBaseText" layoutX="58.0" layoutY="446.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Text fx:id="costoText" layoutX="58.0" layoutY="468.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Text fx:id="penaleText" layoutX="58.0" layoutY="488.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Label fx:id="tariffaBaseLabel" layoutX="356.0" layoutY="429.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="costoLabel" layoutX="356.0" layoutY="451.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="penaleLabel" layoutX="356.0" layoutY="471.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Button layoutX="109.0" layoutY="589.0" mnemonicParsing="false" prefHeight="72.0" prefWidth="323.0" text="Stipula Contratto" />
+                        <Line endX="390.0" layoutX="122.0" layoutY="70.0" startX="-100.0" />
+                        <Line endX="390.0" layoutX="122.0" layoutY="560.0" startX="-100.0" />
+                        <Text layoutX="57.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome Cliente" />
+                        <Text layoutX="57.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cognome Cliente" />
+                        <Text fx:id="nomeCliente" layoutX="356.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Text fx:id="cognomeCliente" layoutX="356.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                      </children>
                   </AnchorPane>
               </items>

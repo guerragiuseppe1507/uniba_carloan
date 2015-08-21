@@ -60,5 +60,10 @@ public class Filiale implements Comparable<Filiale>{
 	public int compareTo(Filiale other) {
 		return this.getNome().compareTo(other.getNome());
 	}
+	
+	@Override
+	public String toString(){
+		return this.getNome();
+	}
 
 }

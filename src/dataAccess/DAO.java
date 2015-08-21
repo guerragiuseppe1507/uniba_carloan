@@ -685,13 +685,6 @@ public class DAO {
 				SchemaDb.TAB_PREZZI+".id";
 	
 		String nome_fascia;
-		String id_prezzi;
-		String tariffa_base_g;
-		String tariffa_base_s;
-		String costo_chilometrico;
-		String penale_chilometri;
-		String tariffa_illim_g;
-		String tariffa_illim_s;
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
@@ -706,22 +699,8 @@ public class DAO {
 				do{
 					
 					nome_fascia = res.getString("nome");
-					id_prezzi= res.getString("nome");
-					tariffa_base_g= res.getString("nome");
-					tariffa_base_s= res.getString("nome");
-					costo_chilometrico= res.getString("nome");
-					penale_chilometri= res.getString("nome");
-					tariffa_illim_g= res.getString("nome");
-					tariffa_illim_s= res.getString("nome");
 					
 					risultato.put("nome_fascia" + Integer.toString(pos), nome_fascia);
-					risultato.put("id_prezzi" + Integer.toString(pos), id_prezzi);
-					risultato.put("tariffa_base_g" + Integer.toString(pos), tariffa_base_g);
-					risultato.put("tariffa_base_s" + Integer.toString(pos),tariffa_base_s);
-					risultato.put("costo_chilometrico" + Integer.toString(pos),costo_chilometrico);
-					risultato.put("penale_chilometri" + Integer.toString(pos),penale_chilometri);
-					risultato.put("tariffa_illim_g" + Integer.toString(pos),tariffa_illim_g);
-					risultato.put("tariffa_illim_s" + Integer.toString(pos),tariffa_illim_s);
 					
 					pos++;
 					
@@ -1901,7 +1880,7 @@ public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
 	public HashMap<String, String> insertAuto(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
-		risultato = connetti();
+		risultato = connetti();/*
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
 		String newAuto="INSERT INTO"+SchemaDb.TAB_AUTO+" (id, id_modello, targa, id_filiale, status,chilometraggio, provenienza) VALUES (NULL, ?,?, ?, ?, 0, ITALIA)";
@@ -1923,7 +1902,7 @@ public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
-		
+		*/
 		return risultato;
 
 
@@ -1957,8 +1936,50 @@ public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
 		return risultato;
 	}
 	
-	
-	
-	
+
+	public HashMap<String, String> getPrezzi(HashMap<String, String> inputParam) {
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryPrezzi =  "SELECT * FROM "+ SchemaDb.TAB_FASCE +
+				" INNER JOIN "+ SchemaDb.TAB_PREZZI +
+				" ON " + SchemaDb.TAB_FASCE+".id_prezzi = "+SchemaDb.TAB_PREZZI+".id"+
+				" WHERE " + SchemaDb.TAB_FASCE+".nome = ?";
+		
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryPrezzi);
+			istruzione.setString(1, inputParam.get("nomeFascia"));
+			ResultSet res = istruzione.executeQuery();
+			Boolean isFascia = res.first();
+			if(isFascia){
+				String id_prezzi= res.getString(SchemaDb.TAB_PREZZI +".id");
+				String tariffa_base_g= res.getString("tariffa_base_g");
+				String tariffa_base_s= res.getString("tariffa_base_s");
+				String costo_chilometrico= res.getString("costo_chilometrico");
+				String penale_chilometri= res.getString("penale_chilometri");
+				String tariffa_illim_g= res.getString("tariffa_illim_g");
+				String tariffa_illim_s= res.getString("tariffa_illim_s");
+				
+				risultato.put("id_prezzi", id_prezzi);
+				risultato.put("tariffa_base_g", tariffa_base_g);
+				risultato.put("tariffa_base_s",tariffa_base_s);
+				risultato.put("costo_chilometrico",costo_chilometrico);
+				risultato.put("penale_chilometri",penale_chilometri);
+				risultato.put("tariffa_illim_g",tariffa_illim_g);
+				risultato.put("tariffa_illim_s",tariffa_illim_s);
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+			}
+
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+	}	
 	
 }
