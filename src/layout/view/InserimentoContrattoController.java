@@ -221,6 +221,9 @@ ScreensController myController;
 		}
 		
 		scegliFiliale.setItems(filialiData);
+		scegliFiliale.setValue(Context.getInstance().getUtente().getFiliale());
+		filialeDiArrivoLabel.setText(Context.getInstance().getUtente().getFiliale().getNome());
+		
 	}
 
 	 
@@ -243,25 +246,30 @@ ScreensController myController;
 			 
 			 if(scegliTariffa.getValue().equals("GIORNALIERA")){
 				 tariffaBaseText.setText("Tariffa Base Giornaliera");
-				 tariffaBaseLabel.setText(prezzi.get("tariffa_base_g"));
+				 tariffaBaseLabel.setText(
+						 PriceValidator.validatePrice("€", prezzi.get("tariffa_base_g")));
 			 } else {
 				 tariffaBaseText.setText("Tariffa Base Settimanale");
-				 tariffaBaseLabel.setText(prezzi.get("tariffa_base_s"));
+				 tariffaBaseLabel.setText(
+						 PriceValidator.validatePrice("€", prezzi.get("tariffa_base_s")));
 			 }
 			 
 			 if(scegliChilometraggio.getValue().equals("LIMITATO")){
 				 costoText.setText("Costo Chilometraggio Limitato");
 				 penaleText.setText("Penale Chilometraggio Limitato");
-				 costoLabel.setText(prezzi.get("costo_chilometrico"));
-				 penaleLabel.setText(prezzi.get("penale_chilometri"));
+				 costoLabel.setText(
+						 PriceValidator.validatePrice("€", prezzi.get("costo_chilometrico")));
+				 penaleLabel.setText(
+						 PriceValidator.validatePrice("€", prezzi.get("penale_chilometri")));
 			 } else {
 				 costoText.setText("Costo Chilometraggio Illimitato");
 				 penaleText.setText("");
 				 penaleLabel.setText("");
 				 if(scegliTariffa.getValue().equals("GIORNALIERA")){
-					 costoLabel.setText(prezzi.get("tariffa_illim_g"));
+					 costoLabel.setText(
+							 PriceValidator.validatePrice("€", prezzi.get("tariffa_illim_g")));
 				 } else {
-					 costoLabel.setText(prezzi.get("tariffa_illim_s"));
+					 costoLabel.setText(PriceValidator.validatePrice("€", prezzi.get("tariffa_illim_s")));
 				 }
 			 }
 		 } catch (NullPointerException e){
