@@ -1,13 +1,10 @@
 package layout.view;
 
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import dataAccess.SchemaDb;
 import presentationTier.FrontController;
 import util.CountryManager;
 import util.NotificationManager;
@@ -20,7 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -29,8 +25,8 @@ import layout.model.Context;
 import layout.model.ContextMenu;
 import layout.model.TableManager;
 import layout.model.entities.Auto;
-import layout.model.entities.ManagerDiFiliale;
-
+import layout.model.entities.Fascia;
+import layout.model.entities.Modello;
 
 public class ManageAutoController implements Initializable, ControlledScreen{
 	
@@ -52,11 +48,11 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	
 	//Sezione inserimento auto
 	@FXML
-	private ComboBox<String> scegliFascia;
+	private ComboBox<Fascia> scegliFascia;
 	@FXML
 	private ComboBox<String> scegliProvenienza;
 	@FXML
-	private ComboBox<String> scegliModello;
+	private ComboBox<Modello> scegliModello;
 	@FXML
 	private TextField nuovaTarga;
 	@FXML
@@ -83,15 +79,12 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	Label examplePlateAutoDisp;
 	
-	
-	
-	private ObservableList<Auto> autoData = FXCollections.observableArrayList();
-	private ObservableList<String> fasceData = FXCollections.observableArrayList();
-	private ObservableList<String> modelliData = FXCollections.observableArrayList();
-	private ObservableList<String> filialiData = FXCollections.observableArrayList();
+	private ObservableList<Fascia> fasceData = FXCollections.observableArrayList();
+	private ObservableList<Modello> modelliData = FXCollections.observableArrayList();
 	
 	//elementi scelti dagli spinner
-	private String modelloScelto;
+	private Modello modelloScelto;
+	private Fascia fasciaScelta;
 	private String nazioneScelta;
 	private String statusSceltoDaDisp;
 	private String statusSceltoDaNonDisp;
@@ -122,9 +115,8 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		
 		//Popolamento Spinner
 		popolaSpinnerFasce();
+		scegliModello.setDisable(true);
 		popolaSpinnerStatus();
-		popolaSpinnerFiliali();
-		
 		
 		scegliStatusDaDispon.getSelectionModel().selectedIndexProperty().addListener(
 				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliStatusDaDispon(new_value));
@@ -150,28 +142,36 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	
 	private void handleScegliAutoDispon(Auto auto){
 		autoDispScelta = auto;
-		examplePlateAutoDisp.setText(NumberPlateValidator.getPlateExample(auto.getProvenienza()));
-		scegliStatusDaDispon.getSelectionModel().select(auto.getStatus());
-		nuovaTargaAutoDisp.setText(auto.getTarga());
+		if(autoDispScelta != null){
+			examplePlateAutoDisp.setText(NumberPlateValidator.getPlateExample(autoDispScelta.getProvenienza()));
+			scegliStatusDaDispon.getSelectionModel().select(autoDispScelta.getStatus());
+			nuovaTargaAutoDisp.setText(autoDispScelta.getTarga());
+		}
 	}
 	
 	private void handleScegliAutoNonDispon(Auto auto){
 		autoNonDispScelta = auto;
-		examplePlateAutoNonDisp.setText(NumberPlateValidator.getPlateExample(auto.getProvenienza()));
-		scegliStatusDaNonDispon.getSelectionModel().select(auto.getStatus());
-		nuovaTargaAutoNonDisp.setText(auto.getTarga());
+		if(autoNonDispScelta != null){
+			examplePlateAutoNonDisp.setText(NumberPlateValidator.getPlateExample(autoNonDispScelta.getProvenienza()));
+			scegliStatusDaNonDispon.getSelectionModel().select(autoNonDispScelta.getStatus());
+			nuovaTargaAutoNonDisp.setText(autoNonDispScelta.getTarga());
+		}
 	}
 	
 	//Gestione scelta spinner
 	
 	
 	private void handleScegliStatusDaDispon(Number value){
-		statusSceltoDaDisp = scegliStatusDaDispon.getItems().get(value.intValue());
+		if(value.intValue() != -1){
+			statusSceltoDaDisp = scegliStatusDaDispon.getItems().get(value.intValue());
+		}
 	}
 	
 	
 	private void handleScegliStatusDaNonDispon(Number value){
-		statusSceltoDaNonDisp = scegliStatusDaNonDispon.getItems().get(value.intValue());
+		if(value.intValue() != -1){
+			statusSceltoDaNonDisp = scegliStatusDaNonDispon.getItems().get(value.intValue());
+		}
 	}
 	
 	
@@ -183,9 +183,9 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	}
 	
 	private void handleScegliFascia(Number value){
-		String selectedFascia = scegliFascia.getItems().get(value.intValue());
+		fasciaScelta = scegliFascia.getItems().get(value.intValue());
 		
-		popolaSpinnerModelli(selectedFascia);
+		popolaSpinnerModelli(fasciaScelta);
 		scegliModello.getSelectionModel().selectedIndexProperty().addListener(
 				(ChangeListener<Number>) (ovModello, valueModello, new_valueModello) -> handleScegliModello(new_valueModello));
 		
@@ -203,10 +203,10 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	
 	//Popolazione spinner
 	
-	private void popolaSpinnerModelli(String fascia){
+	private void popolaSpinnerModelli(Fascia fascia){
 		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiModelli"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("nome_fascia",fascia);
+		inputParam.put("nome_fascia",fascia.getNome());
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
@@ -216,14 +216,16 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
-				modelliData.add(
-						risultato.get("nome_modello" + Integer.toString(i))
+				modelliData.add(new Modello(
+						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+						risultato.get("nome_modello" + Integer.toString(i)))		
 				); 
 				
 			}
 		}
 		
 		scegliModello.setItems(modelliData);
+		scegliModello.setDisable(false);
 
 	}
 	
@@ -248,8 +250,9 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
-				fasceData.add(
-						risultato.get("nome_fascia" + Integer.toString(i))
+				fasceData.add(new Fascia(
+						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+						risultato.get("nome_fascia" + Integer.toString(i)))
 				); 
 				
 			}
@@ -285,8 +288,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			Optional<ButtonType> result = NotificationManager.setConfirm("L'auto non sarà più disponbile nel sistema.\n\nContinuare?");
 			if (result.get() == ButtonType.OK){
 				queryCancellaAuto(autoDispScelta.getId());
-				riempiTabellaAuto();
-				riempiTabellaAutoNonDisp();
 			}
 		}else{
 			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
@@ -298,11 +299,9 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		if (autoDispScelta == null){
 			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
 		}else if(statusSceltoDaDisp == null){
-			NotificationManager.setWarning("Scegli il Nuovo status");
+			NotificationManager.setWarning("Scegli il nuovo status");
 		}else{
-			queryModificaStatus(autoDispScelta.getId());
-			riempiTabellaAuto();
-			riempiTabellaAutoNonDisp();
+			queryModificaStatus(autoDispScelta.getId(),"disponibile");
 		}
 	}
 	
@@ -312,8 +311,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			Optional<ButtonType> result = NotificationManager.setConfirm("L'auto non sarà più disponbile nel sistema.\n\nContinuare?");
 			if (result.get() == ButtonType.OK){
 			    queryCancellaAuto(autoNonDispScelta.getId());
-				riempiTabellaAuto();
-				riempiTabellaAutoNonDisp();
 			}
 		}else{
 			NotificationManager.setWarning("Scegli un auto tra quelle non disponibili prima.");
@@ -326,9 +323,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		}else if(statusSceltoDaNonDisp == null){
 			NotificationManager.setWarning("Scegli il Nuovo status");
 		}else{
-			queryModificaStatus(autoNonDispScelta.getId());
-			riempiTabellaAuto();
-			riempiTabellaAutoNonDisp();
+			queryModificaStatus(autoNonDispScelta.getId(),"non_disponibile");
 		}
 	}
 	@FXML
@@ -342,7 +337,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			NotificationManager.setError("Targa non conforme agli standard della nazione scelta.\n"+
 										"Nazione Scelta : "+nazioneScelta);
 		} else {
-			queryInsertAuto(nuovaTarga.getText(), nazioneScelta, modelloScelto);
+			queryInsertAuto(nuovaTarga.getText(), nazioneScelta, Integer.toString(modelloScelto.getId()));
 		}
 
 	}
@@ -350,7 +345,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	private void handleCambiaTargaAutoNonDisp() {
 			
 		if(nuovaTargaAutoNonDisp.getText().equals("")){
-			NotificationManager.setWarning("Inserisci Una Targa.");
+			NotificationManager.setWarning("Inserisci una targa.");
 		}else if(autoNonDispScelta == null){
 			NotificationManager.setWarning("Scegli un auto tra quelle non disponibili prima.");
 		}else if(!NumberPlateValidator.validate(nuovaTargaAutoNonDisp.getText(),
@@ -358,8 +353,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			NotificationManager.setWarning("Targa non nel formato standard della sua nazione.");
 		}else{
 			queryCambiaTarga(nuovaTargaAutoNonDisp.getText(),autoNonDispScelta.getId());
-			riempiTabellaAuto();
-			riempiTabellaAutoNonDisp();
 		}
 
 	}
@@ -375,8 +368,6 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			NotificationManager.setWarning("Targa non nel formato standard della sua nazione.");
 		}else{
 			queryCambiaTarga(nuovaTargaAutoDisp.getText(),autoDispScelta.getId());
-		riempiTabellaAuto();
-		riempiTabellaAutoNonDisp();
 		}
 		
 	}
@@ -386,76 +377,90 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	
 		String[] comando = new String[]{"businessTier.GestioneAuto", "modificaTarga"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("idTarga",Integer.toString (idAuto));
-
-			inputParam.put("upTarga", targa);
-
-			
+		inputParam.put("id_auto",Integer.toString (idAuto));
+		inputParam.put("new_targa", targa);
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
+		
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			riempiTabellaAuto();
+			riempiTabellaAutoNonDisp();
+			NotificationManager.setInfo("Targa modificata con successo.");
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+		}
 	
 	}
 	
 	private void queryCancellaAuto(int idAuto){
+		
 		String[] comando = new String[]{"businessTier.GestioneAuto", "cancellaAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("autoCanc", Integer.toString(idAuto));
+		inputParam.put("id_auto", Integer.toString(idAuto));
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
 		
-		
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){	
+			riempiTabellaAuto();
+			riempiTabellaAutoNonDisp();
+			NotificationManager.setInfo("Auto eliminata con successo.");
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
 		}
 	
-	private void queryInsertAuto(String targa, String nazione, String modello){
+	}
+	
+	private void queryInsertAuto(String targa, String nazione, String id_modello){
+		
 		String[] comando = new String[]{"businessTier.GestioneAuto", "inserisciAuto"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("Provenienza", scegliProvenienza.getValue());
-		inputParam.put("Fascia", scegliFascia.getValue());
-		inputParam.put("Modello", scegliModello.getValue());
-		inputParam.put("Targa", nuovaTarga.getText());
+		inputParam.put("nazione", nazione);
+		inputParam.put("id_modello", id_modello);
+		inputParam.put("targa", targa);
+		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
+		
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			riempiTabellaAuto();
+			NotificationManager.setInfo("Auto inserita con successo.");	
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+		}
+		
 	}
 	
-	private void queryModificaStatus(int id){
+	private void queryModificaStatus(int id_auto, String filter){
 		String[] comando = new String[]{"businessTier.GestioneAuto", "modificaStatus"};
 		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("idStatus", Integer.toString(id));
-		if (statusSceltoDaNonDisp==null){
-			inputParam.put("upStatus", statusSceltoDaDisp);
-		}
-		else{
-			inputParam.put("upStatus", statusSceltoDaNonDisp);
+		inputParam.put("id_auto", Integer.toString(id_auto));
+		if (filter.equals("disponibile")){
+			inputParam.put("new_status", statusSceltoDaDisp);
+		}else if (filter.equals("non_disponibile")){
+			inputParam.put("new_status", statusSceltoDaNonDisp);
 		}
 			
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
 		
-	}
-	
-	
-	
-	 private void popolaSpinnerFiliali(){
-		String[] comando = new String[]{"businessTier.GestioneFiliali", "recuperoDatiFiliali"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			
-			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
-				
-				filialiData.add(
-						risultato.get("id" + Integer.toString(i))
-				); 
-				
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			riempiTabellaAuto();
+			riempiTabellaAutoNonDisp();
+			if (filter.equals("disponibile")){
+				nuovaTargaAutoDisp.setText("");
+				scegliStatusDaDispon.setValue(null);
+			}else if (filter.equals("non_disponibile")){
+				nuovaTargaAutoNonDisp.setText("");
+				scegliStatusDaNonDispon.setValue(null);
 			}
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
 		}
 		
-		scegliFiliale.setItems(filialiData);
 	}
+	
 }

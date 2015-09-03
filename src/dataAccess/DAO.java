@@ -6,11 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import com.mysql.jdbc.exceptions.jdbc4.*;
 
-import javafx.beans.property.StringProperty;
-import layout.view.GestioneContrattiController;
-
-import com.mysql.jdbc.Statement;
 
 public class DAO {
 	private static final String USERNAME = "root";
@@ -41,6 +38,15 @@ public class DAO {
 		}
 		
 		return risultato;
+	}
+	
+	public boolean disconnetti() {
+		try {
+			connessione.close();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
 	}
 	
 	private void startConnectionTransaction(){
@@ -427,6 +433,7 @@ public class DAO {
 	
 		String id;
 		String nome_filiale;
+		String id_modello;
 		String modello;
 		String targa;
 		String status;
@@ -449,6 +456,7 @@ public class DAO {
 				do{
 					id=res.getString(SchemaDb.TAB_AUTO+".id");
 					nome_filiale = res.getString(SchemaDb.TAB_FILIALI+".nome");
+					id_modello = res.getString(SchemaDb.TAB_MODELLI+".id");
 					modello = res.getString(SchemaDb.TAB_MODELLI+".nome");
 					targa = res.getString(SchemaDb.TAB_AUTO+".targa");
 					status=res.getString(SchemaDb.TAB_AUTO+".status");
@@ -458,6 +466,7 @@ public class DAO {
 
 					risultato.put("id" + Integer.toString(pos), id);
 					risultato.put("nome_filiale" + Integer.toString(pos), nome_filiale);
+					risultato.put("id_modello" + Integer.toString(pos), id_modello);
 					risultato.put("modello" + Integer.toString(pos), modello);
 					risultato.put("targa" + Integer.toString(pos), targa);
 					risultato.put("status" + Integer.toString(pos),status);
@@ -582,7 +591,7 @@ public class DAO {
 			
 			risultato.put(util.ResultKeys.ESITO, "true");
 
-		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
+		} catch (MySQLIntegrityConstraintViolationException e){
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Username o Email già utilizzati");
 		} catch (SQLException e) {
@@ -612,7 +621,7 @@ public class DAO {
 			
 			risultato.put(util.ResultKeys.ESITO, "true");
 
-		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
+		} catch (MySQLIntegrityConstraintViolationException e){
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Username o Email già utilizzati");
 		} catch (SQLException e) {
@@ -684,6 +693,7 @@ public class DAO {
 		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_FASCE + " INNER JOIN "+SchemaDb.TAB_PREZZI+" ON id_prezzi = "+
 				SchemaDb.TAB_PREZZI+".id";
 	
+		String id;
 		String nome_fascia;
 
 		try {
@@ -698,8 +708,10 @@ public class DAO {
 				int pos = 0;
 				do{
 					
+					id = res.getString("id");
 					nome_fascia = res.getString("nome");
 					
+					risultato.put("id" + Integer.toString(pos), id);
 					risultato.put("nome_fascia" + Integer.toString(pos), nome_fascia);
 					
 					pos++;
@@ -733,6 +745,7 @@ public class DAO {
 		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_MODELLI +" INNER JOIN "+SchemaDb.TAB_FASCE+" ON id_fascia = "+
 				SchemaDb.TAB_FASCE+".id WHERE "+SchemaDb.TAB_FASCE+".nome = ?";
 	
+		String id;
 		String nome_modello;
 
 		try {
@@ -748,8 +761,10 @@ public class DAO {
 				int pos = 0;
 				do{
 					
+					id = res.getString("id");
 					nome_modello = res.getString("nome");
 					
+					risultato.put("id" + Integer.toString(pos), id);
 					risultato.put("nome_modello" + Integer.toString(pos), nome_modello);
 					
 					pos++;
@@ -1723,7 +1738,7 @@ public class DAO {
 	
 	
 	
-public HashMap<String, String> getClienti(){
+    public HashMap<String, String> getClienti(){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
@@ -1791,7 +1806,7 @@ public HashMap<String, String> getClienti(){
 		}
 
 	
-public HashMap<String, String> inserisciCliente(HashMap<String,String> inputParam){
+	public HashMap<String, String> inserisciCliente(HashMap<String,String> inputParam){
 	
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
@@ -1813,7 +1828,11 @@ public HashMap<String, String> inserisciCliente(HashMap<String,String> inputPara
 			
 			risultato.put(util.ResultKeys.ESITO, "true");
 
-		} catch (SQLException e){
+		}catch (MySQLIntegrityConstraintViolationException e){
+			String[] error = e.toString().split("'");
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Esiste già un cliente con \n" + error[3] + " : " + error[1]);
+		}catch (SQLException e){
 			e.printStackTrace();
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
@@ -1826,89 +1845,129 @@ public HashMap<String, String> inserisciCliente(HashMap<String,String> inputPara
 
 
 
-public HashMap<String, String> deleteAuto(HashMap<String,String> inputParam){
-	
-	HashMap<String, String> risultato = new HashMap<String, String>();
-	risultato = connetti();
-	if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
-	
-	String deleteAuto= "DELETE FROM " +SchemaDb.TAB_AUTO + " WHERE id = ?";
-
-	try {
-		PreparedStatement istruzione = connessione.prepareStatement(deleteAuto);
-		istruzione.setString(1, inputParam.get("autoCanc"));		
-		istruzione.execute();
+	public HashMap<String, String> deleteAuto(HashMap<String,String> inputParam){
 		
-		risultato.put(util.ResultKeys.ESITO, "true");
-
-	} catch (SQLException e){
-		e.printStackTrace();
-		risultato.put(util.ResultKeys.ESITO, "false");
-		risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String deleteAuto= "DELETE FROM " +SchemaDb.TAB_AUTO + " WHERE id = ?";
+	
+		try {
+			if(!checkAuto(inputParam.get("autoCanc"),"nofilter")){
+				PreparedStatement istruzione = connessione.prepareStatement(deleteAuto);
+				istruzione.setString(1, inputParam.get("autoCanc"));		
+				istruzione.execute();
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+			}else {
+				risultato.put(util.ResultKeys.ESITO, "true");
+				risultato.put(util.ResultKeys.MSG_ERR, "Auto utilizzata in un contratto");
+			}
+	
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+	
+	}
+		
+	private boolean checkAuto(String id_auto, String filter){
+		
+		boolean isAuto;
+		String checkAuto = "";
+		
+		if (filter.equals("nofilter")){
+			checkAuto = "SELECT * FROM " + SchemaDb.TAB_CONTRATTI + " WHERE id_auto = ?";
+		} else if (filter.equals("noleggiata")){
+			checkAuto = "SELECT * FROM " + SchemaDb.TAB_CONTRATTI + " WHERE id_auto = ? AND stato = 'APERTO'";
+		}
+		
+		try{	
+		
+			PreparedStatement istruzione  = connessione.prepareStatement(checkAuto);
+			istruzione.setString(1, id_auto);	
+			ResultSet res = istruzione.executeQuery();
+			isAuto = res.first();
+			
+		} catch (SQLException e){
+				isAuto = false;
+		}
+		
+		return isAuto;
+		
 	}
 	
-	return risultato;
-
-}
-	
-public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
-	
-	HashMap<String, String> risultato = new HashMap<String, String>();
-	risultato = connetti();
-	if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
-	
-	String updateStatus="UPDATE "+ SchemaDb.TAB_AUTO
-			+" SET status = ? WHERE id = ?";
-
-	try {
-		PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
-		istruzione.setString(1, inputParam.get("upStatus"));
-		istruzione.setString(2, inputParam.get("idStatus"));
-		istruzione.execute();
+	public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
-		risultato.put(util.ResultKeys.ESITO, "true");
-
-	} catch (SQLException e){
-		e.printStackTrace();
-		risultato.put(util.ResultKeys.ESITO, "false");
-		risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		String updateStatus="UPDATE "+ SchemaDb.TAB_AUTO
+				+" SET status = ? WHERE id = ?";
+	
+		try {
+			if(!checkAuto(inputParam.get("id_auto"),"noleggiata")){
+				PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
+				istruzione.setString(1, inputParam.get("new_status"));
+				istruzione.setString(2, inputParam.get("id_auto"));
+				istruzione.execute();
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+			} else {
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, 
+						"Lo stato di un auto in noleggio non puo essere cambiato.");
+			}
+	
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
 	}
-	
-	return risultato;
-}
-	
+		
 	public HashMap<String, String> insertAuto(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
-		risultato = connetti();/*
+		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
-		String newAuto="INSERT INTO"+SchemaDb.TAB_AUTO+" (id, id_modello, targa, id_filiale, status,chilometraggio, provenienza) VALUES (NULL, ?,?, ?, ?, 0, ITALIA)";
+		String newAuto="INSERT INTO " + SchemaDb.TAB_AUTO
+				+ " (id_modello, targa, id_filiale, status, chilometraggio, provenienza) VALUES (? ,?, ?, ?, ?, ?)";
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(newAuto);
 			
-			istruzione.setString(2, takeIdModello(inputParam));
-			istruzione.setString(3, inputParam.get("targa"));
-			istruzione.setString(4, takeIdFiliale(inputParam));
-			istruzione.setString(5, inputParam.get("status"));
-			istruzione.setString(6, inputParam.get("Provenienza"));
+			istruzione.setString(1, inputParam.get("id_modello"));
+			istruzione.setString(2, inputParam.get("targa"));
+			istruzione.setString(3, inputParam.get("id_filiale"));
+			istruzione.setString(4, "DISPONIBILE");
+			istruzione.setInt(5, 0);
+			istruzione.setString(6, inputParam.get("nazione"));
 			istruzione.execute();
 			
 			risultato.put(util.ResultKeys.ESITO, "true");
 
-		} catch (SQLException e){
+		}catch (MySQLIntegrityConstraintViolationException e){
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Auto già presente");
+		}catch (SQLException e){
 			e.printStackTrace();
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
-		*/
+		
 		return risultato;
-
-
-}	
 	
-	
+	}	
+		
+		
 	
 	public HashMap<String, String> changeTarga(HashMap<String,String> inputParam){
 		
@@ -1920,12 +1979,18 @@ public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
 				+" SET targa = ? WHERE id = ?";
 
 		try {
-			PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
-			istruzione.setString(1, inputParam.get("upTarga"));
-			istruzione.setString(2, inputParam.get("idTarga"));
-			istruzione.execute();
-			
-			risultato.put(util.ResultKeys.ESITO, "true");
+			if(!checkAuto(inputParam.get("id_auto"),"noleggiata")){
+				PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
+				istruzione.setString(1, inputParam.get("new_targa"));
+				istruzione.setString(2, inputParam.get("id_auto"));
+				istruzione.execute();
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+			} else {
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, 
+						"La targa di un auto in noleggio non puo essere cambiata.");
+			}
 
 		} catch (SQLException e){
 			e.printStackTrace();
@@ -1980,6 +2045,49 @@ public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
 		}
 		
 		return risultato;
-	}	
+	}
+	
+	public HashMap<String, String> inserisciContratto(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		HashMap<String, String> datiQueryAuto = new HashMap<String, String>();
+		datiQueryAuto.put("new_status", inputParam.get("status_auto"));
+		datiQueryAuto.put("id_auto", inputParam.get("id_auto"));
+		
+		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_CONTRATTI 
+								+" (tipo_km, tariffa, data_inizio, data_limite, acconto, stato, id_cliente,"
+									+" id_dipendente, id_auto, filiale_di_partenza, filiale_di_arrivo)"
+								+" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("tipo_km"));
+			istruzione.setString(2, inputParam.get("tariffa"));
+			istruzione.setString(3, inputParam.get("data_inizio"));
+			istruzione.setString(4, inputParam.get("data_limite"));
+			istruzione.setString(5, inputParam.get("acconto"));
+			istruzione.setString(6, inputParam.get("status_contratto"));
+			istruzione.setString(7, inputParam.get("id_cliente"));
+			istruzione.setString(8, inputParam.get("id_dipendente"));
+			istruzione.setString(9, inputParam.get("id_auto"));
+			istruzione.setString(10, inputParam.get("id_start_filiale"));
+			istruzione.setString(11, inputParam.get("id_end_filiale"));	
+			datiQueryAuto = changeStatus(datiQueryAuto);
+			if (datiQueryAuto.get(util.ResultKeys.ESITO).equals("true")){
+				istruzione.execute();
+				risultato.put(util.ResultKeys.ESITO, "true");
+			} else {
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, "Auto già noleggiata");
+			}	
+		}catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		return risultato;
+	}
 	
 }

@@ -3,23 +3,20 @@ package layout.view;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
 import presentationTier.FrontController;
+import util.DateValidator;
 import util.EmailValidator;
 import util.NotificationManager;
-import util.ResultKeys;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
-import layout.model.Context;
-import layout.model.entities.Utente;
+import javafx.util.Callback;
 
 
 public class NuovoClienteController  implements Initializable, ControlledScreen {
@@ -31,30 +28,49 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 	
 	
 	//Sezione Coontratti Stipulati
-	 @FXML
-	 Button Inserisci;
+	@FXML
+	Button Inserisci;
 	
 	
  
-	 @FXML
-	 private TextField nomeText;
-	 @FXML
-	 private TextField cognomeText;
-	 @FXML
-	 private TextField mailText;
-	 @FXML
-	 private TextField residenzaText;
-	 @FXML
-	 private DatePicker dataDiNascitaPicker;
-	 @FXML
-	 private TextField codiceFiscaleText;
-	 @FXML
-	 private TextField codicePatenteText;
+	@FXML
+	private TextField nomeText;
+	@FXML
+	private TextField cognomeText;
+	@FXML
+	private TextField mailText;
+	@FXML
+	private TextField residenzaText;
+	@FXML
+	private DatePicker dataDiNascitaPicker;
+	@FXML
+	private TextField codiceFiscaleText;
+	@FXML
+	private TextField codicePatenteText;
 	 
 	 
-	 @Override
+	@Override
 	public void initialize(URL url, ResourceBundle rb){
-		 
+		
+		 final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+		    public DateCell call(final DatePicker datePicker) {
+		        return new DateCell() {
+		            @Override 
+		            public void updateItem(LocalDate item, boolean empty) {
+		                super.updateItem(item, empty);
+
+		                if (DateValidator.isBornDateValid(item)) {
+		                        setDisable(true);
+		                        setStyle("-fx-background-color: #ffc0cb;");
+		                }
+		                
+		            }
+		        };
+		    }
+		};
+		dataDiNascitaPicker.setDayCellFactory(dayCellFactory);
+		dataDiNascitaPicker.setShowWeekNumbers(false);
+		
 	}
 
 	public void setScreenParent(ScreensController screenParent){
@@ -64,7 +80,6 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 	@FXML
 	public void onActionInsersciCliente(){
 		try{
-			LocalDate date = dataDiNascitaPicker.getValue();
 			String nome = nomeText.getText();
 			String cognome = cognomeText.getText();
 			String mail = mailText.getText();
@@ -76,8 +91,6 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 				NotificationManager.setWarning("Compilare tutti i campi");
 			} else if(!EmailValidator.isValidEmailAddress(mail)){
 				NotificationManager.setError("Mail non valida");
-			} else if (!isBornDateValid(date)){
-				NotificationManager.setError("Data di nascita non valida");
 			} else {
 				registraCliente();
 			}
@@ -85,19 +98,6 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 			e.printStackTrace();
 			NotificationManager.setWarning("Compilare tutti i campi");
 		}
-	}
-	
-	
-	private boolean isBornDateValid(LocalDate d){
-		int year = d.getYear();
-		int day = d.getDayOfYear();
-		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-		
-		boolean valid = false;
-		if((((year < (currentYear-18)) && year > 1900) || 
-				(year == (currentYear-18) && day <= currentDay))) valid = true;
-		return valid;
 	}
 	
 	private void registraCliente(){
@@ -118,17 +118,14 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 			InterStageEventsHandler.getInstance().getCaller().callBack();
 			myController.closeWinStage();
 		} else {
-
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
 		}
 		
-		//InserimentoContrattoController.riempiTabellaClienti();
 	}
 	
+	@FXML
+	public void onActionDatepicker(){
+		dataDiNascitaPicker.setValue(LocalDate.now().minusYears(50));
+	}
 	
-	
-	
-	
-	
-	
-		
 }

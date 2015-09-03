@@ -2,29 +2,20 @@ package layout.view;
 
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
 import presentationTier.FrontController;
 import util.NotificationManager;
 import util.ResultKeys;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import layout.model.Context;
 import layout.model.ContextMenu;
 import layout.model.TableManager;
-import layout.model.entities.DipendenteDiFiliale;
-import layout.model.entities.Filiale;
-import layout.model.entities.ManagerDiFiliale;
 import layout.model.entities.Utente;
 
 

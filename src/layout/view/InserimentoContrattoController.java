@@ -3,31 +3,30 @@ package layout.view;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
 import presentationTier.FrontController;
+import util.DateValidator;
 import util.NotificationManager;
-import util.NumberPlateValidator;
 import util.PriceValidator;
-import util.ResultKeys;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import layout.model.Context;
 import layout.model.ContextMenu;
 import layout.model.TableManager;
@@ -46,9 +45,6 @@ ScreensController myController;
 	AnchorPane menu;
 	
 	//Sezione Coontratti Stipulati
-	@FXML
-	Button newClient;
-	
 	@FXML
 	private TableView<Cliente> clientiTable; 
 	 
@@ -74,6 +70,10 @@ ScreensController myController;
 	private Label targaLabel;
 	@FXML
 	private Label dataInizioLabel;
+	@FXML
+	private DatePicker dataLimitePicker;
+	@FXML
+	private Label dataLimiteLabel;
 	@FXML
 	private Label filialeDiPartenzaLabel;
 	@FXML
@@ -133,6 +133,36 @@ ScreensController myController;
 		popolaSpinnerChilometraggio();
 		popolaSpinnerTariffa();
 		popolaSpinnerFiliali();
+		
+		dataLimitePicker.valueProperty().addListener(new ChangeListener<LocalDate>() { 
+
+			@Override
+			public void changed(ObservableValue<? extends LocalDate> arg0,
+					LocalDate arg1, LocalDate arg2) {
+				dataLimiteLabel.setText(arg2.toString());
+				
+			}
+	    });
+		
+		
+		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+		    public DateCell call(final DatePicker datePicker) {
+		        return new DateCell() {
+		            @Override 
+		            public void updateItem(LocalDate item, boolean empty) {
+		                super.updateItem(item, empty);
+
+		                if (DateValidator.isContractLimitValid(item)) {
+		                        setDisable(true);
+		                        setStyle("-fx-background-color: #ffc0cb;");
+		                }
+		                
+		            }
+		        };
+		    }
+		};
+		dataLimitePicker.setDayCellFactory(dayCellFactory);
+		dataLimitePicker.setShowWeekNumbers(false);
 		
 		clientiTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> handleScegliCliente(newValue));
@@ -291,7 +321,7 @@ ScreensController myController;
 	 public void handleScegliAuto(Auto auto){
 			autoDispScelta = auto;
 			fasciaLabel.setText(auto.getFasce());
-			modelloLabel.setText(auto.getModello());
+			modelloLabel.setText(auto.getModello().getNome());
 			targaLabel.setText(auto.getTarga());
 			caricaPrezzi(auto.getFasce());
 			impostaPrezzi();
@@ -317,12 +347,86 @@ ScreensController myController;
 				prezzi.put("tariffa_illim_g",risultato.get("tariffa_illim_g"));
 				prezzi.put("tariffa_illim_s",risultato.get("tariffa_illim_s"));
 			}
-			
 	 }	 
 	 
 	 @FXML
 	 public void handleOpenContract(){
 		 
+		 String statoContratto = checkContratto();
+		 
+		 if(statoContratto.equals("stipulabile")){
+			 queryApriContratto();
+		 } else {
+			 NotificationManager.setWarning(statoContratto);
+		 } 
+	 }
+	 
+	 private String checkContratto(){
+		 String warning = "Mancano nel contratto:\n";
+		 boolean cStipulabile = true;
+		 
+		 if (nomeCliente.getText().equals("")){
+			 warning += "- cliente;\n";
+			 cStipulabile = false;
+		 }
+		 if (chilometraggioLabel.getText().equals("")){
+			 warning += "- chilometraggio;\n";
+			 cStipulabile = false;
+		 }
+		 if (tariffaLabel.getText().equals("")){
+			 warning += "- tariffa;\n";
+			 cStipulabile = false;
+		 }
+		 if (targaLabel.getText().equals("")) {
+			 warning += "- auto;\n";
+			 cStipulabile = false;
+		 }
+		 if (dataLimiteLabel.getText().equals("")) {
+			 warning += "- data limite;\n";
+			 cStipulabile = false;
+		 }
+		 if (accontoLabel.getText().equals("0.00 €")||
+				 accontoLabel.getText().equals(PriceValidator.PRICE_ERR)){
+			 warning += "- acconto;\n";
+			 cStipulabile = false;
+		 }
+		 
+		 if(!cStipulabile){
+			 return warning;
+		 } else {
+			 return "stipulabile";
+		 }
+		 
+	 }
+	 
+	 private void queryApriContratto(){
+			String[] comando = new String[]{"businessTier.GestioneContratti", "stipulaContratto"};
+			
+			HashMap<String, String> inputParam = new HashMap<>();
+			
+			inputParam.put("tipo_km", chilometraggioLabel.getText());
+			inputParam.put("tariffa", tariffaLabel.getText());
+			inputParam.put("data_inizio", dataInizioLabel.getText());
+			inputParam.put("data_limite", dataLimiteLabel.getText());
+			inputParam.put("acconto", accontoLabel.getText().substring(0,accontoLabel.getText().length() -2));
+			inputParam.put("status_contratto", Contratto.STATUS_APERTO);
+			inputParam.put("id_cliente", Integer.toString(clienteScelto.getId()));
+			inputParam.put("id_dipendente", Integer.toString(Context.getInstance().getUtente().getId()));
+			inputParam.put("id_auto", Integer.toString(autoDispScelta.getId()));
+			inputParam.put("id_start_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+			inputParam.put("id_end_filiale", Integer.toString(scegliFiliale.getSelectionModel().getSelectedItem().getId()));
+	
+			inputParam.put("status_auto", Auto.STATUS_NOLEGGIATA);
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			
+			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+				NotificationManager.setInfo("Contratto stipulato con successo.");
+			} else {
+				NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+			}
+			
 	 }
 	 
 }

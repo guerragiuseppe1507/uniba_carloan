@@ -36,6 +36,7 @@ public class ContextMenu {
 			gestisciManager.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.insertManagerID, ScreensFramework.insertManagerFile);
 	            	ctrl.setScreen(ScreensFramework.insertManagerID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.insertManagerTitle);
 	            }
@@ -43,8 +44,10 @@ public class ContextMenu {
 			
     	}else if(Context.getInstance().getUserType().equals(Context.managerFiliale)){
     		
+    		
+    		Menu contratti = new Menu("Contratti");
     		Menu gestisci = new Menu("Gestisci Filiale");
-    		mainMenu.getMenus().addAll(gestisci);
+    		mainMenu.getMenus().addAll(contratti, gestisci);
     		
     		//TODO voci del menu
     		
@@ -52,12 +55,15 @@ public class ContextMenu {
     		MenuItem gestisciDipendente = new MenuItem("Gestisci Dipendenti");
     		MenuItem gestisciContratto = new MenuItem("Gestisci Contratti");
     		MenuItem inserimentoContratto= new MenuItem("Inserimento Contratto");
-    		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente, gestisciContratto,inserimentoContratto);
+    		
+    		contratti.getItems().addAll(inserimentoContratto, gestisciContratto);
+    		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente);
     		
     	
     		gestisciAuto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.manageAutoID, ScreensFramework.manageAutoFile);
 	            	ctrl.setScreen(ScreensFramework.manageAutoID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.manageAutoTitle);
 	            }
@@ -67,6 +73,7 @@ public class ContextMenu {
     		gestisciContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.gestioneContrattoID, ScreensFramework.gestioneContrattoFile);
 	            	ctrl.setScreen(ScreensFramework.gestioneContrattoID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneContrattoTitle);
 	            }
@@ -75,6 +82,7 @@ public class ContextMenu {
     		gestisciDipendente.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.gestioneDipendentiID, ScreensFramework.gestioneDipendentiFile);
 	            	ctrl.setScreen(ScreensFramework.gestioneDipendentiID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneDipendentiTitle);
 	            }
@@ -87,6 +95,7 @@ public class ContextMenu {
     		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.InserimentoContrattoID, ScreensFramework.InserimentoContrattoFile);
 	            	ctrl.setScreen(ScreensFramework.InserimentoContrattoID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.InserimentoContrattoTitle);
 	            }
@@ -103,6 +112,7 @@ public class ContextMenu {
     		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.InserimentoContrattoID, ScreensFramework.InserimentoContrattoFile);
 	            	ctrl.setScreen(ScreensFramework.InserimentoContrattoID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.InserimentoContrattoTitle);
 	            }
@@ -134,6 +144,7 @@ public class ContextMenu {
 			editProfile.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
+	            	ctrl.reloadScreen(ScreensFramework.gestioneProfiloID, ScreensFramework.gestioneProfiloFile);
 	            	ctrl.setScreen(ScreensFramework.gestioneProfiloID);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneProfiloTitle);
 	            }

@@ -14,6 +14,7 @@ import layout.model.entities.Cliente;
 import layout.model.entities.Contratto;
 import layout.model.entities.Filiale;
 import layout.model.entities.ManagerDiFiliale;
+import layout.model.entities.Modello;
 import layout.model.entities.Utente;
 
 public class TableManager {
@@ -68,7 +69,7 @@ public class TableManager {
 			usersTable.setItems(usersData);
 			
 		} else {
-			usersTable.setPlaceholder(new Label("No Users Found"));
+			usersTable.setPlaceholder(new Label("Nessun utente trovato"));
 		}
 		
 	}
@@ -125,7 +126,7 @@ public class TableManager {
 			
 		} else {
 			
-			contrattoTable.setPlaceholder(new Label("No Contracts Found"));
+			contrattoTable.setPlaceholder(new Label("Nessun contratto trovato"));
 			
 		}
 		
@@ -173,6 +174,10 @@ public class TableManager {
 			FXCollections.sort(clienteData);
 			clientiTable.setItems(clienteData);
 			
+		} else {
+			
+			clientiTable.setPlaceholder(new Label("Nessun cliente trovato"));
+			
 		}
 		
 	}
@@ -202,16 +207,22 @@ public class TableManager {
 			
 			for(int i = 0; i < Integer.parseInt(risultato.get(util.ResultKeys.RES_LENGTH)) ; i++){
 				
-				autoData.add(new Auto(
+				Auto auto = new Auto(
 						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
-						risultato.get("modello" + Integer.toString(i)),
 						risultato.get("nome_filiale" + Integer.toString(i)), 
 						risultato.get("status" + Integer.toString(i)),
 						risultato.get("targa"+Integer.toString(i)),
 						risultato.get("chilometraggio" + Integer.toString(i)),
 						risultato.get("fasce" + Integer.toString(i)),
-						risultato.get("provenienza" + Integer.toString(i)))
-				); 
+						risultato.get("provenienza" + Integer.toString(i))
+						); 
+				
+				
+				auto.setModello(new Modello(Integer.parseInt(risultato.get("id_modello" + Integer.toString(i))),
+						risultato.get("modello" + Integer.toString(i)))
+				);
+				
+				autoData.add(auto);
 				
 			}
 			
@@ -232,7 +243,7 @@ public class TableManager {
 			
 		} else {
 			
-			autoTable.setPlaceholder(new Label("No Cars Found"));
+			autoTable.setPlaceholder(new Label("Nessuna auto trovata"));
 			
 		}
 		
@@ -281,7 +292,7 @@ public class TableManager {
 			
 		} else {
 			
-			managerDiFilialeTable.setPlaceholder(new Label("No Managers Found"));
+			managerDiFilialeTable.setPlaceholder(new Label("Nessun manager trovato"));
 			
 		}
 		
@@ -329,7 +340,7 @@ public class TableManager {
 			
 		} else {
 			
-			filialiTable.setPlaceholder(new Label("No Filiali Found"));
+			filialiTable.setPlaceholder(new Label("Nessuna filiale trovata"));
 			
 		}
 		

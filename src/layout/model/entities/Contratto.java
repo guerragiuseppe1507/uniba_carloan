@@ -22,6 +22,9 @@ public class Contratto implements Comparable<Contratto>{
 	private StringProperty totPrezzo;
 	private StringProperty filialeDiPartenza;
 	private StringProperty filialeDiArrivo;
+	public static final String STATUS_APERTO = "APERTO";
+	public static final String STATUS_CHIUSO = "CHIUSO";
+	public static final String STATUS_ANNULLATO = "ANNULLATO";
 	public static final String[] POSSIBILE_CHILOMETRAGGIO = {"LIMITATO", "ILLIMITATO"};
 	public static final String[] POSSIBILE_TARIFFA = {"GIORNALIERA", "SETTIMANALE"};
 	public static String[] properties = {"tipoKm", "tariffa", "dataInizio", "dataLimite", "dataRientro", "acconto"

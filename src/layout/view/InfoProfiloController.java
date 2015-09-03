@@ -3,24 +3,11 @@ package layout.view;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
-
-
-
-
-
-
-
-
-
-
-
 import presentationTier.FrontController;
 import util.NotificationManager;
 import util.ResultKeys;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;

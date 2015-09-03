@@ -1,8 +1,6 @@
 package util;
 
 import java.util.Collections;
-import java.util.Locale;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

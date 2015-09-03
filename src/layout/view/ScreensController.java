@@ -2,13 +2,6 @@ package layout.view;
 
 import java.io.IOException;
 import java.util.HashMap;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -16,8 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 
 
 public class ScreensController extends StackPane {
@@ -58,7 +49,13 @@ public class ScreensController extends StackPane {
 		}
 	}
 	
-
+	public boolean reloadScreen(String name, String resource){
+		boolean reload = false;
+		boolean unload = unloadScreen(name);
+		boolean load = loadScreen(name, resource);
+		if (unload && load) reload = true;
+		return reload;
+	}
 	
 	//Questo metodo prova a visualizzare la schermata col nome dato.
 	//Prima di tutto controlla se la schermata è stata caricata. Poi, se c'è più di una schermata,
@@ -97,6 +94,7 @@ public class ScreensController extends StackPane {
 			winStage = new Stage();
 			winStage.setTitle(ScreensFramework.APP_NAME+" - "+title);
 			winStage.initModality(Modality.APPLICATION_MODAL);
+			winStage.setResizable(false);
 			winStage.setScene(new Scene(root));
 			winStage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
 			winStage.show();

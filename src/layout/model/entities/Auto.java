@@ -10,20 +10,23 @@ import javafx.collections.ObservableList;
 public class Auto implements Comparable<Auto>{
 	
 	private int id;
-	private StringProperty modello;
+	private Modello modello;
 	private StringProperty nomeFiliale;
 	private StringProperty status;
 	private StringProperty chilometraggio;
 	private StringProperty fasce;
 	private StringProperty targa;
 	private StringProperty provenienza;
-	public static final String[] POSSIBILE_STATUS = {"DISPONIBILE", "MANUTENZIONE", "NOLEGGIATA", "ROTTAMAZIONE", "VENDUTA"};
+	public static final String STATUS_NOLEGGIATA = "NOLEGGIATA";
+	public static final String STATUS_DISPONIBILE = "DISPONIBILE";
+	public static final String STATUS_MANUTENZIONE = "MANUTENZIONE";
+	public static final String STATUS_ROTTAMATA = "ROTTAMATA";
+	public static final String[] POSSIBILE_STATUS = {STATUS_DISPONIBILE, STATUS_MANUTENZIONE, STATUS_ROTTAMATA};
 	public static String[] properties = {"modello", "nomeFiliale", "chilometraggio", "status", "fasce", "targa", "provenienza"};
 	
-	public Auto(int id, String modello, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
+	public Auto(int id, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
 		
 		this.id = id;
-		this.modello=new SimpleStringProperty(modello);
 		this.status=new SimpleStringProperty(status);
 		this.targa= new SimpleStringProperty(targa);
 		this.nomeFiliale = new SimpleStringProperty(nomeFiliale);
@@ -33,9 +36,18 @@ public class Auto implements Comparable<Auto>{
 		
 	}
 	
+	public void setModello(Modello modello){
+		
+		this.modello = modello;
+		
+	}
+	
+	public Modello getModello() throws NullPointerException{
+		return modello;
+	}
+	
 	public int getId(){return id;}
 	
-	public String getModello(){return modello.get();}
 	public String getnomeFiliale(){return nomeFiliale.get();}
 	public String getChilometraggio(){return chilometraggio.get();}
 	public String getStatus(){return status.get();}
@@ -49,7 +61,7 @@ public class Auto implements Comparable<Auto>{
 		
 		switch (propertyName){
 			case("modello"): 	
-				wanted = modello;
+				wanted = modello.getNomePrperty();
 				break;
 			case("nomeFiliale"): 	
 				wanted = nomeFiliale;
