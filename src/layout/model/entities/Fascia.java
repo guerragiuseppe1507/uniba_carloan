@@ -3,7 +3,7 @@ package layout.model.entities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Fascia {
+public class Fascia implements CarloanEntity{
 	
 	private int id;
 	private StringProperty nome;
@@ -13,6 +13,8 @@ public class Fascia {
 	private StringProperty penale_chilometri;
 	private StringProperty tariffa_illim_g;
 	private StringProperty tariffa_illim_s;
+	public static final int LIM_KM_G = 400;
+	public static final int LIM_KM_S = 3600;
 
 	public Fascia(int id, String nome){
 		

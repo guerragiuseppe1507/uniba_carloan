@@ -34,5 +34,8 @@ public class HomeDipendenteDiFilialeController implements Initializable, Control
 		ContextMenu.showContextMenu(menu,myController);
 
 	}
+	
+	@Override
+    public void riempiCampi(){}
 
 }

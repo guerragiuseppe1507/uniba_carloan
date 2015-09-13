@@ -11,6 +11,8 @@ public class GestioneUtenti {
 	public HashMap<String, String> recuperoDatiUtenti(HashMap<String, String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<>();
+		
+		inputParam.put("filter", "filiale"); 
 
 		DAO dao = new DAO();
 		risultato = dao.getUtenti(inputParam);	
@@ -22,8 +24,10 @@ public class GestioneUtenti {
 		
 		HashMap<String, String> risultato = new HashMap<>();
 
+		inputParam.put("filter", "liberi");
+		
 		DAO dao = new DAO();
-		risultato = dao.getFreeUsers();	
+		risultato = dao.getUtenti(inputParam);	
 		return risultato;
 		
 	}

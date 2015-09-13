@@ -32,6 +32,7 @@ public class ApplicationController {
 			
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, e.toString());
+			e.printStackTrace();
 			
 		}
 		

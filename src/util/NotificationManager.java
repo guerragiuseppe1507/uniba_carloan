@@ -5,6 +5,7 @@ import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
 
 public class NotificationManager {
 	
@@ -33,9 +34,19 @@ public class NotificationManager {
 		return result;
 	}
 	
+	public static Optional<String> setInput(String c){
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("");	
+		dialog.setHeaderText("");
+		dialog.setContentText(c);
+		Optional<String> result = dialog.showAndWait();
+		return result;
+	}
+	
 	private static void showNotification(String n){
 		notifica.setTitle("");	
 		notifica.setContentText(n);
 		notifica.showAndWait();
 	}
+	
 }

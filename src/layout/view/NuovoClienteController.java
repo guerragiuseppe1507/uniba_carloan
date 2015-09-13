@@ -5,6 +5,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
 import presentationTier.FrontController;
 import util.DateValidator;
 import util.EmailValidator;
@@ -51,31 +52,32 @@ public class NuovoClienteController  implements Initializable, ControlledScreen 
 	 
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
-		
-		 final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-		    public DateCell call(final DatePicker datePicker) {
-		        return new DateCell() {
-		            @Override 
-		            public void updateItem(LocalDate item, boolean empty) {
-		                super.updateItem(item, empty);
+		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+		   public DateCell call(final DatePicker datePicker) {
+		       return new DateCell() {
+		           @Override 
+		           public void updateItem(LocalDate item, boolean empty) {
+		               super.updateItem(item, empty);
 
-		                if (DateValidator.isBornDateValid(item)) {
-		                        setDisable(true);
-		                        setStyle("-fx-background-color: #ffc0cb;");
-		                }
+		               if (DateValidator.isBornDateValid(item)) {
+		                       setDisable(true);
+		                       setStyle("-fx-background-color: #ffc0cb;");
+		               }
 		                
-		            }
-		        };
-		    }
+		           }
+		       };
+		   }
 		};
 		dataDiNascitaPicker.setDayCellFactory(dayCellFactory);
 		dataDiNascitaPicker.setShowWeekNumbers(false);
-		
 	}
 
 	public void setScreenParent(ScreensController screenParent){
 		myController = screenParent;
 	}
+	
+	@Override
+	public void riempiCampi(){}
 	
 	@FXML
 	public void onActionInsersciCliente(){

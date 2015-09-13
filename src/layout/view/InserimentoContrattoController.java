@@ -4,9 +4,11 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
 import presentationTier.FrontController;
 import util.DateValidator;
 import util.NotificationManager;
@@ -17,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -33,6 +36,7 @@ import layout.model.TableManager;
 import layout.model.entities.Auto;
 import layout.model.entities.Cliente;
 import layout.model.entities.Contratto;
+import layout.model.entities.Fascia;
 import layout.model.entities.Filiale;
 
 public class InserimentoContrattoController implements Initializable, ControlledScreen,InterStageCallBackListener {
@@ -89,11 +93,15 @@ ScreensController myController;
 	@FXML
 	private Text penaleText;
 	@FXML
+	private Text limiteText;
+	@FXML
 	private Label tariffaBaseLabel;
 	@FXML
 	private Label costoLabel;
 	@FXML
 	private Label penaleLabel;
+	@FXML
+	private Label limiteLabel;
 
 	
 	@FXML
@@ -105,13 +113,17 @@ ScreensController myController;
 	@FXML
 	private ComboBox<String> scegliTariffa;
 	
-
+	@FXML
+	private Button stipulaContratto;
 	
 	private ObservableList<Filiale> filialiData = FXCollections.observableArrayList();
-	HashMap<String, String> prezzi = new HashMap<>();
+	HashMap<String, String> prezzi = new HashMap<String, String>();
 	
 	private Auto autoDispScelta;
-	private Cliente clienteScelto; 
+	private Cliente clienteScelto;
+	private Contratto contrattoDaModificare;
+	
+	private boolean isEditMode = false;
 	 
 	@Override
 	public void initialize(URL url, ResourceBundle rb){
@@ -121,18 +133,17 @@ ScreensController myController;
 		menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
+		autoTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		clientiTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		dataInizioLabel.setText(dateFormat.format(date).toString());
 		
 		filialeDiPartenzaLabel.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		
-		riempiTabellaClienti();
-		riempiTabellaAuto();
-		
 		popolaSpinnerChilometraggio();
 		popolaSpinnerTariffa();
-		popolaSpinnerFiliali();
 		
 		dataLimitePicker.valueProperty().addListener(new ChangeListener<LocalDate>() { 
 
@@ -161,13 +172,10 @@ ScreensController myController;
 		        };
 		    }
 		};
+		
 		dataLimitePicker.setDayCellFactory(dayCellFactory);
 		dataLimitePicker.setShowWeekNumbers(false);
 		
-		clientiTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> handleScegliCliente(newValue));
-		autoTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> handleScegliAuto(newValue));
 	}
 
 	public void setScreenParent(ScreensController screenParent){
@@ -175,6 +183,69 @@ ScreensController myController;
 		ContextMenu.showContextMenu(menu,myController);
 	}
 	
+	@Override
+	public void riempiCampi(){
+		
+		riempiTabellaClienti();
+		riempiTabellaAuto();
+		
+		popolaSpinnerFiliali();
+		
+		clientiTable.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> handleScegliCliente(newValue));
+		autoTable.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> handleScegliAuto(newValue));
+		
+		if(myController.params.get("modContratto_contratto") != null
+			&& myController.params.get("modContratto_auto") != null
+			&& myController.params.get("modContratto_cliente") != null){
+			inizializzaModificaContratto();
+		}
+		
+	}
+	
+	private void inizializzaModificaContratto(){
+		
+		contrattoDaModificare = (Contratto) myController.params.get("modContratto_contratto");
+		autoDispScelta = (Auto) myController.params.get("modContratto_auto");
+		clienteScelto = (Cliente) myController.params.get("modContratto_cliente");
+		clientiTable.getSelectionModel().select(clienteScelto);
+		autoTable.getSelectionModel().select(autoDispScelta);
+		autoTable.getColumns().clear();
+		clientiTable.getColumns().clear();
+		autoTable.setPlaceholder(new Label("Non è possibilie modificare l'auto associata al contratto"));
+		clientiTable.setPlaceholder(new Label("Non è possibilie modificare il cliente associato al contratto"));
+		
+		
+		Contratto c = (Contratto) myController.params.get("modContratto_contratto");
+		
+		scegliTariffa.setValue(c.getTariffa());
+		scegliChilometraggio.setValue(c.getTipoKm());
+		Filiale filialeDiArrivo = null;
+		for(Filiale item : scegliFiliale.getItems()) {
+            if(item.toString().equals(c.getFilialeDiArrivo())) {
+            	filialeDiArrivo = item;
+            }
+        }
+		if(filialeDiArrivo != null){
+			scegliFiliale.setValue(filialeDiArrivo);
+		}
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(c.getDataLimite(), formatter);
+		dataLimitePicker.setValue(date);
+		
+		inserisciAcconto.setText(c.getAcconto());
+		accontoLabel.setText(c.getAcconto()+" €");
+		
+		stipulaContratto.setText("Modifica Contratto");
+		
+		myController.params.remove("modContratto_contratto");
+		myController.params.remove("modContratto_auto");
+		myController.params.remove("modContratto_cliente");
+		isEditMode = true;
+		
+	}
 	
 	private void riempiTabellaAuto(){
 		
@@ -191,8 +262,7 @@ ScreensController myController;
 	
 	@FXML
 	public void handleNewClient(){
-		myController.setScreenNewWindow(ScreensFramework.InserimentoClienteID,
-				ScreensFramework.InserimentoClienteFile, 
+		myController.showScreenNewWindow(ScreensFramework.InserimentoClienteFile, 
 				ScreensFramework.InserimentoClienteTitle);
 		InterStageEventsHandler.getInstance().setCaller(this);
 	}
@@ -258,6 +328,7 @@ ScreensController myController;
 
 	 
 	 //Riepiloghi
+	 @FXML
 	 public void onActionTariffa(){
 		 
 		 tariffaLabel.setText(scegliTariffa.getValue());
@@ -265,36 +336,47 @@ ScreensController myController;
 		 
 	 }
 	 
+	 @FXML
 	 public void onActionChilometraggio(){
 		 chilometraggioLabel.setText(scegliChilometraggio.getValue());
 		 impostaPrezzi();
 		 
 	 }
 	 
-	 public void impostaPrezzi(){
+	 private void impostaPrezzi(){
 		 try{ 
 			 
 			 if(scegliTariffa.getValue().equals("GIORNALIERA")){
-				 tariffaBaseText.setText("Tariffa Base Giornaliera");
+				 tariffaBaseText.setText("Tariffa base giornaliera :");
 				 tariffaBaseLabel.setText(
 						 PriceValidator.validatePrice("€", prezzi.get("tariffa_base_g")));
+				 if (scegliChilometraggio.getValue().equals("LIMITATO")){
+					 limiteText.setText("Limite chilometri giornalieri :");
+					 limiteLabel.setText(Integer.toString(Fascia.LIM_KM_G)+" km");
+				 } 
 			 } else {
-				 tariffaBaseText.setText("Tariffa Base Settimanale");
+				 tariffaBaseText.setText("Tariffa Base Settimanale :");
 				 tariffaBaseLabel.setText(
 						 PriceValidator.validatePrice("€", prezzi.get("tariffa_base_s")));
+				 if (scegliChilometraggio.getValue().equals("LIMITATO")){
+					 limiteText.setText("Limite chilometri settimanali");
+					 limiteLabel.setText(Integer.toString(Fascia.LIM_KM_S)+" km");
+				 }
 			 }
 			 
 			 if(scegliChilometraggio.getValue().equals("LIMITATO")){
-				 costoText.setText("Costo Chilometraggio Limitato");
-				 penaleText.setText("Penale Chilometraggio Limitato");
+				 costoText.setText("Costo chilometraggio limitato :");
+				 penaleText.setText("Penale chilometraggio limitato :");
 				 costoLabel.setText(
 						 PriceValidator.validatePrice("€", prezzi.get("costo_chilometrico")));
 				 penaleLabel.setText(
 						 PriceValidator.validatePrice("€", prezzi.get("penale_chilometri")));
 			 } else {
-				 costoText.setText("Costo Chilometraggio Illimitato");
+				 costoText.setText("Costo chilometraggio Illimitato :");
 				 penaleText.setText("");
 				 penaleLabel.setText("");
+				 limiteText.setText("");
+				 limiteLabel.setText("");
 				 if(scegliTariffa.getValue().equals("GIORNALIERA")){
 					 costoLabel.setText(
 							 PriceValidator.validatePrice("€", prezzi.get("tariffa_illim_g")));
@@ -302,16 +384,17 @@ ScreensController myController;
 					 costoLabel.setText(PriceValidator.validatePrice("€", prezzi.get("tariffa_illim_s")));
 				 }
 			 }
-		 } catch (NullPointerException e){
-			 
-		 } 
+		 } catch (NullPointerException e){} 
+		 
 	 }
 	 
+	 @FXML
 	 public void onActionFiliale(){
 		 filialeDiArrivoLabel.setText(scegliFiliale.getValue().toString());
 		 
 	 }
 	 
+	 @FXML
 	 public void onActionAcconto(){
 		 String resultString = inserisciAcconto.getText();
 		 resultString = PriceValidator.validatePrice("€", resultString);
@@ -320,10 +403,10 @@ ScreensController myController;
 	 
 	 public void handleScegliAuto(Auto auto){
 			autoDispScelta = auto;
-			fasciaLabel.setText(auto.getFasce());
+			fasciaLabel.setText(auto.getFascia());
 			modelloLabel.setText(auto.getModello().getNome());
 			targaLabel.setText(auto.getTarga());
-			caricaPrezzi(auto.getFasce());
+			caricaPrezzi(auto.getFascia());
 			impostaPrezzi();
 	 }
 	 
@@ -355,7 +438,11 @@ ScreensController myController;
 		 String statoContratto = checkContratto();
 		 
 		 if(statoContratto.equals("stipulabile")){
-			 queryApriContratto();
+			 if(isEditMode){
+				 queryEditContratto();
+			 } else {
+				 queryApriContratto();
+			 }
 		 } else {
 			 NotificationManager.setWarning(statoContratto);
 		 } 
@@ -399,33 +486,66 @@ ScreensController myController;
 		 
 	 }
 	 
+	 private void queryEditContratto(){
+			String[] comando = new String[]{"businessTier.GestioneContratti", "modificaContratto"};
+			
+			HashMap<String, String> inputParam = new HashMap<>();
+			
+			setParams(inputParam);
+			inputParam.put("id_contratto", Integer.toString(contrattoDaModificare.getId()));
+			inputParam.put("id_dipendente", Integer.toString(contrattoDaModificare.getIdDipendente()));
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			
+			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+				myController.showScreen(ScreensFramework.gestioneContrattoFile);
+				if(Context.getInstance().getUtente().getId() == contrattoDaModificare.getIdDipendente()){
+					ScreensFramework.PRIMARY_STAGE.setTitle(ScreensFramework.APP_NAME+" - "+ScreensFramework.gestioneContrattoTitle);
+				} else {
+					ScreensFramework.PRIMARY_STAGE.setTitle(ScreensFramework.APP_NAME+" - "+ScreensFramework.gestioneContrattoFilialeTitle);
+					myController.opzioniAvvio = "gestioneFiliale";
+				}
+				NotificationManager.setInfo("Contratto modificato con successo.");
+			} else {
+				NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+			}
+			
+	 }
+	 
 	 private void queryApriContratto(){
 			String[] comando = new String[]{"businessTier.GestioneContratti", "stipulaContratto"};
 			
 			HashMap<String, String> inputParam = new HashMap<>();
 			
-			inputParam.put("tipo_km", chilometraggioLabel.getText());
+			setParams(inputParam);
+			inputParam.put("id_dipendente", Integer.toString(Context.getInstance().getUtente().getId()));
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			
+			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+				myController.showScreen(ScreensFramework.gestioneContrattoFile);
+				ScreensFramework.PRIMARY_STAGE.setTitle(ScreensFramework.APP_NAME+" - "+ScreensFramework.gestioneContrattoTitle);
+				NotificationManager.setInfo("Contratto stipulato con successo.");
+			} else {
+				NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+			}	
+	 }
+	 
+	 private void setParams(HashMap<String, String> inputParam){
+		 
+		 	inputParam.put("tipo_km", chilometraggioLabel.getText());
 			inputParam.put("tariffa", tariffaLabel.getText());
 			inputParam.put("data_inizio", dataInizioLabel.getText());
 			inputParam.put("data_limite", dataLimiteLabel.getText());
 			inputParam.put("acconto", accontoLabel.getText().substring(0,accontoLabel.getText().length() -2));
 			inputParam.put("status_contratto", Contratto.STATUS_APERTO);
 			inputParam.put("id_cliente", Integer.toString(clienteScelto.getId()));
-			inputParam.put("id_dipendente", Integer.toString(Context.getInstance().getUtente().getId()));
 			inputParam.put("id_auto", Integer.toString(autoDispScelta.getId()));
 			inputParam.put("id_start_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
 			inputParam.put("id_end_filiale", Integer.toString(scegliFiliale.getSelectionModel().getSelectedItem().getId()));
-	
 			inputParam.put("status_auto", Auto.STATUS_NOLEGGIATA);
-			
-			HashMap<String, String> risultato = new HashMap<>();
-			risultato =	FrontController.request(comando, inputParam);
-			
-			if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
-				NotificationManager.setInfo("Contratto stipulato con successo.");
-			} else {
-				NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
-			}
 			
 	 }
 	 

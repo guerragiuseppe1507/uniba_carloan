@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import presentationTier.FrontController;
 import util.NotificationManager;
+import util.ResultKeys;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -52,7 +55,21 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
+		usersTable.setPlaceholder(new Label("Scegli una filiale"));
+		filialiTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		managerDiFilialeTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		
 		managersDiFiliale = new ArrayList<ManagerDiFiliale>();
+		
+	}
+	
+	public void setScreenParent(ScreensController screenParent){
+		myController = screenParent;
+		ContextMenu.showContextMenu(menu,myController);
+	}
+	
+	@Override
+	public void riempiCampi(){
 		
 		riempiTabellaManager();
 		
@@ -66,12 +83,7 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getUser(newValue));
-
-	}
-	
-	public void setScreenParent(ScreensController screenParent){
-		myController = screenParent;
-		ContextMenu.showContextMenu(menu,myController);
+		
 	}
 	
 	
@@ -89,7 +101,11 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 	
 	private void riempiTabellaUtenti(String idFiliale){
 		
-		TableManager.riempiTabellaUtenti(usersTable, "filiale",idFiliale);
+		try {
+			TableManager.riempiTabellaUtenti(usersTable, "filiale",idFiliale);
+		} catch (Exception e) {
+			myController.disconnetti(ResultKeys.DB_CONN_ERR);
+		}
 		
 	}
 	
@@ -152,7 +168,11 @@ public class InsertManagerController implements Initializable, ControlledScreen{
 	
 	@FXML
 	public void caricaUtentiLiberiHandler(){
-		TableManager.riempiTabellaUtenti(usersTable, "liberi");
+		try {
+			TableManager.riempiTabellaUtenti(usersTable, "liberi");
+		} catch (Exception e) {
+			myController.disconnetti(ResultKeys.DB_CONN_ERR);
+		}
 	}
 
 }

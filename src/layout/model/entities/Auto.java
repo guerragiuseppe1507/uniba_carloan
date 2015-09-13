@@ -1,20 +1,16 @@
 package layout.model.entities;
 
-import java.util.ArrayList;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-public class Auto implements Comparable<Auto>{
+public class Auto implements CarloanEntity, Comparable<Auto>{
 	
 	private int id;
 	private Modello modello;
 	private StringProperty nomeFiliale;
 	private StringProperty status;
 	private StringProperty chilometraggio;
-	private StringProperty fasce;
+	private StringProperty fascia;
 	private StringProperty targa;
 	private StringProperty provenienza;
 	public static final String STATUS_NOLEGGIATA = "NOLEGGIATA";
@@ -22,7 +18,7 @@ public class Auto implements Comparable<Auto>{
 	public static final String STATUS_MANUTENZIONE = "MANUTENZIONE";
 	public static final String STATUS_ROTTAMATA = "ROTTAMATA";
 	public static final String[] POSSIBILE_STATUS = {STATUS_DISPONIBILE, STATUS_MANUTENZIONE, STATUS_ROTTAMATA};
-	public static String[] properties = {"modello", "nomeFiliale", "chilometraggio", "status", "fasce", "targa", "provenienza"};
+	public static String[] properties = {"modello", "nomeFiliale", "chilometraggio", "status", "fascia", "targa", "provenienza"};
 	
 	public Auto(int id, String nomeFiliale, String status,String targa, String chilometraggio, String fasce, String provenienza){
 		
@@ -31,7 +27,7 @@ public class Auto implements Comparable<Auto>{
 		this.targa= new SimpleStringProperty(targa);
 		this.nomeFiliale = new SimpleStringProperty(nomeFiliale);
 		this.chilometraggio = new SimpleStringProperty(chilometraggio);
-		this.fasce=new SimpleStringProperty(fasce);
+		this.fascia=new SimpleStringProperty(fasce);
 		this.provenienza=new SimpleStringProperty(provenienza);
 		
 	}
@@ -51,7 +47,7 @@ public class Auto implements Comparable<Auto>{
 	public String getnomeFiliale(){return nomeFiliale.get();}
 	public String getChilometraggio(){return chilometraggio.get();}
 	public String getStatus(){return status.get();}
-	public String getFasce(){return fasce.get();}
+	public String getFascia(){return fascia.get();}
 	public String getTarga(){return targa.get();}
 	public String getProvenienza(){return provenienza.get();}
 	
@@ -61,7 +57,7 @@ public class Auto implements Comparable<Auto>{
 		
 		switch (propertyName){
 			case("modello"): 	
-				wanted = modello.getNomePrperty();
+				wanted = modello.getProperty("nome");
 				break;
 			case("nomeFiliale"): 	
 				wanted = nomeFiliale;
@@ -72,8 +68,8 @@ public class Auto implements Comparable<Auto>{
 			case("status"): 	
 				wanted = status;
 				break;
-			case("fasce"): 	
-				wanted = fasce;
+			case("fascia"): 	
+				wanted = fascia;
 				break;
 			case("targa"): 	
 				wanted = targa;

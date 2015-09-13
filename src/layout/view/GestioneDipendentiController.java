@@ -4,6 +4,7 @@ package layout.view;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
 import presentationTier.FrontController;
 import util.NotificationManager;
 import util.ResultKeys;
@@ -53,8 +54,13 @@ ScreensController myController;
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
 		filiale.setText(Context.getInstance().getUtente().getFiliale().getNome());
-		
-		riempiTabUtentiLiberi();
+		usersTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		employeeTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+	}
+    
+    @Override
+    public void riempiCampi(){
+    	riempiTabUtentiLiberi();
 		riempiTabDipendenti();
 		
 		usersTable.getSelectionModel().selectedItemProperty().addListener(
@@ -62,15 +68,14 @@ ScreensController myController;
 		
 		employeeTable.getSelectionModel().selectedItemProperty().addListener(
 	            (observable, oldValue, newValue) -> getEmployee(newValue));
-
-	}
+    }
     
     private void riempiTabUtentiLiberi(){
     	TableManager.riempiTabellaUtenti(usersTable, "liberi");
     }
     
     private void riempiTabDipendenti(){
-    	TableManager.riempiTabellaUtenti(employeeTable, "filiale",Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+    	TableManager.riempiTabellaUtenti(employeeTable, "filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
     }
     
 	private void getUser(Utente u){
@@ -90,36 +95,43 @@ ScreensController myController;
 	
 	@FXML
 	public void handleAssunzione(){
-		String[] comando = new String[]{"businessTier.GestioneFiliali", "assumi"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("id_utente", Integer.toString(selectedUtente.getId()));
-		inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
-		
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			riempiTabUtentiLiberi();
-			riempiTabDipendenti();
-		}else{
-			NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
+		if (selectedUtente != null){
+			String[] comando = new String[]{"businessTier.GestioneFiliali", "assumi"};
+			HashMap<String, String> inputParam = new HashMap<>();
+			inputParam.put("id_utente", Integer.toString(selectedUtente.getId()));
+			inputParam.put("id_filiale", Integer.toString(Context.getInstance().getUtente().getFiliale().getId()));
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+				riempiTabUtentiLiberi();
+				riempiTabDipendenti();
+			}else{
+				NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
+			}
+		}else {
+			NotificationManager.setInfo("Seleziona un utente libero prima");
 		}
 	}
 	
 	@FXML
 	public void handleLicenziamento(){
-		
-		String[] comando = new String[]{"businessTier.GestioneFiliali", "licenzia"};
-		HashMap<String, String> inputParam = new HashMap<>();
-		inputParam.put("id_utente", Integer.toString(selectedDipendent.getId()));
-		
-		HashMap<String, String> risultato = new HashMap<>();
-		risultato =	FrontController.request(comando, inputParam);
-		
-		if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-			riempiTabUtentiLiberi();
-			riempiTabDipendenti();
-		}else{
-			NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
+		if (selectedDipendent != null){
+			String[] comando = new String[]{"businessTier.GestioneFiliali", "licenzia"};
+			HashMap<String, String> inputParam = new HashMap<>();
+			inputParam.put("id_utente", Integer.toString(selectedDipendent.getId()));
+			
+			HashMap<String, String> risultato = new HashMap<>();
+			risultato =	FrontController.request(comando, inputParam);
+			
+			if(risultato.get(util.ResultKeys.ESITO).equals("true")){
+				riempiTabUtentiLiberi();
+				riempiTabDipendenti();
+			}else{
+				NotificationManager.setError(risultato.get(ResultKeys.MSG_ERR));
+			}
+		}else {
+			NotificationManager.setInfo("Seleziona un dipendente prima");
 		}
 		
 	}

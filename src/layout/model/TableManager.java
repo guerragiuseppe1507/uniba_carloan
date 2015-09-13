@@ -69,17 +69,25 @@ public class TableManager {
 			usersTable.setItems(usersData);
 			
 		} else {
-			usersTable.setPlaceholder(new Label("Nessun utente trovato"));
+			usersTable.setPlaceholder(new Label(risultato.get(util.ResultKeys.MSG_ERR)));
 		}
 		
 	}
 	
-	public static void riempiTabellaContratto(TableView<Contratto> contrattoTable){
+	public static void riempiTabellaContratto(TableView<Contratto> contrattoTable,String id_dipendente, String id_filiale,
+													String filtro, String tipoAccesso, String status){
 		
 		ObservableList<Contratto> contrattoData = FXCollections.observableArrayList();
 		
 		String[] comando = new String[]{"businessTier.GestioneContratti", "recuperoDatiContratto"};
 		HashMap<String, String> inputParam = new HashMap<>();
+		
+
+		inputParam.put("status", status);
+		inputParam.put("id_dipendente", id_dipendente);
+		inputParam.put("id_filiale", id_filiale);
+		inputParam.put("filter", filtro);
+		
 		HashMap<String, String> risultato = new HashMap<>();
 		risultato =	FrontController.request(comando, inputParam);
 		
@@ -92,24 +100,27 @@ public class TableManager {
 				
 				contrattoData.add(new Contratto(
 						Integer.parseInt(risultato.get("id" + Integer.toString(i))),
+						Integer.parseInt(risultato.get("id_cliente" + Integer.toString(i))),
+						Integer.parseInt(risultato.get("id_auto" + Integer.toString(i))),
+						Integer.parseInt(risultato.get("id_dipendente" + Integer.toString(i))),
+						Integer.parseInt(risultato.get("id_filiale_di_partenza" + Integer.toString(i))),
+						Integer.parseInt(risultato.get("id_filiale_di_arrivo" + Integer.toString(i))),
 						risultato.get("tipoKm" + Integer.toString(i)), 
 						risultato.get("tariffa" + Integer.toString(i)),
 						risultato.get("dataInizio"+Integer.toString(i)),
 						risultato.get("dataLimite" + Integer.toString(i)),
 						risultato.get("dataRientro" + Integer.toString(i)),
+						risultato.get("filialeDiPartenza" + Integer.toString(i)),
+						risultato.get("filialeDiArrivo" + Integer.toString(i)),
 						risultato.get("acconto" + Integer.toString(i)),
 						risultato.get("stato" + Integer.toString(i)),
-						risultato.get("nomeCliente" + Integer.toString(i)),
-						risultato.get("nomeDipendente" + Integer.toString(i)),
-						risultato.get("modello" + Integer.toString(i)),
-						risultato.get("totPrezzo" + Integer.toString(i)),
-						risultato.get("filialeDiPartenza" + Integer.toString(i)),
-						risultato.get("filialeDiArrivo" + Integer.toString(i)))
+						risultato.get("dipendente" + Integer.toString(i)),
+						risultato.get("totPrezzo" + Integer.toString(i)))
 				); 
 			}
 			
-			String[] columnNames = {"TipoKm", "Tariffa", "DataInizio", "DataLimite", "DataRientro", "Acconto"
-					, "Stato", "NomeCliente", "NomeDipendente", "Modello", "TotPrezzo", "FilialeDiPartenza", "FilialeDiArrivo"};
+			String[] columnNames = {"Dipendente", "TipoKm", "Tariffa", "DataInizio", "DataLimite", "DataRientro", "FilialeDiPartenza", "FilialeDiArrivo" , "Acconto"
+					, "Stato", "TotPrezzo"};
 			
 			@SuppressWarnings("unchecked")
 			TableColumn<Contratto, String>[] columns = new TableColumn[columnNames.length];
@@ -119,14 +130,21 @@ public class TableManager {
 				contrattoTable.getColumns().add(columns[i]);
 				final int wantedProperty = i;
 				columns[i].setCellValueFactory(cellData -> cellData.getValue().getProperty(Contratto.properties[wantedProperty]));
-			}
+			}	
 			
 			FXCollections.sort(contrattoData);	
 			contrattoTable.setItems(contrattoData);
 			
+			if(tipoAccesso.equals(Context.MANAGER_FILIALE)
+					 || tipoAccesso.equals(Context.DIPENDENTE_FILIALE)){
+				removeColumns(contrattoTable,9);
+			} else if(tipoAccesso.equals("TUTTI")){
+				removeColumns(contrattoTable,0,9);
+			}
+			
 		} else {
 			
-			contrattoTable.setPlaceholder(new Label("Nessun contratto trovato"));
+			contrattoTable.setPlaceholder(new Label(risultato.get(util.ResultKeys.MSG_ERR)));
 			
 		}
 		
@@ -176,7 +194,7 @@ public class TableManager {
 			
 		} else {
 			
-			clientiTable.setPlaceholder(new Label("Nessun cliente trovato"));
+			clientiTable.setPlaceholder(new Label(risultato.get(util.ResultKeys.MSG_ERR)));
 			
 		}
 		
@@ -226,7 +244,7 @@ public class TableManager {
 				
 			}
 			
-			String[] columnNames = {"Modello", "NomeFiliale", "Chilometraggio", "Status", "Fasce", "Targa", "Provenienza"};
+			String[] columnNames = {"Modello", "NomeFiliale", "km", "Status", "Fascia", "Targa", "Provenienza"};
 			
 			@SuppressWarnings("unchecked")
 			TableColumn<Auto, String>[] columns = new TableColumn[columnNames.length];
@@ -238,12 +256,14 @@ public class TableManager {
 				columns[i].setCellValueFactory(cellData -> cellData.getValue().getProperty(Auto.properties[wantedProperty]));
 			}
 			
+			autoTable.getColumns().remove(columns[1]);
+			
 			FXCollections.sort(autoData);
 			autoTable.setItems(autoData);
 			
 		} else {
 			
-			autoTable.setPlaceholder(new Label("Nessuna auto trovata"));
+			autoTable.setPlaceholder(new Label(risultato.get(util.ResultKeys.MSG_ERR)));
 			
 		}
 		
@@ -292,7 +312,7 @@ public class TableManager {
 			
 		} else {
 			
-			managerDiFilialeTable.setPlaceholder(new Label("Nessun manager trovato"));
+			managerDiFilialeTable.setPlaceholder(new Label(risultato.get(util.ResultKeys.MSG_ERR)));
 			
 		}
 		
@@ -340,8 +360,16 @@ public class TableManager {
 			
 		} else {
 			
-			filialiTable.setPlaceholder(new Label("Nessuna filiale trovata"));
+			filialiTable.setPlaceholder(new Label(risultato.get(util.ResultKeys.MSG_ERR)));
 			
+		}
+		
+	}
+	
+	private static void removeColumns(TableView<?> table, int... indexes){
+		
+		for(int i = 0 ; i < indexes.length ; i++){
+			table.getColumns().remove(indexes[i] - i);
 		}
 		
 	}

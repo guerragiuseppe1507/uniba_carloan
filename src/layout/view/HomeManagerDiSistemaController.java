@@ -2,8 +2,6 @@ package layout.view;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
@@ -41,9 +39,8 @@ public class HomeManagerDiSistemaController implements Initializable, Controlled
 
 	}
 	
-	@FXML
-	private void toGestisciManager(ActionEvent event){	
-		myController.setScreen(ScreensFramework.insertManagerID);
-	}
+	@Override
+    public void riempiCampi(){}
+	
 
 }

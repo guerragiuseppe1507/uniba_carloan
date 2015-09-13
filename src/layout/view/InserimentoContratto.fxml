@@ -80,39 +80,41 @@
                               <Font size="24.0" />
                            </font>
                         </Text>
-                        <Text layoutX="57.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio" />
-                        <Text layoutX="57.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa" />
-                        <Text layoutX="58.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fascia Auto" />
-                        <Text layoutX="58.0" layoutY="262.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modello" />
-                        <Text layoutX="57.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Targa" />
-                        <Text layoutX="57.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Partenza" />
-                        <Text layoutX="57.0" layoutY="399.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di Arrivo" />
-                        <Text layoutX="58.0" layoutY="532.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto" />
-                        <Text layoutX="57.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Stipulazione" />
-                        <Label fx:id="chilometraggioLabel" layoutX="358.0" layoutY="159.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="modelloLabel" layoutX="358.0" layoutY="249.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="fasciaLabel" layoutX="358.0" layoutY="225.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="tariffaLabel" layoutX="358.0" layoutY="183.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="targaLabel" layoutX="358.0" layoutY="273.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="dataInizioLabel" layoutX="358.0" layoutY="318.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="filialeDiPartenzaLabel" layoutX="358.0" layoutY="361.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="filialeDiArrivoLabel" layoutX="358.0" layoutY="383.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Text layoutX="58.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chilometraggio :" />
+                        <Text layoutX="58.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tariffa :" />
+                        <Text layoutX="58.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fascia auto :" />
+                        <Text layoutX="58.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modello :" />
+                        <Text layoutX="58.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Targa :" />
+                        <Text layoutX="58.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di partenza :" />
+                        <Text layoutX="58.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filiale di arrivo :" />
+                        <Text layoutX="58.0" layoutY="532.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acconto :" />
+                        <Text layoutX="58.0" layoutY="316.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data stipulazione :" />
+                        <Label fx:id="chilometraggioLabel" layoutX="358.0" layoutY="155.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="modelloLabel" layoutX="358.0" layoutY="241.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="fasciaLabel" layoutX="358.0" layoutY="217.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="tariffaLabel" layoutX="358.0" layoutY="179.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="targaLabel" layoutX="358.0" layoutY="265.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="dataInizioLabel" layoutX="358.0" layoutY="303.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="filialeDiPartenzaLabel" layoutX="358.0" layoutY="346.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="filialeDiArrivoLabel" layoutX="358.0" layoutY="368.0" prefHeight="17.0" prefWidth="120.0" />
                         <Label fx:id="accontoLabel" layoutX="358.0" layoutY="519.0" prefHeight="17.0" prefWidth="120.0" text="0.00 €" />
-                        <Text fx:id="tariffaBaseText" layoutX="58.0" layoutY="446.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-                        <Text fx:id="costoText" layoutX="58.0" layoutY="468.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-                        <Text fx:id="penaleText" layoutX="58.0" layoutY="488.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-                        <Label fx:id="tariffaBaseLabel" layoutX="358.0" layoutY="429.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="costoLabel" layoutX="358.0" layoutY="451.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Label fx:id="penaleLabel" layoutX="358.0" layoutY="471.0" prefHeight="17.0" prefWidth="120.0" />
-                        <Button layoutX="109.0" layoutY="589.0" mnemonicParsing="false" onAction="#handleOpenContract" prefHeight="72.0" prefWidth="323.0" text="Stipula Contratto" />
+                        <Text fx:id="tariffaBaseText" layoutX="58.0" layoutY="433.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Text fx:id="costoText" layoutX="58.0" layoutY="455.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Text fx:id="penaleText" layoutX="58.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Text fx:id="limiteText" layoutX="58.0" layoutY="495.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <Label fx:id="tariffaBaseLabel" layoutX="358.0" layoutY="416.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="costoLabel" layoutX="358.0" layoutY="438.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="penaleLabel" layoutX="358.0" layoutY="458.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Label fx:id="limiteLabel" layoutX="358.0" layoutY="478.0" prefHeight="17.0" prefWidth="120.0" />
+                        <Button fx:id="stipulaContratto" layoutX="109.0" layoutY="589.0" mnemonicParsing="false" onAction="#handleOpenContract" prefHeight="72.0" prefWidth="323.0" text="Stipula Contratto" />
                         <Line endX="390.0" layoutX="122.0" layoutY="70.0" startX="-100.0" />
                         <Line endX="390.0" layoutX="122.0" layoutY="560.0" startX="-100.0" />
-                        <Text layoutX="57.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome Cliente" />
-                        <Text layoutX="57.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cognome Cliente" />
+                        <Text layoutX="58.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome cliente :" />
+                        <Text layoutX="58.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cognome cliente :" />
                         <Text fx:id="nomeCliente" layoutX="358.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                         <Text fx:id="cognomeCliente" layoutX="358.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-                        <Text layoutX="57.0" layoutY="355.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Limite" />
-                        <Label fx:id="dataLimiteLabel" layoutX="357.0" layoutY="339.0" prefWidth="120.0" />
+                        <Text layoutX="58.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data limite :" />
+                        <Label fx:id="dataLimiteLabel" layoutX="357.0" layoutY="324.0" prefWidth="120.0" />
                      </children>
                   </AnchorPane>
               </items>

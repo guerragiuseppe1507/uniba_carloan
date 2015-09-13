@@ -14,9 +14,9 @@ public class Context {
 
 	//Dichiarazione e instanziazione di un oggetto della classe Context
 	private final static Context instance = new Context();
-	public static final String dipendenteFiliale = "Dipendente Di Filiale";
-	public static final String managerFiliale = "Manager Di Filiale";
-	public static final String managerSistema = "Manager Di Sistema";
+	public static final String DIPENDENTE_FILIALE = "Dipendente Di Filiale";
+	public static final String MANAGER_FILIALE = "Manager Di Filiale";
+	public static final String MANAGER_SISTEMA = "Manager Di Sistema";
 
 	private String userType;
 	private Utente utente;

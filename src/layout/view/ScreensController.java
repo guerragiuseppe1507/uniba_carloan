@@ -2,6 +2,9 @@ package layout.view;
 
 import java.io.IOException;
 import java.util.HashMap;
+
+import util.NotificationManager;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -9,37 +12,37 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import layout.model.entities.CarloanEntity;
 
 
 public class ScreensController extends StackPane {
 	
 
-	private HashMap<String, Node> screens = new HashMap<>();
-	private Stage winStage;
+	private Node currentScreen;
+	private Stage winScreen;
+	private ControlledScreen controller;
+	public HashMap<String,CarloanEntity> params = new HashMap<String,CarloanEntity>();
+	public String opzioniAvvio;
 	
 	public ScreensController(){
 		super();
 	}
-	
-	//Aggiunge la schermata alla collezione.
-	public void addScreen(String name, Node screen){
-		screens.put(name, screen);
+
+	public void setScreen(Node screen){
+		currentScreen = screen;
 	}
-	
-	//Restituisce il nodo con il nome appropriato.
+
 	public Node getScreen(String name){
-		return screens.get(name);
+		return currentScreen;
 	}
-	
-	//Carica il file fxml, aggiunge la schermata alla collezione e infine
-	//introduce lo ScreenPane nel controller
-	public boolean loadScreen(String name, String resource){
+
+	public boolean loadScreen(final String resource){
 		try{
 			FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
 			Parent loadScreen = (Parent) myLoader.load();
-			ControlledScreen myScreenController = ((ControlledScreen) myLoader.getController());
-			myScreenController.setScreenParent(this);
-			addScreen(name, loadScreen);
+			controller = ((ControlledScreen) myLoader.getController());
+			controller.setScreenParent(this);
+			setScreen(loadScreen);
 			return true;
 		}
 		catch (Exception e){
@@ -47,61 +50,72 @@ public class ScreensController extends StackPane {
 			System.out.println(e.getMessage());
 			return false;
 		}
+		
 	}
-	
-	public boolean reloadScreen(String name, String resource){
-		boolean reload = false;
-		boolean unload = unloadScreen(name);
-		boolean load = loadScreen(name, resource);
-		if (unload && load) reload = true;
-		return reload;
-	}
-	
-	//Questo metodo prova a visualizzare la schermata col nome dato.
-	//Prima di tutto controlla se la schermata è stata caricata. Poi, se c'è più di una schermata,
-	//la nuova schermata viene aggiunta come seconda e la schermata corrente viene rimossa.
-	//Se non c'è nessuna schermata già visualizzata, la nuova schermata viene direttamente aggiunta alla radice.
-	public boolean setScreen(final String name){
-		if (screens.get(name) != null){
+
+	public boolean showScreen(final String resource){
+		
+		boolean isLoad;
+		
+		loadScreen(resource);
+		
+		if (currentScreen != null){
 			
-			if (!getChildren().isEmpty()){                     		//Se c'è più di una schermata.
+			if (!getChildren().isEmpty()){                     		
 				
-				getChildren().remove(0);              		//Rimuove la schermata visualizzata
-				getChildren().add(0, screens.get(name));
+				getChildren().remove(0);              		
+				getChildren().add(0, currentScreen);
 			
 			} else {
 				
-				getChildren().add(screens.get(name));				//Non c'è nient'altro visualizzato, mostra direttamente
+				getChildren().add(currentScreen);				
 				
 			}
-			return true;
+			
+			Platform.runLater(new Runnable() {
+		        @Override
+		        public void run() {
+		        	controller.riempiCampi();
+		        }
+		    });
+			
+			isLoad = true;
 		} else {
-			System.out.println("La schermata non è stata caricata! \n");
-			return false;
+			
+			isLoad = false;
 		}
+		
+		return isLoad;
+		
 	}
 
+	//GESTIONE SCHERMATE SOVRAPPOSTE
 	
 	//Questo Metodo Visualizza la  schermata scelta in una nuova finestra
-	public boolean setScreenNewWindow(final String name, final String res, final String title){
+	public boolean showScreenNewWindow(final String res, final String title){
 		
 		Parent root;
 		try {
+			
 			FXMLLoader myLoader = new FXMLLoader(getClass().getResource(res));
             root = myLoader.load();
             ControlledScreen myScreenController = ((ControlledScreen) myLoader.getController());
 			myScreenController.setScreenParent(this);
-			winStage = new Stage();
-			winStage.setTitle(ScreensFramework.APP_NAME+" - "+title);
-			winStage.initModality(Modality.APPLICATION_MODAL);
-			winStage.setResizable(false);
-			winStage.setScene(new Scene(root));
-			winStage.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
-			winStage.show();
-
-            //hide this current window (if this is whant you want
-            //((Node)(event.getSource())).getScene().getWindow().hide();
-
+			winScreen = new Stage();
+			winScreen.setTitle(ScreensFramework.APP_NAME+" - "+title);
+			winScreen.initModality(Modality.APPLICATION_MODAL);
+			winScreen.setResizable(false);
+			winScreen.setScene(new Scene(root));
+			winScreen.initOwner(ScreensFramework.PRIMARY_STAGE.getScene().getWindow());
+			winScreen.show();
+			
+			Platform.runLater(new Runnable() {
+		        @Override
+		        public void run() {
+		        	myScreenController.riempiCampi();
+		        }
+		    });
+			
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,22 +124,12 @@ public class ScreensController extends StackPane {
 	}
 	
 	public void closeWinStage(){
-		winStage.close();
+		winScreen.close();
 	}
 	
-	//Rimuove la schermata con il nome dato dalla collezione
-	public boolean unloadScreen(String name){
-		if (screens.remove(name) == null){
-			System.out.println("La schermata non esiste");
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	public boolean resetScreens(){
-		screens = new HashMap<>();
-		return loadScreen(ScreensFramework.loginID,ScreensFramework.loginFile);
+	public void disconnetti(String msg){
+		showScreen(ScreensFramework.loginFile);
+		NotificationManager.setInfo(msg);
 	}
 
 }

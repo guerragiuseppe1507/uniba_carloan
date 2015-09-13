@@ -3,7 +3,7 @@ package layout.model.entities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Modello {
+public class Modello implements CarloanEntity{
 	
 	private int id;
 	private StringProperty nome;
@@ -32,7 +32,20 @@ public class Modello {
 	
 	public String getNome(){return nome.get();}
 	
-	public StringProperty getNomePrperty(){return nome;}
+	public StringProperty getProperty(String propertyName) throws NullPointerException{
+		StringProperty wanted;
+		
+		switch (propertyName){
+			case("nome"): 	
+				wanted = nome;
+				break;
+			default:
+				wanted = null;
+				break;
+		}
+		
+		return wanted;
+	}
 	
 	@Override
 	public String toString(){

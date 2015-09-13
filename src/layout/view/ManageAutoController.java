@@ -101,20 +101,12 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
+		autoTable.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		autoTableNonDisp.setPlaceholder(new Label(util.ResultKeys.LOADING_TABLE));
+		
 		filiale.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		filialeNonDisp.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		
-		riempiTabellaAuto();
-		riempiTabellaAutoNonDisp();
-		
-		autoTableNonDisp.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> handleScegliAutoNonDispon(newValue));
-		
-		autoTable.getSelectionModel().selectedItemProperty().addListener(
-	            (observable, oldValue, newValue) -> handleScegliAutoDispon(newValue));
-		
-		//Popolamento Spinner
-		popolaSpinnerFasce();
 		scegliModello.setDisable(true);
 		popolaSpinnerStatus();
 		
@@ -127,14 +119,32 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		
 		scegliProvenienza.getSelectionModel().selectedIndexProperty().addListener(
 				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliProvenienza(new_value));
-		scegliFascia.getSelectionModel().selectedIndexProperty().addListener(
-				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliFascia(new_value));	
 	
 	}
 	
 	public void setScreenParent(ScreensController screenParent){
 		myController = screenParent;
 		ContextMenu.showContextMenu(menu,myController);
+	}
+	
+	@Override
+	public void riempiCampi(){
+		
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
+		
+		autoTableNonDisp.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> handleScegliAutoNonDispon(newValue));
+		
+		autoTable.getSelectionModel().selectedItemProperty().addListener(
+	            (observable, oldValue, newValue) -> handleScegliAutoDispon(newValue));
+		
+		//Popolamento Spinner
+		popolaSpinnerFasce();
+		
+		scegliFascia.getSelectionModel().selectedIndexProperty().addListener(
+				(ChangeListener<Number>) (ov, value, new_value) -> handleScegliFascia(new_value));	
+		
 	}
 	
 	
@@ -326,6 +336,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			queryModificaStatus(autoNonDispScelta.getId(),"non_disponibile");
 		}
 	}
+	
 	@FXML
 	private void handleInserisciAuto() {
 		
@@ -382,10 +393,10 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
-			riempiTabellaAuto();
-			riempiTabellaAutoNonDisp();
 			NotificationManager.setInfo("Targa modificata con successo.");
 		} else {
 			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
@@ -401,10 +412,10 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){	
-			riempiTabellaAuto();
-			riempiTabellaAutoNonDisp();
 			NotificationManager.setInfo("Auto eliminata con successo.");
 		} else {
 			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
@@ -423,9 +434,10 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
-			riempiTabellaAuto();
 			NotificationManager.setInfo("Auto inserita con successo.");	
 		} else {
 			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
@@ -442,14 +454,15 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		}else if (filter.equals("non_disponibile")){
 			inputParam.put("new_status", statusSceltoDaNonDisp);
 		}
+		inputParam.put("force", "false");
 			
 		HashMap<String, String> risultato = new HashMap<>();
 		
 		risultato =	FrontController.request(comando, inputParam);
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
-			riempiTabellaAuto();
-			riempiTabellaAutoNonDisp();
 			if (filter.equals("disponibile")){
 				nuovaTargaAutoDisp.setText("");
 				scegliStatusDaDispon.setValue(null);

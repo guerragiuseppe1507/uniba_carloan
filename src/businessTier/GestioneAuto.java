@@ -59,7 +59,7 @@ public class GestioneAuto {
 		HashMap<String, String> risultato = new HashMap<>();
 
 		DAO dao = new DAO();
-		risultato = dao.changeStatus(inputParam);	
+		risultato = dao.changeAutoStatus(inputParam);	
 		return risultato;
 	}
 	
@@ -69,7 +69,7 @@ public class GestioneAuto {
 		HashMap<String, String> risultato = new HashMap<>();
 
 		DAO dao = new DAO();
-		risultato = dao.changeTarga(inputParam);	
+		risultato = dao.changeAutoTarga(inputParam);	
 		return risultato;
 	}
 		

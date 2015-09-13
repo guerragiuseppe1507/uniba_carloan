@@ -1,6 +1,6 @@
 package layout.model.entities;
 
-public class DipendenteDiFiliale extends Utente{
+public class DipendenteDiFiliale extends Utente implements CarloanEntity{
 
 	public DipendenteDiFiliale(int id, String username, String email, String nome,
 			String cognome, String telefono, String residenza) {

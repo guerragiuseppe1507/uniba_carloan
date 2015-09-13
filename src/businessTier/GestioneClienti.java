@@ -15,7 +15,7 @@ import dataAccess.DAO;
 			 * e che le credenziali di accesso al sistema siano corrette.
 			 */
 			DAO dao = new DAO();
-			risultato = dao.getClienti();	
+			risultato = dao.getClienti(inputParam);	
 			return risultato;
 		
 		

@@ -8,14 +8,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import com.mysql.jdbc.exceptions.jdbc4.*;
 
-
 public class DAO {
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "";
 	private static final String NOME_DATABASE = "carloan";
 	
-	//private static long dataSistema = System.currentTimeMillis();
-	//private static final int DUE_GIORNI_MILLIS = 172800000;
 	private Connection connessione = null;
 	
 	public HashMap<String, String> connetti() {
@@ -33,7 +30,7 @@ public class DAO {
 		} catch (ClassNotFoundException | SQLException e) {
 			
 			risultato.put(util.ResultKeys.ESITO, "false");
-			risultato.put(util.ResultKeys.MSG_ERR, "Connessione al DataBase fallita");
+			risultato.put(util.ResultKeys.MSG_ERR, util.ResultKeys.DB_CONN_ERR);
 			
 		}
 		
@@ -224,10 +221,18 @@ public class DAO {
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
-		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
-				" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
-				" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
-								
+		
+		String queryUtente;
+		
+		if(inputParam.get("filter").equals("filiale")){
+			queryUtente = "SELECT * FROM "+ SchemaDb.TAB_UTENTI + " , "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE +
+					" WHERE "+ SchemaDb.TAB_UTENTI+".id = "+ SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_utente"+
+					" AND " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE+".id_filiale = ?";
+		} else {
+			queryUtente = "SELECT * FROM "+SchemaDb.TAB_UTENTI+" WHERE id NOT IN(SELECT id_utente FROM "
+					+ SchemaDb.TAB_MANAGER_DI_FILIALE+") AND id NOT IN(SELECT id_utente FROM "+SchemaDb.TAB_DIPENDENTI_DI_FILIALE+")";
+		}
+		
 		String id;
 		String username;
 		String email;
@@ -238,7 +243,9 @@ public class DAO {
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
-			istruzione.setString(1, inputParam.get("idFiliale"));
+			if(inputParam.get("filter").equals("filiale")){
+				istruzione.setString(1, inputParam.get("idFiliale"));
+			}
 			ResultSet res = istruzione.executeQuery();
 			Boolean isUtente = res.first();
 			
@@ -249,7 +256,11 @@ public class DAO {
 				int pos = 0;
 				do{
 					
-					id = Integer.toString(res.getInt("id_utente"));
+					if(inputParam.get("filter").equals("filiale")){
+						id = Integer.toString(res.getInt("id_utente"));
+					} else {
+						id = Integer.toString(res.getInt("id"));
+					}
 					username = res.getString("username");
 					email = res.getString("email");
 					nome = res.getString("nome");
@@ -274,6 +285,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessun utente trovato");
 				
 			}
 			
@@ -331,6 +343,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessuna filiale trovata");
 				
 			}
 			
@@ -393,6 +406,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessun manager trovato");
 				
 			}
 			
@@ -426,9 +440,8 @@ public class DAO {
 			queryAuto += " WHERE status = ? AND id_filiale = ?";
 		} else if(inputParam.get("disponibilita").equals("non_disponibile")){
 			queryAuto += " WHERE (NOT (status = ?)) AND id_filiale = ?";
-		} else {
-			risultato.put(util.ResultKeys.ESITO, "false");
-			risultato.put(util.ResultKeys.MSG_ERR, "disponibilita non impostata");
+		} else if(inputParam.get("disponibilita").equals("singola")){
+			queryAuto += " WHERE "+ SchemaDb.TAB_AUTO +".id = ?";
 		}
 	
 		String id;
@@ -443,8 +456,12 @@ public class DAO {
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
-			istruzione.setString(1, "DISPONIBILE");
-			istruzione.setString(2, inputParam.get("id_filiale"));
+			if(inputParam.get("disponibilita").equals("singola")){
+				istruzione.setString(1, inputParam.get("id_auto"));
+			} else {
+				istruzione.setString(1, "DISPONIBILE");
+				istruzione.setString(2, inputParam.get("id_filiale"));
+			}
 			ResultSet res = istruzione.executeQuery();
 			Boolean isAuto = res.first();
 			
@@ -484,6 +501,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessuna auto trovata");
 				
 			}
 			
@@ -724,6 +742,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessuna fascia trovata");
 				
 			}
 			
@@ -777,6 +796,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessun modello trovato per la fascia "+inputParam.get("nome_fascia"));
 				
 			}
 			
@@ -1572,76 +1592,7 @@ public class DAO {
 	
 	// METODI DANIELE
 	
-    public HashMap<String, String> getFreeUsers(){
-			
-		HashMap<String, String> risultato = new HashMap<String, String>();
-		risultato = connetti();
-		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
-		String queryUtente = "SELECT * FROM "+SchemaDb.TAB_UTENTI+" WHERE id NOT IN(SELECT id_utente FROM "+SchemaDb.TAB_MANAGER_DI_FILIALE+") AND id NOT IN(SELECT id_utente FROM "+SchemaDb.TAB_DIPENDENTI_DI_FILIALE+")";
-		
-				
-				//SELECT * FROM utenti where id NOT IN (select id_utente from manager_di_filiale) 
-				//and id NOT IN ( select id_utente from dipendenti_di_filiale)
-		String id;
-		String username;
-		String email;
-		String nome;
-		String cognome;
-		String telefono;
-		String residenza;
-		
-		try {
-			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
-			ResultSet res = istruzione.executeQuery();
-			Boolean isUtente = res.first();
-			
-			if (isUtente){
-				
-				risultato.put(util.ResultKeys.ESITO, "true");
-
-				int pos = 0;
-				do{
-					id = res.getString("id");
-					username = res.getString("username");
-					email = res.getString("email");
-					nome = res.getString("nome");
-					cognome = res.getString("cognome");
-					telefono = res.getString("telefono");
-					residenza = res.getString("residenza");
-					
-					risultato.put("id" + Integer.toString(pos), id);
-					risultato.put("username" + Integer.toString(pos), username);
-					risultato.put("email" + Integer.toString(pos), email);
-					risultato.put("nome" + Integer.toString(pos), nome);
-					risultato.put("cognome" + Integer.toString(pos), cognome);
-					risultato.put("telefono" + Integer.toString(pos), telefono);
-					risultato.put("residenza" + Integer.toString(pos), residenza);
-					pos++;
-					
-				}while(res.next());
-				
-				risultato.put(util.ResultKeys.RES_LENGTH, Integer.toString(pos));
-				
-			}else{
-				
-				risultato.put(util.ResultKeys.ESITO, "false");
-				risultato.put(util.ResultKeys.RES_LENGTH, "0");
-				
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			risultato.put(util.ResultKeys.ESITO, "false");
-			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
-		}
-		
-		return risultato;
-			
-	}
-		
-		
-	
-    public HashMap<String, String> getContratto(){
+    public HashMap<String, String> getContratto(HashMap<String,String> inputParam){
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
@@ -1654,25 +1605,70 @@ public class DAO {
 				" INNER JOIN "+ SchemaDb.TAB_CLIENTI+
 				" ON " + SchemaDb.TAB_CONTRATTI+".id_cliente = "+SchemaDb.TAB_CLIENTI+".id"+
 				" INNER JOIN "+SchemaDb.TAB_UTENTI+
-				" ON " + SchemaDb.TAB_CONTRATTI+".id_dipendente = "+SchemaDb.TAB_UTENTI+".id";
+				" ON " + SchemaDb.TAB_CONTRATTI+".id_dipendente = "+SchemaDb.TAB_UTENTI+".id"+
+				" INNER JOIN "+SchemaDb.TAB_FILIALI+
+				" ON " + SchemaDb.TAB_CONTRATTI+".filiale_di_partenza = "+SchemaDb.TAB_FILIALI+".id"+
+				" INNER JOIN "+SchemaDb.TAB_FILIALI+ " AS filiali1" +
+				" ON " + SchemaDb.TAB_CONTRATTI+".filiale_di_arrivo = filiali1.id";
+		
+		if(inputParam.get("filter").equals("GESTIONE_FILIALE")){
+			
+			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ?"+
+							"AND ("+ SchemaDb.TAB_CONTRATTI +".filiale_di_partenza = ?" +
+							"OR "+ SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?)";
+			
+			if(!inputParam.get("status").equals("TUTTI")){
+				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
+			}
+			
+		} else if(inputParam.get("filter").equals("CONTRATTI_FILIALE")){
+			
+			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ?"+
+							"AND " + SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?";
+			
+			if(!inputParam.get("status").equals("TUTTI")){
+				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
+			}
+			
+		} else if(inputParam.get("filter").equals("MIEI_CONTRATTI")){
+			
+			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente = ?"+
+					"AND ("+ SchemaDb.TAB_CONTRATTI +".filiale_di_partenza = ?" +
+					"OR "+ SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?)";
 	
-		 String id;
-		 String tipoKm;
-		 String tariffa;
-		 String dataInizio;
-		 String dataLimite;
-		 String dataRientro;
-		 String acconto;
-		 String stato;
-		 String nomeCliente;
-		 String nomeDipendente;
-		 String modello;
-		 String totPrezzo;
-		 String filialeDiPartenza;
-		 String filialeDiArrivo;
+			if(!inputParam.get("status").equals("TUTTI")){
+				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
+			}
+			
+		}
+	
+		String id;
+		String id_cliente;
+		String id_auto;
+		String id_dipendente;
+		String id_filiale_di_partenza;
+		String id_filiale_di_arrivo;
+		String tipoKm;
+		String tariffa;
+		String dataInizio;
+		String dataLimite;
+		String dataRientro;
+		String acconto;
+		String stato;
+		String nomeDipendente;
+		String totPrezzo;
+		String filialeDiPartenza;
+		String filialeDiArrivo;
 
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			istruzione.setString(1, inputParam.get("id_dipendente"));
+			istruzione.setString(2, inputParam.get("id_filiale"));
+			
+			if (!inputParam.get("filter").equals("CONTRATTI_FILIALE")) {
+				istruzione.setString(3, inputParam.get("id_filiale"));
+			}
+			
 			ResultSet res = istruzione.executeQuery();
 			Boolean isAuto = res.first();
 			
@@ -1684,31 +1680,37 @@ public class DAO {
 				do{
 					
 					id = res.getString(SchemaDb.TAB_CONTRATTI+".id");
+					id_cliente = res.getString(SchemaDb.TAB_CONTRATTI+".id_cliente");
+					id_auto = res.getString(SchemaDb.TAB_CONTRATTI+".id_auto");
+					id_dipendente = res.getString(SchemaDb.TAB_UTENTI+".id");
+					id_filiale_di_partenza = res.getString(SchemaDb.TAB_FILIALI+".id");
+					id_filiale_di_arrivo = res.getString("filiali1.id");
 					tipoKm = res.getString(SchemaDb.TAB_CONTRATTI+".tipo_km");
 					tariffa = res.getString(SchemaDb.TAB_CONTRATTI+".tariffa");
-					dataInizio=res.getString(SchemaDb.TAB_CONTRATTI+".data_inizio");
-					dataLimite=res.getString(SchemaDb.TAB_CONTRATTI+".data_limite");
-					dataRientro=res.getString(SchemaDb.TAB_CONTRATTI+".data_rientro");
-					acconto=res.getString(SchemaDb.TAB_CONTRATTI+".acconto");
-					stato=res.getString(SchemaDb.TAB_CONTRATTI+".stato");
-					nomeCliente=res.getString(SchemaDb.TAB_CLIENTI+".nome");
-					nomeDipendente=res.getString(SchemaDb.TAB_UTENTI+".nome");
-					modello = res.getString(SchemaDb.TAB_MODELLI+".nome");
-					totPrezzo=res.getString(SchemaDb.TAB_CONTRATTI+".tot_prezzo");
-					filialeDiPartenza=res.getString(SchemaDb.TAB_CONTRATTI+".filiale_di_partenza");
-					filialeDiArrivo=res.getString(SchemaDb.TAB_CONTRATTI+".filiale_di_arrivo");
+					dataInizio = res.getString(SchemaDb.TAB_CONTRATTI+".data_inizio");
+					dataLimite = res.getString(SchemaDb.TAB_CONTRATTI+".data_limite");
+					dataRientro = res.getString(SchemaDb.TAB_CONTRATTI+".data_rientro");
+					acconto = res.getString(SchemaDb.TAB_CONTRATTI+".acconto");
+					stato = res.getString(SchemaDb.TAB_CONTRATTI+".stato");
+					nomeDipendente = res.getString(SchemaDb.TAB_UTENTI+".username");
+					totPrezzo = res.getString(SchemaDb.TAB_CONTRATTI+".tot_prezzo");
+					filialeDiPartenza = res.getString(SchemaDb.TAB_FILIALI+".nome");
+					filialeDiArrivo = res.getString("filiali1.nome");
 					
 					risultato.put("id" + Integer.toString(pos), id);
+					risultato.put("id_cliente" + Integer.toString(pos), id_cliente);
+					risultato.put("id_auto" + Integer.toString(pos), id_auto);
+					risultato.put("id_dipendente" + Integer.toString(pos), id_dipendente);
+					risultato.put("id_filiale_di_partenza" + Integer.toString(pos), id_filiale_di_partenza);
+					risultato.put("id_filiale_di_arrivo" + Integer.toString(pos), id_filiale_di_arrivo);
 					risultato.put("tipoKm" + Integer.toString(pos), tipoKm);
-					risultato.put("modello" + Integer.toString(pos), modello);
 					risultato.put("tariffa" + Integer.toString(pos), tariffa);
 					risultato.put("dataInizio" + Integer.toString(pos),dataInizio);
 					risultato.put("dataLimite" + Integer.toString(pos),dataLimite);
 					risultato.put("dataRientro" + Integer.toString(pos),dataRientro);
-					risultato.put("nomeDipendente" + Integer.toString(pos),nomeDipendente);
+					risultato.put("dipendente" + Integer.toString(pos),nomeDipendente);
 					risultato.put("acconto" + Integer.toString(pos),acconto);
 					risultato.put("stato" + Integer.toString(pos),stato);
-					risultato.put("nomeCliente" + Integer.toString(pos),nomeCliente);
 					risultato.put("totPrezzo" + Integer.toString(pos),totPrezzo);
 					risultato.put("filialeDiPartenza" + Integer.toString(pos),filialeDiPartenza);
 					risultato.put("filialeDiArrivo" + Integer.toString(pos),filialeDiArrivo);
@@ -1723,6 +1725,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessun contratto trovato");
 				
 			}
 			
@@ -1738,12 +1741,16 @@ public class DAO {
 	
 	
 	
-    public HashMap<String, String> getClienti(){
+    public HashMap<String, String> getClienti(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		String queryUtente = "SELECT * FROM "+ SchemaDb.TAB_CLIENTI;
+		
+		if(inputParam.get("filtro") != null && inputParam.get("filtro").equals("singolo")){
+			queryUtente += " WHERE "+ SchemaDb.TAB_CLIENTI+".id = ?";
+		}
 								
 		String id;
 		String nome;
@@ -1756,6 +1763,9 @@ public class DAO {
 		
 		try {
 			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			if(inputParam.get("filtro") != null && inputParam.get("filtro").equals("singolo")){
+				istruzione.setString(1, inputParam.get("id_cliente"));
+			} 
 			ResultSet res = istruzione.executeQuery();
 			Boolean isCliente = res.first();
 			
@@ -1793,6 +1803,7 @@ public class DAO {
 				
 				risultato.put(util.ResultKeys.ESITO, "false");
 				risultato.put(util.ResultKeys.RES_LENGTH, "0");
+				risultato.put(util.ResultKeys.MSG_ERR, "Nessun cliente trovato");
 				
 			}
 			
@@ -1901,7 +1912,7 @@ public class DAO {
 		
 	}
 	
-	public HashMap<String, String> changeStatus(HashMap<String,String> inputParam){
+	public HashMap<String, String> changeAutoStatus(HashMap<String,String> inputParam){
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
@@ -1910,7 +1921,13 @@ public class DAO {
 				+" SET status = ? WHERE id = ?";
 	
 		try {
-			if(!checkAuto(inputParam.get("id_auto"),"noleggiata")){
+			boolean runnable;
+			if(inputParam.get("force").equals("true")){
+				runnable = true;
+			} else {
+				runnable = !checkAuto(inputParam.get("id_auto"),"noleggiata");
+			}
+			if(runnable){
 				PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
 				istruzione.setString(1, inputParam.get("new_status"));
 				istruzione.setString(2, inputParam.get("id_auto"));
@@ -1969,7 +1986,7 @@ public class DAO {
 		
 		
 	
-	public HashMap<String, String> changeTarga(HashMap<String,String> inputParam){
+	public HashMap<String, String> changeAutoTarga(HashMap<String,String> inputParam){
 		
 		HashMap<String, String> risultato = new HashMap<String, String>();
 		risultato = connetti();
@@ -2036,6 +2053,10 @@ public class DAO {
 				risultato.put("tariffa_illim_s",tariffa_illim_s);
 				
 				risultato.put(util.ResultKeys.ESITO, "true");
+			} else {
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, 
+						"Prezzi non trovati per la fascia " + inputParam.get("nomeFascia"));
 			}
 
 		} catch (SQLException e){
@@ -2056,6 +2077,7 @@ public class DAO {
 		HashMap<String, String> datiQueryAuto = new HashMap<String, String>();
 		datiQueryAuto.put("new_status", inputParam.get("status_auto"));
 		datiQueryAuto.put("id_auto", inputParam.get("id_auto"));
+		datiQueryAuto.put("force", "false");
 		
 		String queryUtente = "INSERT INTO "+ SchemaDb.TAB_CONTRATTI 
 								+" (tipo_km, tariffa, data_inizio, data_limite, acconto, stato, id_cliente,"
@@ -2074,7 +2096,7 @@ public class DAO {
 			istruzione.setString(9, inputParam.get("id_auto"));
 			istruzione.setString(10, inputParam.get("id_start_filiale"));
 			istruzione.setString(11, inputParam.get("id_end_filiale"));	
-			datiQueryAuto = changeStatus(datiQueryAuto);
+			datiQueryAuto = changeAutoStatus(datiQueryAuto);
 			if (datiQueryAuto.get(util.ResultKeys.ESITO).equals("true")){
 				istruzione.execute();
 				risultato.put(util.ResultKeys.ESITO, "true");
@@ -2087,6 +2109,118 @@ public class DAO {
 			risultato.put(util.ResultKeys.ESITO, "false");
 			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
 		}
+		return risultato;
+	}
+	
+	public HashMap<String, String> modificaContratto(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "UPDATE "+ SchemaDb.TAB_CONTRATTI 
+								+" SET tipo_km = ?, tariffa = ?, data_inizio = ?, data_limite = ?, acconto = ?, stato = ?, id_cliente = ?,"
+									+" id_dipendente = ?, id_auto = ?, filiale_di_partenza = ?, filiale_di_arrivo = ?"
+								+" WHERE id = ?";
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("tipo_km"));
+			istruzione.setString(2, inputParam.get("tariffa"));
+			istruzione.setString(3, inputParam.get("data_inizio"));
+			istruzione.setString(4, inputParam.get("data_limite"));
+			istruzione.setString(5, inputParam.get("acconto"));
+			istruzione.setString(6, inputParam.get("status_contratto"));
+			istruzione.setString(7, inputParam.get("id_cliente"));
+			istruzione.setString(8, inputParam.get("id_dipendente"));
+			istruzione.setString(9, inputParam.get("id_auto"));
+			istruzione.setString(10, inputParam.get("id_start_filiale"));
+			istruzione.setString(11, inputParam.get("id_end_filiale"));	
+			istruzione.setString(12, inputParam.get("id_contratto"));	
+			
+			istruzione.execute();
+			risultato.put(util.ResultKeys.ESITO, "true");
+
+		}catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		return risultato;
+	}
+	
+	public HashMap<String, String> rimuoviContratto(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		HashMap<String, String> datiQueryAuto = new HashMap<String, String>();
+		datiQueryAuto.put("new_status", inputParam.get("status_auto"));
+		datiQueryAuto.put("id_auto", inputParam.get("id_auto"));
+		datiQueryAuto.put("force", "true");
+		
+		String queryUtente = "DELETE FROM "+ SchemaDb.TAB_CONTRATTI 
+								+" WHERE id = ?";
+		try {
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("id_contratto"));
+			
+			datiQueryAuto = changeAutoStatus(datiQueryAuto);
+			if (datiQueryAuto.get(util.ResultKeys.ESITO).equals("true")){
+				istruzione.execute();
+				risultato.put(util.ResultKeys.ESITO, "true");
+			} else {
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, "Errore auto");
+			}	
+
+		}catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		return risultato;
+	}
+	
+	public HashMap<String, String> chiudiContratto(HashMap<String,String> inputParam){
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String queryUtente = "UPDATE "+ SchemaDb.TAB_CONTRATTI 
+				+" SET data_rientro = ? , stato = ? , tot_prezzo = ? WHERE id = ?";
+		
+		String queryAuto = "UPDATE "+ SchemaDb.TAB_AUTO 
+				+" SET id_filiale = ? , status = ? , chilometraggio = ? WHERE id = ?";
+		
+		startConnectionTransaction();
+
+		try {
+			
+			PreparedStatement istruzione = connessione.prepareStatement(queryUtente);
+			istruzione.setString(1, inputParam.get("data_rientro"));
+			istruzione.setString(2, inputParam.get("new_status_contratto"));
+			istruzione.setString(3, inputParam.get("tot"));
+			istruzione.setString(4, inputParam.get("id_contratto"));
+			istruzione.execute();
+			
+			istruzione = connessione.prepareStatement(queryAuto);
+			istruzione.setString(1, inputParam.get("new_filiale"));
+			istruzione.setString(2, inputParam.get("new_status_auto"));
+			istruzione.setString(3, inputParam.get("new_chilometraggio_auto"));
+			istruzione.setString(4, inputParam.get("id_auto"));
+			istruzione.execute();
+			
+			endConnectionTransaction();
+			risultato.put(util.ResultKeys.ESITO, "true");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollBack();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
 		return risultato;
 	}
 	

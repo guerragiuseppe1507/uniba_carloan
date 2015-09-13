@@ -1,11 +1,9 @@
 package layout.model.entities;
 
-import java.util.Comparator;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Cliente implements Comparable<Cliente> {
+public class Cliente implements CarloanEntity, Comparable<Cliente> {
 	private int id;
 	private StringProperty nome;
 	private StringProperty cognome;

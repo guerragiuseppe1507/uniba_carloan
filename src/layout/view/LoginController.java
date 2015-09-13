@@ -55,6 +55,9 @@ public class LoginController implements Initializable, ControlledScreen{
 		myController = screenParent;
 	}
 	
+	@Override
+	public void riempiCampi(){}
+	
 	@FXML
 	private void handleLogin() {
 		
@@ -69,26 +72,23 @@ public class LoginController implements Initializable, ControlledScreen{
 		
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
 			
-			if (risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerSistema)){
-				c.setUserType(Context.managerSistema);
-				ScreensFramework.loadManagerSistemaScreens(myController);		
-				myController.setScreen(ScreensFramework.homeManagerDiSistemaID);
+			if (risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.MANAGER_SISTEMA)){
+				c.setUserType(Context.MANAGER_SISTEMA);		
+				myController.showScreen(ScreensFramework.homeManagerDiSistemaFile);
 				ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.homeManagerDiSistemaTitle);
 			}
 			
-			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.managerFiliale)){
-				c.setUserType(Context.managerFiliale);
+			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.MANAGER_FILIALE)){
+				c.setUserType(Context.MANAGER_FILIALE);
 				istanziaUtente(risultato);
-				ScreensFramework.loadManagerFilialeScreens(myController);
-				myController.setScreen(ScreensFramework.homeManagerDiFilialeID);
+				myController.showScreen(ScreensFramework.homeManagerDiFilialeFile);
 				ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.homeManagerDiFilialeTitle);
 			}
 			
-			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.dipendenteFiliale)){
-				c.setUserType(Context.dipendenteFiliale);
+			if(risultato.get(util.ResultKeys.TIPO_UTENTE).equals(Context.DIPENDENTE_FILIALE)){
+				c.setUserType(Context.DIPENDENTE_FILIALE);
 				istanziaUtente(risultato);
-				ScreensFramework.loadDipendenteFilialeScreens(myController);
-				myController.setScreen(ScreensFramework.homeDipendenteDiFilialeID);
+				myController.showScreen(ScreensFramework.homeDipendenteDiFilialeFile);
 				ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.homeDipendenteDiFilialeTitle);
 			}
 			
@@ -96,8 +96,8 @@ public class LoginController implements Initializable, ControlledScreen{
 				
 				NotificationManager.setInfo("Utente non ancora associato ad alcuna filiale\n"+
 											"Contatta il manager della tua filiale di riferimento");
+				
 			}
-			
 
 		}else if(risultato.get(util.ResultKeys.MSG_ERR).equalsIgnoreCase("Connessione al DataBase fallita")){
 						
@@ -108,7 +108,6 @@ public class LoginController implements Initializable, ControlledScreen{
 			NotificationManager.setError("Ricontrolla i dati inseriti o contatta un manager della tua filiale di riferimento");
 
 		}
-		
 		
 	}
 	
@@ -160,6 +159,7 @@ public class LoginController implements Initializable, ControlledScreen{
 			} else {
 				NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
 			}
+			
 		}
 		
 	}

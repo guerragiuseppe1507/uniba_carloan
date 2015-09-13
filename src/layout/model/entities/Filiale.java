@@ -3,7 +3,7 @@ package layout.model.entities;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Filiale implements Comparable<Filiale>{
+public class Filiale implements CarloanEntity, Comparable<Filiale>{
 	
 	private int id;
 	private StringProperty nome;

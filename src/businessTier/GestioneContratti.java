@@ -12,7 +12,7 @@ public class GestioneContratti {
 		HashMap<String, String> risultato = new HashMap<>();
 
 		DAO dao = new DAO();
-		risultato = dao.getContratto();	
+		risultato = dao.getContratto(inputParam);	
 		return risultato;
 	
 	
@@ -26,10 +26,36 @@ public class GestioneContratti {
 		risultato = dao.inserisciContratto(inputParam);	
 		return risultato;
 	
+	}
+	
+	public HashMap<String, String> modificaContratto(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+
+		DAO dao = new DAO();
+		risultato = dao.modificaContratto(inputParam);	
+		return risultato;
 	
 	}
 	
+	public HashMap<String, String> annullaContratto(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+
+		DAO dao = new DAO();
+		risultato = dao.rimuoviContratto(inputParam);	
+		return risultato;
 	
+	}
 	
+	public HashMap<String, String> chiudiContratto(HashMap<String, String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<>();
+
+		DAO dao = new DAO();
+		risultato = dao.chiudiContratto(inputParam);	
+		return risultato;
+	
+	}
 	
 }

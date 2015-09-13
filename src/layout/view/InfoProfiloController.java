@@ -58,11 +58,17 @@ public class InfoProfiloController implements Initializable, ControlledScreen {
 		menu.setPrefHeight(ScreensFramework.DEFAULT_MENU_HEIGHT);
 		menu.setPrefWidth(ScreensFramework.DEFAULT_MENU_WIDTH);
 		
-		riempiCampi();
+		tfUsername.setText(Context.getInstance().getUtente().getUsername());
+		tfEmail.setText(Context.getInstance().getUtente().getEmail());
+		tfNome.setText(Context.getInstance().getUtente().getNome());
+		tfCognome.setText(Context.getInstance().getUtente().getCognome());
+		tfTelefono.setText(Context.getInstance().getUtente().getTelefono());
+		tfResidenza.setText(Context.getInstance().getUtente().getResidenza());
+		//tfPassword.setText(Context.getInstance().getPassword());
+		
 		tvFiliale.setText(Context.getInstance().getUtente().getFiliale().getNome());
 		tvUtente.setText(Context.getInstance().getUtente().getUsername());
 		tvTipo.setText(Context.getInstance().getUserType());
-
 	}
     
 	
@@ -71,16 +77,8 @@ public class InfoProfiloController implements Initializable, ControlledScreen {
 		ContextMenu.showContextMenu(menu,myController);
 	}
 	
-	
-	private void riempiCampi(){
-		tfUsername.setText(Context.getInstance().getUtente().getUsername());
-		tfEmail.setText(Context.getInstance().getUtente().getEmail());
-		tfNome.setText(Context.getInstance().getUtente().getNome());
-		tfCognome.setText(Context.getInstance().getUtente().getCognome());
-		tfTelefono.setText(Context.getInstance().getUtente().getTelefono());
-		tfResidenza.setText(Context.getInstance().getUtente().getResidenza());
-		//tfPassword.setText(Context.getInstance().getPassword());
-	}
+	@Override
+	public void riempiCampi(){}
 	
 	@FXML
 	private void  handleSave(){

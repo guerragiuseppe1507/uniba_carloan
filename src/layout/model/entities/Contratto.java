@@ -6,9 +6,14 @@ import javafx.beans.property.StringProperty;
 
 
 
-public class Contratto implements Comparable<Contratto>{
+public class Contratto implements CarloanEntity, Comparable<Contratto>{
 	
 	private int id;
+	private int id_cliente;
+	private int id_auto;
+	private int id_dipendente;
+	private int id_filiale_di_partenza;
+	private int id_filiale_di_arrivo;
 	private StringProperty tipoKm;
 	private StringProperty tariffa;
 	private StringProperty dataInizio;
@@ -16,45 +21,50 @@ public class Contratto implements Comparable<Contratto>{
 	private StringProperty dataRientro;
 	private StringProperty acconto;
 	private StringProperty stato;
-	private StringProperty nomeCliente;
 	private StringProperty nomeDipendente;
-	private StringProperty modello;
 	private StringProperty totPrezzo;
 	private StringProperty filialeDiPartenza;
 	private StringProperty filialeDiArrivo;
 	public static final String STATUS_APERTO = "APERTO";
 	public static final String STATUS_CHIUSO = "CHIUSO";
-	public static final String STATUS_ANNULLATO = "ANNULLATO";
+	public static final String[] POSSIBILE_STATUS = {STATUS_APERTO, STATUS_CHIUSO};
 	public static final String[] POSSIBILE_CHILOMETRAGGIO = {"LIMITATO", "ILLIMITATO"};
 	public static final String[] POSSIBILE_TARIFFA = {"GIORNALIERA", "SETTIMANALE"};
-	public static String[] properties = {"tipoKm", "tariffa", "dataInizio", "dataLimite", "dataRientro", "acconto"
-		, "stato", "nomeCliente", "nomeDipendente", "modello", "totPrezzo", "filialeDiPartenza", "filialeDiArrivo"};
+	public static String[] properties = {"dipendente", "tipoKm", "tariffa", "dataInizio", "dataLimite", "dataRientro", "filialeDiPartenza", "filialeDiArrivo" , "acconto"
+		, "stato", "totPrezzo"};
 
 	
-	public Contratto(int id, String tipoKm, String tariffa,String dataInizio, String dataLimite, 
-			String dataRientro, String acconto, String stato,String nomeCliente,
-			String nomeDipendente, String modello, String totPrezzo,
-			String filialeDiPartenza, String filialeDiArrivo){
+	public Contratto(int id, int id_cliente, int id_auto, int id_dipendente, int id_filiale_di_partenza, int id_filiale_di_arrivo, String tipoKm, String tariffa, String dataInizio, String dataLimite, 
+			String dataRientro, String filialeDiPartenza, String filialeDiArrivo, String acconto, String stato,
+			String nomeDipendente, String totPrezzo){
 		
-		this.id=id;
-		this.tipoKm=new SimpleStringProperty(tipoKm);
-		this.tariffa= new SimpleStringProperty(tariffa);
+		this.id = id;
+		this.id_cliente = id_cliente;
+		this.id_auto = id_auto;
+		this.id_dipendente = id_dipendente;
+		this.id_filiale_di_partenza = id_filiale_di_partenza;
+		this.id_filiale_di_arrivo = id_filiale_di_arrivo;
+		this.tipoKm = new SimpleStringProperty(tipoKm);
+		this.tariffa = new SimpleStringProperty(tariffa);
 		this.dataInizio = new SimpleStringProperty(dataInizio);
 		this.dataLimite = new SimpleStringProperty(dataLimite);
-		this.dataRientro=new SimpleStringProperty(dataRientro);
-		this.acconto=new SimpleStringProperty(acconto);
-		this.stato=new SimpleStringProperty(stato);
-		this.nomeCliente=new SimpleStringProperty(nomeCliente);
-		this.nomeDipendente=new SimpleStringProperty(nomeDipendente);
-		this.modello=new SimpleStringProperty(modello);
-		this.totPrezzo=new SimpleStringProperty(totPrezzo);
-		this.filialeDiPartenza=new SimpleStringProperty(filialeDiPartenza);
-		this.filialeDiArrivo=new SimpleStringProperty(filialeDiArrivo);
+		this.dataRientro = new SimpleStringProperty(dataRientro);
+		this.acconto = new SimpleStringProperty(acconto);
+		this.stato = new SimpleStringProperty(stato);
+		this.nomeDipendente = new SimpleStringProperty(nomeDipendente);
+		this.totPrezzo = new SimpleStringProperty(totPrezzo);
+		this.filialeDiPartenza = new SimpleStringProperty(filialeDiPartenza);
+		this.filialeDiArrivo = new SimpleStringProperty(filialeDiArrivo);
 		
 	}
 	
 	
 	public int getId(){return id;}
+	public int getIdCliente(){return id_cliente;}
+	public int getIdAuto(){return id_auto;}
+	public int getIdDipendente(){return id_dipendente;}
+	public int getIdFilialeDiPartenza(){return id_filiale_di_partenza;}
+	public int getIdFilialeDiArrivo(){return id_filiale_di_arrivo;}
 	public String getTipoKm(){return tipoKm.get();}
 	public String getTariffa(){return tariffa.get();}
 	public String getDataInizio(){return dataInizio.get();}
@@ -62,9 +72,7 @@ public class Contratto implements Comparable<Contratto>{
 	public String getDataRientro(){return dataRientro.get();} 
 	public String getAcconto(){ return acconto.get();}
 	public String getStato(){return stato.get();}
-	public String getNomeCliente(){return nomeCliente.get();}
 	public String getNomeDipendente(){ return nomeDipendente.get();}
-	public String getModello(){ return modello.get();}
 	public String getTotPrezzo(){return totPrezzo.get();};
 	public String getFilialeDiPartenza(){return filialeDiPartenza.get();}
 	public String getFilialeDiArrivo(){return filialeDiArrivo.get();}
@@ -95,14 +103,8 @@ public class Contratto implements Comparable<Contratto>{
 			case("stato"): 	
 				wanted = stato;
 				break;
-			case("nomeCliente"): 	
-				wanted = nomeCliente;
-				break;
-			case("nomeDipendente"): 	
+			case("dipendente"): 	
 				wanted = nomeDipendente;
-				break;
-			case("modello"): 	
-				wanted = modello;
 				break;
 			case("totPrezzo"): 	
 				wanted = totPrezzo;

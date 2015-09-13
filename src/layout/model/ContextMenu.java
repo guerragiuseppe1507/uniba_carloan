@@ -24,7 +24,7 @@ public class ContextMenu {
 		Boolean notManager = true;
 		
     	
-    	if(Context.getInstance().getUserType().equals(Context.managerSistema)){
+    	if(Context.getInstance().getUserType().equals(Context.MANAGER_SISTEMA)){
     		notManager = false;
 			Menu gestisci = new Menu("Gestisci Filiali");
 			mainMenu.getMenus().addAll(gestisci);
@@ -36,13 +36,12 @@ public class ContextMenu {
 			gestisciManager.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.insertManagerID, ScreensFramework.insertManagerFile);
-	            	ctrl.setScreen(ScreensFramework.insertManagerID);
+	            	ctrl.showScreen(ScreensFramework.insertManagerFile);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.insertManagerTitle);
 	            }
 	        });
 			
-    	}else if(Context.getInstance().getUserType().equals(Context.managerFiliale)){
+    	}else if(Context.getInstance().getUserType().equals(Context.MANAGER_FILIALE)){
     		
     		
     		Menu contratti = new Menu("Contratti");
@@ -53,18 +52,18 @@ public class ContextMenu {
     		
     		MenuItem gestisciAuto = new MenuItem("Gestisci Auto");
     		MenuItem gestisciDipendente = new MenuItem("Gestisci Dipendenti");
-    		MenuItem gestisciContratto = new MenuItem("Gestisci Contratti");
-    		MenuItem inserimentoContratto= new MenuItem("Inserimento Contratto");
+    		MenuItem gestisciContratto = new MenuItem("Miei Contratti");
+    		MenuItem inserimentoContratto = new MenuItem("Stipula Contratto");
+    		MenuItem contrattiFiliale = new MenuItem("Gestisci Contratti");
     		
     		contratti.getItems().addAll(inserimentoContratto, gestisciContratto);
-    		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente);
+    		gestisci.getItems().addAll(gestisciAuto, gestisciDipendente, contrattiFiliale);
     		
     	
     		gestisciAuto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.manageAutoID, ScreensFramework.manageAutoFile);
-	            	ctrl.setScreen(ScreensFramework.manageAutoID);
+	            	ctrl.showScreen(ScreensFramework.manageAutoFile);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.manageAutoTitle);
 	            }
 	        });
@@ -73,17 +72,25 @@ public class ContextMenu {
     		gestisciContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.gestioneContrattoID, ScreensFramework.gestioneContrattoFile);
-	            	ctrl.setScreen(ScreensFramework.gestioneContrattoID);
+	            	ctrl.showScreen(ScreensFramework.gestioneContrattoFile);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneContrattoTitle);
+	            	ctrl.opzioniAvvio = "mieiContratti";
+	            }
+	        });
+    		
+    		contrattiFiliale.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.showScreen(ScreensFramework.gestioneContrattoFile);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneContrattoFilialeTitle);
+	            	ctrl.opzioniAvvio = "gestioneFiliale";
 	            }
 	        });
     		
     		gestisciDipendente.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.gestioneDipendentiID, ScreensFramework.gestioneDipendentiFile);
-	            	ctrl.setScreen(ScreensFramework.gestioneDipendentiID);
+	            	ctrl.showScreen(ScreensFramework.gestioneDipendentiFile);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneDipendentiTitle);
 	            }
 	            
@@ -95,46 +102,60 @@ public class ContextMenu {
     		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.InserimentoContrattoID, ScreensFramework.InserimentoContrattoFile);
-	            	ctrl.setScreen(ScreensFramework.InserimentoContrattoID);
-	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.InserimentoContrattoTitle);
+	            	ctrl.showScreen(ScreensFramework.inserimentoContrattoFile);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.inserimentoContrattoTitle);
 	            }
 	        });
     		
-    	}else if(Context.getInstance().getUserType().equals(Context.dipendenteFiliale)){
+    	} else if (Context.getInstance().getUserType().equals(Context.DIPENDENTE_FILIALE)){
     		
-    		Menu gestisci = new Menu("Gestisci");
-    		mainMenu.getMenus().addAll(gestisci);
-    		MenuItem inserimentoContratto = new MenuItem("Inserimento Contratto");
+    		Menu gestisci = new Menu("Contratti");
+    		Menu filiale = new Menu("Filiale");
+    		mainMenu.getMenus().addAll(gestisci, filiale);
+    		MenuItem inserimentoContratto = new MenuItem("Stipula Contratto");
+    		MenuItem gestisciContratto = new MenuItem("Miei Contratti");
+    		MenuItem contrattiInArrivo = new MenuItem("Contratti in arrivo");
     		//TODO voci del menu
-    		gestisci.getItems().addAll(inserimentoContratto);
+    		gestisci.getItems().addAll(inserimentoContratto, gestisciContratto);
+    		filiale.getItems().addAll(contrattiInArrivo);
     		
     		inserimentoContratto.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.InserimentoContrattoID, ScreensFramework.InserimentoContrattoFile);
-	            	ctrl.setScreen(ScreensFramework.InserimentoContrattoID);
-	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.InserimentoContrattoTitle);
+	            	ctrl.showScreen(ScreensFramework.inserimentoContrattoFile);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.inserimentoContrattoTitle);
+	            }
+	        });
+    		
+    		gestisciContratto.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.showScreen(ScreensFramework.gestioneContrattoFile);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneContrattoTitle);
+	            	ctrl.opzioniAvvio = "mieiContratti";
+	            }
+	        });
+    		
+    		contrattiInArrivo.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	ctrl.showScreen(ScreensFramework.gestioneContrattoFile);
+	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneContrattoFilialeTitle);
+	            	ctrl.opzioniAvvio = "contrattiInArrivo";
 	            }
 	        });
     		
     	}
     	
-    	
-    	
     	Menu account = new Menu("Account");
 		mainMenu.getMenus().addAll(account);
 		MenuItem disconnetti = new MenuItem("Disconnetti");
 		
-		
-		
-		
 		disconnetti.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	ctrl.setScreen(ScreensFramework.loginID);
+            	ctrl.showScreen(ScreensFramework.loginFile);
             	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME);
-            	ctrl.resetScreens();
             }
         });
 		
@@ -144,14 +165,14 @@ public class ContextMenu {
 			editProfile.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent event) {
-	            	ctrl.reloadScreen(ScreensFramework.gestioneProfiloID, ScreensFramework.gestioneProfiloFile);
-	            	ctrl.setScreen(ScreensFramework.gestioneProfiloID);
+	            	ctrl.showScreen(ScreensFramework.gestioneProfiloFile);
 	            	ScreensFramework.PRIMARY_STAGE.setTitle(APP_NAME+" - "+ScreensFramework.gestioneProfiloTitle);
 	            }
 			 });
-		}else{
+		} else {
 			account.getItems().addAll(disconnetti);
-		};
+		}
     	
     }
+    
 }
