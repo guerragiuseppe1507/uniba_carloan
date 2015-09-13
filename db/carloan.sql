@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS `auto` (
   KEY `FK_auto_modello` (`id_modello`),
   CONSTRAINT `FK_auto_modello` FOREIGN KEY (`id_modello`) REFERENCES `modelli` (`id`),
   CONSTRAINT `FK__filiale` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=latin1;
 
--- Dump dei dati della tabella carloan.auto: ~46 rows (circa)
+-- Dump dei dati della tabella carloan.auto: ~48 rows (circa)
 DELETE FROM `auto`;
 /*!40000 ALTER TABLE `auto` DISABLE KEYS */;
 INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilometraggio`, `provenienza`) VALUES
-	(44, 1, 'targa1', 12, 'DISPONIBILE', 0, 'Italia'),
+	(44, 1, 'targa1', 12, 'NOLEGGIATA', 0, 'Italia'),
 	(45, 11, 'targa2', 9, 'MANUTENZIONE', 0, 'Italia'),
 	(46, 4, 'targa3', 8, 'DISPONIBILE', 0, 'Italia'),
 	(47, 7, 'targa4', 11, 'DISPONIBILE', 0, 'Italia'),
@@ -45,10 +45,10 @@ INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilom
 	(50, 13, 'targa7', 8, 'DISPONIBILE', 0, 'Italia'),
 	(51, 10, 'targa8', 9, 'DISPONIBILE', 0, 'Italia'),
 	(52, 13, 'targa9', 8, 'DISPONIBILE', 0, 'Italia'),
-	(53, 14, 'targa10', 12, 'DISPONIBILE', 0, 'Italia'),
-	(54, 12, 'targa11', 12, 'DISPONIBILE', 0, 'Italia'),
+	(53, 14, 'targa10', 12, 'NOLEGGIATA', 0, 'Italia'),
+	(54, 12, 'targa11', 12, 'NOLEGGIATA', 0, 'Italia'),
 	(55, 10, 'targa12', 12, 'DISPONIBILE', 0, 'Italia'),
-	(56, 15, 'targa13', 12, 'MANUTENZIONE', 0, 'Italia'),
+	(56, 15, 'targa13', 12, 'DISPONIBILE', 400, 'Italia'),
 	(57, 16, 'targa14', 12, 'DISPONIBILE', 0, 'Italia'),
 	(58, 6, 'targa15', 11, 'DISPONIBILE', 0, 'Italia'),
 	(59, 8, 'targa16', 11, 'MANUTENZIONE', 0, 'Italia'),
@@ -57,7 +57,7 @@ INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilom
 	(62, 6, 'targa19', 11, 'DISPONIBILE', 0, 'Italia'),
 	(63, 7, 'targa20', 9, 'DISPONIBILE', 0, 'Italia'),
 	(64, 5, 'targa21', 9, 'DISPONIBILE', 0, 'Italia'),
-	(65, 1, 'targa22', 9, 'DISPONIBILE', 0, 'Italia'),
+	(65, 1, 'targa22', 9, 'NOLEGGIATA', 0, 'Italia'),
 	(66, 11, 'targa23', 9, 'DISPONIBILE', 0, 'Italia'),
 	(67, 13, 'targa24', 8, 'DISPONIBILE', 0, 'Italia'),
 	(68, 15, 'targa25', 8, 'DISPONIBILE', 0, 'Italia'),
@@ -81,7 +81,9 @@ INSERT INTO `auto` (`id`, `id_modello`, `targa`, `id_filiale`, `status`, `chilom
 	(86, 4, 'targa43', 12, 'DISPONIBILE', 0, 'Italia'),
 	(87, 6, 'targa44', 12, 'DISPONIBILE', 0, 'Italia'),
 	(88, 8, 'targa45', 13, 'DISPONIBILE', 0, 'Italia'),
-	(89, 2, 'targa46', 13, 'MANUTENZIONE', 0, 'Italia');
+	(89, 2, 'targa46', 13, 'MANUTENZIONE', 0, 'Italia'),
+	(90, 10, 'FFF-FF-3435', 12, 'DISPONIBILE', 0, 'Italia'),
+	(92, 14, 'DDD-D-2', 12, 'MANUTENZIONE', 0, 'Italia');
 /*!40000 ALTER TABLE `auto` ENABLE KEYS */;
 
 
@@ -90,26 +92,30 @@ CREATE TABLE IF NOT EXISTS `clienti` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `cognome` varchar(50) NOT NULL,
-  `mail` varchar(50) DEFAULT NULL,
-  `residenza` varchar(50) DEFAULT NULL,
-  `data_di_nascita` date DEFAULT NULL,
-  `cod_fiscale` varchar(50) DEFAULT NULL,
-  `cod_patente` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+  `mail` varchar(50) NOT NULL,
+  `residenza` varchar(50) NOT NULL,
+  `data_di_nascita` date NOT NULL,
+  `cod_fiscale` varchar(50) NOT NULL,
+  `cod_patente` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cod_fiscale` (`cod_fiscale`),
+  UNIQUE KEY `cod_patente` (`cod_patente`),
+  UNIQUE KEY `mail` (`mail`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
--- Dump dei dati della tabella carloan.clienti: ~8 rows (circa)
+-- Dump dei dati della tabella carloan.clienti: ~9 rows (circa)
 DELETE FROM `clienti`;
 /*!40000 ALTER TABLE `clienti` DISABLE KEYS */;
 INSERT INTO `clienti` (`id`, `nome`, `cognome`, `mail`, `residenza`, `data_di_nascita`, `cod_fiscale`, `cod_patente`) VALUES
-	(1, 'cliente1', 'cliente1', NULL, NULL, NULL, NULL, NULL),
-	(2, 'cliente2', 'cliente2', NULL, NULL, NULL, NULL, NULL),
-	(3, 'cliente3', 'cliente3', NULL, NULL, NULL, NULL, NULL),
-	(4, 'cliente4', 'cliente4', NULL, NULL, NULL, NULL, NULL),
-	(5, 'cliente5', 'cliente5', NULL, NULL, NULL, NULL, NULL),
-	(6, 'cliente6', 'cliente6', NULL, NULL, NULL, NULL, NULL),
-	(7, 'cliente7', 'cliente7', NULL, NULL, NULL, NULL, NULL),
-	(8, 'cliente8', 'cliente8', NULL, NULL, NULL, NULL, NULL);
+	(1, 'cliente1', 'cliente1', 'tizio@foo.it', 'Bari (BA)', '2015-07-30', 'HJKRTP67L45B660J', '121321424'),
+	(2, 'cliente2', 'cliente2', 'tizio2@foo.it', 'Bari (BA)', '2015-07-31', 'HJKRT767L45B660J', '121224424'),
+	(3, 'cliente3', 'cliente3', 'tizio3@foo.it', 'Bari (BA)', '2015-09-02', 'HFERTG67L45B660J', '121323424'),
+	(4, 'cliente4', 'cliente4', 'tizio4@foo.it', 'Bari (BA)', '2015-09-02', 'HJKSWR3435FW60J', '142234114'),
+	(5, 'cliente5', 'cliente5', 'tizio5@foo.it', 'Bari (BA)', '2015-09-02', 'HJKRTP67WE5B66J', '121327424'),
+	(6, 'cliente6', 'cliente6', 'tizio6@foo.it', 'Bari (BA)', '2015-09-02', 'HJKRTP67L45B6R0J', '121321924'),
+	(7, 'cliente7', 'cliente7', 'tizio7@foo.it', 'Bari (BA)', '2015-09-02', 'HJKRTP67L45T660J', '521321424'),
+	(8, 'cliente8', 'cliente8', 'tizio8@foo.it', 'Bari (BA)', '2015-09-02', 'HJKRTEWRRT5660J', '121351424'),
+	(19, 'cliente9', 'cliente9', 'tizio9@foo.it', 'Bari (BA)', '1996-08-01', 'HJKWYHHH532460J', '121361424');
 /*!40000 ALTER TABLE `clienti` ENABLE KEYS */;
 
 
@@ -126,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `contratti` (
   `id_cliente` int(50) NOT NULL,
   `id_dipendente` int(50) NOT NULL,
   `id_auto` int(50) NOT NULL,
-  `tot_prezzo` double(5,2) DEFAULT NULL,
+  `tot_prezzo` double(7,2) DEFAULT NULL,
   `filiale_di_partenza` int(50) NOT NULL,
   `filiale_di_arrivo` int(50) NOT NULL,
   PRIMARY KEY (`id`),
@@ -140,13 +146,17 @@ CREATE TABLE IF NOT EXISTS `contratti` (
   CONSTRAINT `FK_contratti_dipendente_di_filiale` FOREIGN KEY (`id_dipendente`) REFERENCES `utenti` (`id`),
   CONSTRAINT `FK_contratti_filiali` FOREIGN KEY (`filiale_di_partenza`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK_contratti_filiali_2` FOREIGN KEY (`filiale_di_arrivo`) REFERENCES `filiali` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
--- Dump dei dati della tabella carloan.contratti: ~1 rows (circa)
+-- Dump dei dati della tabella carloan.contratti: ~6 rows (circa)
 DELETE FROM `contratti`;
 /*!40000 ALTER TABLE `contratti` DISABLE KEYS */;
 INSERT INTO `contratti` (`id`, `tipo_km`, `tariffa`, `data_inizio`, `data_limite`, `data_rientro`, `acconto`, `stato`, `id_cliente`, `id_dipendente`, `id_auto`, `tot_prezzo`, `filiale_di_partenza`, `filiale_di_arrivo`) VALUES
-	(4, 'LIMITATO', 'GIORNALIERA', '2015-06-16', '2015-06-21', NULL, 10.00, 'APERTO', 6, 14, 44, NULL, 9, 9);
+	(3, 'LIMITATO', 'GIORNALIERA', '2015-09-12', '2018-09-02', NULL, 30.00, 'APERTO', 4, 16, 53, NULL, 12, 13),
+	(14, 'LIMITATO', 'SETTIMANALE', '2015-09-12', '2015-10-01', '2015-09-13', 44.00, 'CHIUSO', 4, 6, 56, 115.00, 12, 12),
+	(15, 'ILLIMITATO', 'GIORNALIERA', '2015-09-12', '2015-09-29', NULL, 22.00, 'APERTO', 4, 6, 54, NULL, 12, 8),
+	(16, 'ILLIMITATO', 'GIORNALIERA', '2015-09-13', '2015-09-16', NULL, 123.00, 'APERTO', 5, 2, 65, NULL, 9, 9),
+	(17, 'LIMITATO', 'SETTIMANALE', '2015-09-13', '2015-09-24', NULL, 4.00, 'APERTO', 4, 6, 44, NULL, 12, 9);
 /*!40000 ALTER TABLE `contratti` ENABLE KEYS */;
 
 
@@ -160,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `dipendenti_di_filiale` (
   KEY `id_filiale` (`id_filiale`),
   CONSTRAINT `FK_dipendente_di_filiale_filiali` FOREIGN KEY (`id_filiale`) REFERENCES `filiali` (`id`),
   CONSTRAINT `FK_dipendente_di_filiale_utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
 
 -- Dump dei dati della tabella carloan.dipendenti_di_filiale: ~15 rows (circa)
 DELETE FROM `dipendenti_di_filiale`;
@@ -170,17 +180,17 @@ INSERT INTO `dipendenti_di_filiale` (`id`, `id_utente`, `id_filiale`) VALUES
 	(8, 8, 9),
 	(9, 9, 9),
 	(10, 10, 11),
-	(13, 13, 12),
-	(16, 16, 13),
 	(19, 19, 8),
 	(20, 20, 8),
 	(21, 21, 8),
 	(31, 11, 11),
-	(38, 14, 12),
 	(40, 12, 11),
 	(42, 18, 13),
 	(44, 17, 13),
-	(49, 15, 12);
+	(70, 13, 12),
+	(86, 16, 13),
+	(87, 14, 12),
+	(88, 22, 12);
 /*!40000 ALTER TABLE `dipendenti_di_filiale` ENABLE KEYS */;
 
 
@@ -317,10 +327,10 @@ CREATE TABLE IF NOT EXISTS `prezzi` (
 DELETE FROM `prezzi`;
 /*!40000 ALTER TABLE `prezzi` DISABLE KEYS */;
 INSERT INTO `prezzi` (`id`, `tariffa_base_g`, `tariffa_base_s`, `costo_chilometrico`, `penale_chilometri`, `tariffa_illim_g`, `tariffa_illim_s`) VALUES
-	(1, 10.00, 35.00, 0.80, 1.00, 5.00, 17.00),
-	(2, 15.00, 45.00, 1.30, 1.50, 8.00, 25.00),
-	(3, 20.00, 55.00, 1.80, 2.00, 12.00, 30.00),
-	(4, 30.00, 65.00, 2.50, 2.50, 15.00, 36.00);
+	(1, 10.00, 35.00, 0.20, 0.30, 5.00, 17.00),
+	(2, 15.00, 45.00, 0.25, 0.35, 8.00, 25.00),
+	(3, 20.00, 55.00, 0.30, 0.40, 12.00, 30.00),
+	(4, 30.00, 65.00, 0.35, 0.45, 15.00, 36.00);
 /*!40000 ALTER TABLE `prezzi` ENABLE KEYS */;
 
 
