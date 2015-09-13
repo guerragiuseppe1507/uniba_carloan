@@ -364,7 +364,6 @@ public class GestioneContrattiController  implements Initializable, ControlledSc
 					InterStageEventsHandler.getInstance().setCaller(this);
 					InterStageEventsHandler.getInstance().params.put("ChiudiContratto_contratto", contrattoScelto);
 					InterStageEventsHandler.getInstance().params.put("ChiudiContratto_auto", autoScelta);
-					InterStageEventsHandler.getInstance().params.put("ChiudiContratto_cliente", clienteScelto);
 					InterStageEventsHandler.getInstance().options.put("ChiudiContratto_newKm", km);
 				} else {
 					NotificationManager.setError("Valore chilometri invalido "

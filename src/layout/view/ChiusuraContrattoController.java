@@ -2,15 +2,12 @@ package layout.view;
 
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import presentationTier.FrontController;
 import util.NotificationManager;
 import util.PriceValidator;
@@ -21,9 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import layout.model.ContextMenu;
 import layout.model.entities.Auto;
-import layout.model.entities.Cliente;
 import layout.model.entities.Contratto;
 import layout.model.entities.Fascia;
 
@@ -89,7 +84,6 @@ public class ChiusuraContrattoController  implements Initializable, ControlledSc
 	
 	private Contratto contratto;
 	private Auto auto;
-	private Cliente cliente;
 	private int newKm;
 	
 	private boolean inTempo = false;
@@ -129,13 +123,11 @@ public class ChiusuraContrattoController  implements Initializable, ControlledSc
 		
 		contratto = (Contratto) InterStageEventsHandler.getInstance().params.get("ChiudiContratto_contratto");
 		auto = (Auto) InterStageEventsHandler.getInstance().params.get("ChiudiContratto_auto");
-		cliente = (Cliente) InterStageEventsHandler.getInstance().params.get("ChiudiContratto_cliente");
 		newKm = Integer.parseInt(InterStageEventsHandler.getInstance().options.get("ChiudiContratto_newKm"));
 		data_rientro = LocalDate.now();
 		
 		InterStageEventsHandler.getInstance().params.remove("ChiudiContratto_contratto");
 		InterStageEventsHandler.getInstance().params.remove("ChiudiContratto_auto");
-		InterStageEventsHandler.getInstance().params.remove("ChiudiContratto_cliente");
 		InterStageEventsHandler.getInstance().options.remove("ChiudiContratto_newKm");
 		
 	}
