@@ -115,6 +115,8 @@ ScreensController myController;
 	
 	@FXML
 	private Button stipulaContratto;
+	@FXML
+	private Button inserisciClienteBtn;
 	
 	private ObservableList<Filiale> filialiData = FXCollections.observableArrayList();
 	HashMap<String, String> prezzi = new HashMap<String, String>();
@@ -216,6 +218,7 @@ ScreensController myController;
 		autoTable.setPlaceholder(new Label("Non è possibilie modificare l'auto associata al contratto"));
 		clientiTable.setPlaceholder(new Label("Non è possibilie modificare il cliente associato al contratto"));
 		
+		inserisciClienteBtn.setDisable(true);
 		
 		Contratto c = (Contratto) myController.params.get("modContratto_contratto");
 		
