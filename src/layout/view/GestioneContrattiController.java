@@ -128,7 +128,6 @@ public class GestioneContrattiController  implements Initializable, ControlledSc
 		if (opzioniAvvio != null && opzioniAvvio.equals("contrattiInArrivo")){
 			annullaContrattoBtn.setDisable(true);
 			modificaContrattoBtn.setDisable(true);
-			chiudiContrattoBtn.setDisable(true);
 		}
 		
 		contrattoTable.getSelectionModel().selectedItemProperty().addListener(
@@ -183,14 +182,20 @@ public class GestioneContrattiController  implements Initializable, ControlledSc
 		
 		riempiTabellaContratti(statoMenuButton.getValue());
 		
-		if (statoMenuButton.getValue().equals(Contratto.STATUS_APERTO) 
-				&& (opzioniAvvio != null && !opzioniAvvio.equals("contrattiInArrivo"))){
+		if (statoMenuButton.getValue().equals(Contratto.STATUS_APERTO)){
 			tableTitle.setText("Contratti aperti");
-			annullaContrattoBtn.setDisable(false);
-			modificaContrattoBtn.setDisable(false);
-			chiudiContrattoBtn.setDisable(false);
-		} else if (statoMenuButton.getValue().equals(Contratto.STATUS_CHIUSO) 
-				&& (opzioniAvvio != null && !opzioniAvvio.equals("contrattiInArrivo"))){
+			
+			if (opzioniAvvio != null && opzioniAvvio.equals("contrattiInArrivo")){
+				annullaContrattoBtn.setDisable(true);
+				modificaContrattoBtn.setDisable(true);
+				chiudiContrattoBtn.setDisable(false);
+			} else {
+				annullaContrattoBtn.setDisable(false);
+				modificaContrattoBtn.setDisable(false);
+				chiudiContrattoBtn.setDisable(false);
+			}
+			
+		} else if (statoMenuButton.getValue().equals(Contratto.STATUS_CHIUSO)){
 			tableTitle.setText("Contratti chiusi");
 			annullaContrattoBtn.setDisable(true);
 			modificaContrattoBtn.setDisable(true);

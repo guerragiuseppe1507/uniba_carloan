@@ -831,8 +831,8 @@ public class DAO {
 		
 		if(inputParam.get("filter").equals("GESTIONE_FILIALE")){
 			
-			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ?"+
-							"AND ("+ SchemaDb.TAB_CONTRATTI +".filiale_di_partenza = ?" +
+			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ? "+
+							"AND ("+ SchemaDb.TAB_CONTRATTI +".filiale_di_partenza = ? " +
 							"OR "+ SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?)";
 			
 			if(!inputParam.get("status").equals("TUTTI")){
@@ -841,8 +841,9 @@ public class DAO {
 			
 		} else if(inputParam.get("filter").equals("CONTRATTI_FILIALE")){
 			
-			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ?"+
-							"AND " + SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?";
+			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ? "+
+							" AND (" + SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ? "+
+									" AND " + SchemaDb.TAB_CONTRATTI +".filiale_di_partenza != ?)";
 			
 			if(!inputParam.get("status").equals("TUTTI")){
 				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
@@ -882,10 +883,7 @@ public class DAO {
 			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
 			istruzione.setString(1, inputParam.get("id_dipendente"));
 			istruzione.setString(2, inputParam.get("id_filiale"));
-			
-			if (!inputParam.get("filter").equals("CONTRATTI_FILIALE")) {
-				istruzione.setString(3, inputParam.get("id_filiale"));
-			}
+			istruzione.setString(3, inputParam.get("id_filiale"));
 			
 			ResultSet res = istruzione.executeQuery();
 			Boolean isAuto = res.first();
