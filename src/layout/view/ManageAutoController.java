@@ -67,6 +67,8 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	@FXML
 	private TextField nuovaTargaAutoNonDisp;
 	@FXML
+	private TextField nuoviKmAutoNonDisp;
+	@FXML
 	Label examplePlateAutoNonDisp;
 	
 	//Sezione auto disponibili
@@ -76,6 +78,8 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 	private ComboBox<String> scegliStatusDaDispon;
 	@FXML
 	private TextField nuovaTargaAutoDisp;
+	@FXML
+	private TextField nuoviKmAutoDisp;
 	@FXML
 	Label examplePlateAutoDisp;
 	
@@ -156,6 +160,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			examplePlateAutoDisp.setText(NumberPlateValidator.getPlateExample(autoDispScelta.getProvenienza()));
 			scegliStatusDaDispon.getSelectionModel().select(autoDispScelta.getStatus());
 			nuovaTargaAutoDisp.setText(autoDispScelta.getTarga());
+			nuoviKmAutoDisp.setText(autoDispScelta.getChilometraggio());
 		}
 	}
 	
@@ -165,6 +170,7 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 			examplePlateAutoNonDisp.setText(NumberPlateValidator.getPlateExample(autoNonDispScelta.getProvenienza()));
 			scegliStatusDaNonDispon.getSelectionModel().select(autoNonDispScelta.getStatus());
 			nuovaTargaAutoNonDisp.setText(autoNonDispScelta.getTarga());
+			nuoviKmAutoNonDisp.setText(autoNonDispScelta.getChilometraggio());
 		}
 	}
 	
@@ -383,6 +389,38 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		
 	}
 	
+	@FXML
+	private void handleCambiaKmAutoDisp() {
+		Auto autoScelta = autoDispScelta;
+		if(nuoviKmAutoDisp.getText().equals("")){
+			NotificationManager.setWarning("Inserisci un chilometraggio.");
+		}else if(autoDispScelta == null){
+			NotificationManager.setWarning("Scegli un auto tra quelle disponibili prima.");
+		}else if(!isKmAttualiCorretto(nuoviKmAutoDisp.getText(), autoScelta)){
+			NotificationManager.setError("Valore chilometri invalido "
+					+ "o inferiore ai chilometri dell'auto.");
+		}else{
+			queryCambiaKm(Integer.toString(autoScelta.getId()), nuoviKmAutoDisp.getText());
+		}
+		
+	}
+	
+	@FXML
+	private void handleCambiaKmAutoNonDisp() {
+		Auto autoScelta = autoNonDispScelta;
+		if(nuoviKmAutoNonDisp.getText().equals("")){
+			NotificationManager.setWarning("Inserisci un chilometraggio.");
+		}else if(autoNonDispScelta == null){
+			NotificationManager.setWarning("Scegli un auto tra quelle non disponibili prima.");
+		}else if(!isKmAttualiCorretto(nuoviKmAutoNonDisp.getText(), autoScelta)){
+			NotificationManager.setError("Valore chilometri invalido "
+					+ "o inferiore ai chilometri dell'auto.");
+		}else{
+			queryCambiaKm(Integer.toString(autoScelta.getId()), nuoviKmAutoNonDisp.getText());
+		}
+		
+	}
+	
 	private void queryCambiaTarga(String targa,int idAuto){
 			
 	
@@ -473,6 +511,62 @@ public class ManageAutoController implements Initializable, ControlledScreen{
 		} else {
 			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
 		}
+		
+	}
+	
+	private void queryCambiaKm(String id_auto, String nuoviKm){
+		
+		String[] comando = new String[]{"businessTier.GestioneAuto", "cambiaChilometraggio"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("id_auto", id_auto);
+		inputParam.put("nuovi_km", nuoviKm);
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		risultato =	FrontController.request(comando, inputParam);
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
+		
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			NotificationManager.setInfo("Chilometri aggiornati con successo");	
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+		}
+		
+	}
+	
+	private boolean isKmAttualiCorretto(String km, Auto auto){
+		
+		boolean correct = false;
+		boolean isNumber = false;
+		boolean isGreaterThanLast = false;
+		
+		String[] comando = new String[]{"businessTier.GestioneAuto", "recuperoDatiAuto"};
+		HashMap<String, String> inputParam = new HashMap<>();	
+		inputParam.put("disponibilita", "singola");
+		inputParam.put("id_auto", Integer.toString(auto.getId()));
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		riempiTabellaAuto();
+		riempiTabellaAutoNonDisp();
+		
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			if (km.matches("[0-9]{1,6}$")){
+				isNumber = true;
+			}
+			
+			if (isNumber && Integer.parseInt(km) >= Integer.parseInt(risultato.get("chilometraggio0"))){
+				isGreaterThanLast = true;
+			}
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+		}
+		
+		if (isNumber && isGreaterThanLast) {
+			correct = true;
+		}
+		
+		return correct;
 		
 	}
 	

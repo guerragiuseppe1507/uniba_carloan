@@ -23,7 +23,7 @@
 	      </TableView>
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="119.0" layoutX="148.0" layoutY="69.0" stroke="BLACK" strokeType="INSIDE" width="989.0" />
 	      <Button layoutX="39.0" layoutY="646.0" mnemonicParsing="false" onAction="#handleCancellaAutoDisp" prefHeight="46.0" prefWidth="563.0" text="Cancella Auto" />
-	      <Button layoutX="40.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaStatusAutoDisp" prefHeight="39.0" prefWidth="253.0" text="Cambia status" />
+	      <Button layoutX="40.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaStatusAutoDisp" prefHeight="39.0" prefWidth="179.0" text="Cambia status" />
          <AnchorPane fx:id="menu" prefHeight="30.0" prefWidth="1280.0" />
          <GridPane layoutX="174.0" layoutY="83.0" prefHeight="92.0" prefWidth="644.0">
            <columnConstraints>
@@ -62,12 +62,12 @@
          <Label layoutX="656.0" layoutY="241.0" text="Auto non disponibili :" />
          <Label layoutX="40.0" layoutY="512.0" text="Seleziona status dell' auto :" />
          <Button layoutX="678.0" layoutY="646.0" mnemonicParsing="false" onAction="#handleCancellaAutoNonDisp" prefHeight="46.0" prefWidth="563.0" text="Cancella Auto" />
-         <Button layoutX="678.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaStatusAutoNonDisp" prefHeight="39.0" prefWidth="253.0" text="Cambia status" />
+         <Button layoutX="678.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaStatusAutoNonDisp" prefHeight="39.0" prefWidth="179.0" text="Cambia status" />
          <Label layoutX="678.0" layoutY="512.0" text="Seleziona status dell' auto :" />
          <Label fx:id="filiale" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="30.0" layoutY="220.0" text="Filiale" textAlignment="RIGHT" textFill="#00000080" />
          <Label fx:id="filialeNonDisp" layoutX="657.0" layoutY="220.0" text="Filiale" textFill="#00000080" />
-         <ComboBox fx:id="scegliStatusDaDispon" layoutX="40.0" layoutY="541.0" prefHeight="39.0" prefWidth="253.0" />
-         <ComboBox fx:id="scegliStatusDaNonDispon" layoutX="678.0" layoutY="541.0" prefHeight="39.0" prefWidth="253.0" />
+         <ComboBox fx:id="scegliStatusDaDispon" layoutX="40.0" layoutY="541.0" prefHeight="39.0" prefWidth="179.0" />
+         <ComboBox fx:id="scegliStatusDaNonDispon" layoutX="678.0" layoutY="541.0" prefHeight="39.0" prefWidth="179.0" />
          <Label layoutX="334.0" layoutY="168.0" text="Esempio :" textFill="#00000080">
             <font>
                <Font size="10.0" />
@@ -78,32 +78,38 @@
                <Font size="10.0" />
             </font>
          </Label>
-         <Label layoutX="340.0" layoutY="512.0" text="Inserisci nuova targa :" />
-         <Label layoutX="978.0" layoutY="512.0" text="Inserisci nuova targa :" />
-         <TextField fx:id="nuovaTargaAutoDisp" layoutX="340.0" layoutY="541.0" prefHeight="39.0" prefWidth="262.0" />
-         <TextField fx:id="nuovaTargaAutoNonDisp" layoutX="978.0" layoutY="541.0" prefHeight="39.0" prefWidth="262.0" />
-         <Button layoutX="340.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaTargaAutoDisp" prefHeight="39.0" prefWidth="262.0" text="Cambia targa" />
-         <Button layoutX="978.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaTargaAutoNonDisp" prefHeight="39.0" prefWidth="262.0" text="Cambia targa" />
-         <Label layoutX="526.0" layoutY="512.0" text="Esempio :" textFill="#00000080">
+         <Label layoutX="234.0" layoutY="512.0" text="Inserisci nuova targa :" />
+         <Label layoutX="875.0" layoutY="512.0" text="Inserisci nuova targa :" />
+         <TextField fx:id="nuovaTargaAutoDisp" layoutX="234.0" layoutY="541.0" prefHeight="39.0" prefWidth="213.0" />
+         <TextField fx:id="nuovaTargaAutoNonDisp" layoutX="875.0" layoutY="541.0" prefHeight="39.0" prefWidth="219.0" />
+         <Button layoutX="234.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaTargaAutoDisp" prefHeight="39.0" prefWidth="213.0" text="Cambia targa" />
+         <Button layoutX="875.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaTargaAutoNonDisp" prefHeight="39.0" prefWidth="219.0" text="Cambia targa" />
+         <Label layoutX="389.0" layoutY="512.0" text="Esempio :" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
          </Label>
-         <Label fx:id="examplePlateAutoDisp" layoutX="526.0" layoutY="522.0" text="[scegli auto]" textFill="#00000080">
+         <Label fx:id="examplePlateAutoDisp" layoutX="389.0" layoutY="522.0" text="[scegli auto]" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
          </Label>
-         <Label fx:id="examplePlateAutoNonDisp" layoutX="1172.0" layoutY="522.0" text="[scegli auto]" textFill="#00000080">
+         <Label fx:id="examplePlateAutoNonDisp" layoutX="1035.0" layoutY="522.0" text="[scegli auto]" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
          </Label>
-         <Label layoutX="1172.0" layoutY="512.0" text="Esempio :" textFill="#00000080">
+         <Label layoutX="1035.0" layoutY="512.0" text="Esempio :" textFill="#00000080">
             <font>
                <Font size="10.0" />
             </font>
          </Label>
+         <Label layoutX="459.0" layoutY="512.0" text="Km attuali :" />
+         <TextField fx:id="nuoviKmAutoDisp" layoutX="459.0" layoutY="541.0" prefHeight="39.0" prefWidth="144.0" />
+         <Button layoutX="459.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaKmAutoDisp" prefHeight="39.0" prefWidth="144.0" text="Cambia km" />
+         <Label layoutX="1108.0" layoutY="512.0" text="Km attuali :" />
+         <TextField fx:id="nuoviKmAutoNonDisp" layoutX="1108.0" layoutY="541.0" prefHeight="39.0" prefWidth="132.0" />
+         <Button layoutX="1108.0" layoutY="594.0" mnemonicParsing="false" onAction="#handleCambiaKmAutoNonDisp" prefHeight="39.0" prefWidth="132.0" text="Cambia km" />
 	   </children>
 	</AnchorPane>
 </StackPane>

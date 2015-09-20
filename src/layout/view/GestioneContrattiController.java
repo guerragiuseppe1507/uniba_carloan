@@ -334,24 +334,14 @@ public class GestioneContrattiController  implements Initializable, ControlledSc
 		if(contrattoScelto != null){			
 			Optional<ButtonType> result = NotificationManager.setConfirm("L'operazione è irreversibile.\nContinuare?");
 			if (result.get() == ButtonType.OK){
-				
-				String[] comando = new String[]{"businessTier.GestioneContratti", "annullaContratto"};
-				HashMap<String, String> inputParam = new HashMap<>();
-				
-				inputParam.put("id_contratto", Integer.toString(contrattoScelto.getId()));
-				inputParam.put("id_auto", Integer.toString(autoScelta.getId()));
-				inputParam.put("status_auto", Auto.STATUS_DISPONIBILE);
-				
-				HashMap<String, String> risultato = new HashMap<>();
-				risultato =	FrontController.request(comando, inputParam);
-				
-				if(risultato.get(util.ResultKeys.ESITO).equals("true")){
-					riempiTabellaContratti("APERTO");
-					resetInfoContratto();
-					NotificationManager.setInfo("Contratto annullato con successo.");
-				} else {
-					NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
-				}
+				NotificationManager.setInput("Chilometri attuali auto :").ifPresent(km -> {
+					if (isKmAttualiCorretto(km)){
+						queryAnnullaContratto(km);
+					} else {
+						NotificationManager.setError("Valore chilometri invalido "
+								+ "o inferiore ai chilometri precontrattuali dell'auto.");
+					}
+				});
 			}	
 		} else {
 			NotificationManager.setWarning("Scegliere un contratto prima.");
@@ -387,12 +377,53 @@ public class GestioneContrattiController  implements Initializable, ControlledSc
 		NotificationManager.setInfo("Contratto chiuso con successo.");
 	}
 	
+	private void queryAnnullaContratto(String nuoviKm){
+		String[] comando = new String[]{"businessTier.GestioneContratti", "annullaContratto"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		
+		inputParam.put("id_contratto", Integer.toString(contrattoScelto.getId()));
+		inputParam.put("id_auto", Integer.toString(autoScelta.getId()));
+		inputParam.put("status_auto", Auto.STATUS_DISPONIBILE);
+		
+		HashMap<String, String> risultato = new HashMap<>();
+		risultato =	FrontController.request(comando, inputParam);
+		
+		if(risultato.get(util.ResultKeys.ESITO).equals("true") && 
+				queryCambiaKmAuto(Integer.toString(autoScelta.getId()) , nuoviKm)){
+			riempiTabellaContratti("APERTO");
+			resetInfoContratto();
+			NotificationManager.setInfo("Contratto annullato con successo.");
+		} else {
+			NotificationManager.setError(risultato.get(util.ResultKeys.MSG_ERR));
+		}
+	}
+	
+	private boolean queryCambiaKmAuto(String id_auto, String nuoviKm){
+		
+		boolean kmCambiati = false;
+		
+		String[] comando = new String[]{"businessTier.GestioneAuto", "cambiaChilometraggio"};
+		HashMap<String, String> inputParam = new HashMap<>();
+		inputParam.put("id_auto", id_auto);
+		inputParam.put("nuovi_km", nuoviKm);
+		HashMap<String, String> risultato = new HashMap<>();
+		
+		risultato =	FrontController.request(comando, inputParam);
+		
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("true")){
+			kmCambiati = true;
+		}
+		
+		return kmCambiati;
+		
+	}
+	
 	private boolean isKmAttualiCorretto(String km){
 		
 		boolean correct = false;
 		
 		if (km.matches("[0-9]{1,6}$") 
-				&& Integer.parseInt(km) > Integer.parseInt(autoScelta.getChilometraggio())){
+				&& Integer.parseInt(km) >= Integer.parseInt(autoScelta.getChilometraggio())){
 			correct = true;
 		}
 		

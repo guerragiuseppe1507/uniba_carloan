@@ -1234,6 +1234,38 @@ public class DAO {
 		return risultato;
 	}
 	
+	public HashMap<String, String> cambiaKmAuto(HashMap<String,String> inputParam){
+		
+		HashMap<String, String> risultato = new HashMap<String, String>();
+		risultato = connetti();
+		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
+		
+		String updateStatus="UPDATE "+ SchemaDb.TAB_AUTO
+				+" SET chilometraggio = ? WHERE id = ?";
+
+		try {
+			if(!checkAuto(inputParam.get("id_auto"),"noleggiata")){
+				PreparedStatement istruzione = connessione.prepareStatement(updateStatus);
+				istruzione.setString(1, inputParam.get("nuovi_km"));
+				istruzione.setString(2, inputParam.get("id_auto"));
+				istruzione.execute();
+				
+				risultato.put(util.ResultKeys.ESITO, "true");
+			} else {
+				risultato.put(util.ResultKeys.ESITO, "false");
+				risultato.put(util.ResultKeys.MSG_ERR, 
+						"I chilometri di un auto in noleggio non possono essere cambiati.");
+			}
+
+		} catch (SQLException e){
+			e.printStackTrace();
+			risultato.put(util.ResultKeys.ESITO, "false");
+			risultato.put(util.ResultKeys.MSG_ERR, "Errore Query");
+		}
+		
+		return risultato;
+	}
+	
 
 	public HashMap<String, String> getPrezzi(HashMap<String, String> inputParam) {
 		
