@@ -815,7 +815,7 @@ public class DAO {
 		risultato = connetti();
 		if (risultato.get(util.ResultKeys.ESITO).equalsIgnoreCase("false")) return risultato;
 		
-		String queryAuto = "SELECT * FROM "+ SchemaDb.TAB_CONTRATTI +			
+		String queryContratto = "SELECT * FROM "+ SchemaDb.TAB_CONTRATTI +			
 				" INNER JOIN "+ SchemaDb.TAB_AUTO+
 				" ON " + SchemaDb.TAB_CONTRATTI+".id_auto = "+SchemaDb.TAB_AUTO+".id"+
 				" INNER JOIN "+SchemaDb.TAB_MODELLI+
@@ -831,32 +831,32 @@ public class DAO {
 		
 		if(inputParam.get("filter").equals("GESTIONE_FILIALE")){
 			
-			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ? "+
+			queryContratto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ? "+
 							"AND ("+ SchemaDb.TAB_CONTRATTI +".filiale_di_partenza = ? " +
 							"OR "+ SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?)";
 			
 			if(!inputParam.get("status").equals("TUTTI")){
-				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
+				queryContratto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
 			}
 			
 		} else if(inputParam.get("filter").equals("CONTRATTI_FILIALE")){
 			
-			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ? "+
+			queryContratto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente != ? "+
 							" AND (" + SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ? "+
 									" AND " + SchemaDb.TAB_CONTRATTI +".filiale_di_partenza != ?)";
 			
 			if(!inputParam.get("status").equals("TUTTI")){
-				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
+				queryContratto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
 			}
 			
 		} else if(inputParam.get("filter").equals("MIEI_CONTRATTI")){
 			
-			queryAuto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente = ?"+
+			queryContratto += " WHERE "+ SchemaDb.TAB_CONTRATTI+".id_dipendente = ?"+
 					"AND ("+ SchemaDb.TAB_CONTRATTI +".filiale_di_partenza = ?" +
 					"OR "+ SchemaDb.TAB_CONTRATTI +".filiale_di_arrivo = ?)";
 	
 			if(!inputParam.get("status").equals("TUTTI")){
-				queryAuto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
+				queryContratto += " AND "+ SchemaDb.TAB_CONTRATTI+".stato = '"+ inputParam.get("status")+"'";
 			}
 			
 		}
@@ -880,7 +880,7 @@ public class DAO {
 		String filialeDiArrivo;
 
 		try {
-			PreparedStatement istruzione = connessione.prepareStatement(queryAuto);
+			PreparedStatement istruzione = connessione.prepareStatement(queryContratto);
 			istruzione.setString(1, inputParam.get("id_dipendente"));
 			istruzione.setString(2, inputParam.get("id_filiale"));
 			istruzione.setString(3, inputParam.get("id_filiale"));

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<StackPane fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.view.NuovoClienteController">
+   <children>
+      <AnchorPane>
+         <children>
+            <Text layoutX="41.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" />
+            <Text layoutX="41.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cognome" />
+            <Text layoutX="41.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Indirizzo e-mail" />
+            <Text layoutX="41.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Residenza" />
+            <Text layoutX="41.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Di Nascita" />
+            <Text layoutX="41.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Codice Fiscale" />
+            <Text layoutX="41.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Codice Patente" />
+            <TextField fx:id="nomeText" layoutX="311.0" layoutY="39.0" />
+            <TextField fx:id="cognomeText" layoutX="311.0" layoutY="89.0" />
+            <TextField fx:id="mailText" layoutX="311.0" layoutY="139.0" />
+            <TextField fx:id="residenzaText" layoutX="311.0" layoutY="189.0" />
+            <TextField fx:id="codiceFiscaleText" layoutX="311.0" layoutY="289.0" />
+            <TextField fx:id="codicePatenteText" layoutX="311.0" layoutY="339.0" />
+            <DatePicker fx:id="dataDiNascitaPicker" editable="false" layoutX="311.0" layoutY="239.0" onMouseClicked="#onActionDatepicker" prefHeight="31.0" prefWidth="187.0" />
+            <Button fx:id="Inserisci" layoutX="33.0" layoutY="406.0" mnemonicParsing="false" onAction="#onActionInsersciCliente" prefHeight="79.0" prefWidth="465.0" text="Inserisci Cliente" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

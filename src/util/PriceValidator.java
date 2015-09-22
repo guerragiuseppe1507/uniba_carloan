@@ -9,7 +9,8 @@ public class PriceValidator {
 	public static final String PRICE_ERR = "Valore non valido";
 	
 	public static String validatePrice(String currency, String price){
-		if (price.matches(" *") || price == null){
+		if (price.matches(" *") || 
+				price == null){
 			price = "0.00";
 			price += " "+currency;
 		}else if (price.matches("[0-9]{0,3}[.][0-9]{0,2}$")){
