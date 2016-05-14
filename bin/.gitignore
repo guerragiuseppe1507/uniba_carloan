@@ -1,2 +1,6 @@
-/test/
+/businessTier/
 /dataAccess/
+/layout/
+/presentationTier/
+/test/
+/util/

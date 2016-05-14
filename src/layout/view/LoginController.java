@@ -99,7 +99,7 @@ public class LoginController implements Initializable, ControlledScreen{
 				
 			}
 
-		}else if(risultato.get(util.ResultKeys.MSG_ERR).equalsIgnoreCase("Connessione al DataBase fallita")){
+		}else if(usernameLabel.getText().equals(risultato.get("username").toLowerCase())){
 						
 			NotificationManager.setError("Connessione al server fallita");
 			
@@ -140,6 +140,9 @@ public class LoginController implements Initializable, ControlledScreen{
 			registrable = false;
 		}else if(!EmailValidator.isValidEmailAddress(regEmail.getText())){
 			NotificationManager.setWarning("Formato E-mail non valido");
+			registrable = false;
+		}else if (!regUsername.getText().equals(regUsername.getText().toLowerCase())){
+			NotificationManager.setWarning("L'username non deve avere lettere maiuscole");
 			registrable = false;
 		}
 		

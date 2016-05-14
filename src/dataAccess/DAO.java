@@ -203,9 +203,9 @@ public class DAO {
 		
 		String query;
 		if(type.equalsIgnoreCase("managerdifiliale")){
-			query = "SELECT * FROM " + SchemaDb.TAB_MANAGER_DI_FILIALE + " WHERE id = ?";
+			query = "SELECT * FROM " + SchemaDb.TAB_MANAGER_DI_FILIALE + " WHERE id_utente = ?";
 		} else if(type.equalsIgnoreCase("dipendentedifiliale")) {
-			query = "SELECT * FROM " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE + " WHERE id = ?";
+			query = "SELECT * FROM " + SchemaDb.TAB_DIPENDENTI_DI_FILIALE + " WHERE id_utente = ?";
 		} else {
 			return false;
 		}
